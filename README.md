@@ -20,14 +20,21 @@ Run `mvn install` locally, then configure the dependency in your project.
 <dependency>
     <groupId>io.github.copilot-community-sdk</groupId>
     <artifactId>copilot-sdk</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
+Groovy:
+
 ```groovy
-implementation 'io.github.copilot-community-sdk:copilot-sdk:0.1.0'
+implementation 'io.github.copilot-community-sdk:copilot-sdk:1.0.0'
+```
+
+Kotlin
+```kotlin
+implementation("io.github.copilot-community-sdk:copilot-sdk:1.0.0")
 ```
 
 ## Quick Start
@@ -89,7 +96,7 @@ jbang jbang-example.java
 The `jbang-example.java` file includes the dependency declaration and can be run directly:
 
 ```java
-//DEPS com.github.copilot:copilot-sdk:0.1.0
+//DEPS com.github.copilot:copilot-sdk:1.0.1-SNAPSHOT
 ```
 
 ## Documentation
@@ -98,18 +105,11 @@ For detailed API reference and advanced usage examples, see [DOCS.md](DOCS.md).
 
 ## Building and Testing
 
-### Building the Project
+The tests require test resources (snapshots, harness) from the official [copilot-sdk](https://github.com/github/copilot-sdk) repository.
+The build automatically clones this repository during the `generate-test-resources` phase:
 
 ```bash
-mvn clean compile
-```
-
-### Running Tests
-
-The tests require test resources (snapshots, harness) from the official [copilot-sdk](https://github.com/github/copilot-sdk) repository. The build automatically clones this repository during the `generate-test-resources` phase:
-
-```bash
-mvn clean test
+mvn clean verify
 ```
 
 The official SDK repository is cloned to `target/copilot-sdk/` and the `copilot.tests.dir` property is set to point to its `test/` folder.

@@ -1,8 +1,6 @@
 name: "SDK E2E Tests"
 
 env:
-  HUSKY: 0
-  PYTHONUTF8: 1
   COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
 on:
