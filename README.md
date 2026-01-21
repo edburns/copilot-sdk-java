@@ -33,9 +33,9 @@ implementation 'io.github.copilot-community-sdk:copilot-sdk:0.1.0'
 ## Quick Start
 
 ```java
-import io.github.copilot.community.sdk.*;
-import io.github.copilot.community.sdk.events.*;
-import io.github.copilot.community.sdk.json.*;
+import com.github.copilot.sdk.*;
+import com.github.copilot.sdk.events.*;
+import com.github.copilot.sdk.json.*;
 
 import java.util.concurrent.CompletableFuture;
 
