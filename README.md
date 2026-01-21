@@ -8,6 +8,7 @@ Java SDK for programmatic control of GitHub Copilot CLI.
 
 - Java 17 or later
 - GitHub Copilot CLI installed and in PATH (or provide custom `cliPath`)
+- Node.js and npm (required for running tests - the test harness is implemented in Node.js)
 
 ## Installation
 
@@ -431,6 +432,30 @@ try {
     Throwable cause = ex.getCause();
     System.err.println("Error: " + cause.getMessage());
 }
+```
+
+## Building and Testing
+
+### Building the Project
+
+```bash
+mvn clean compile
+```
+
+### Running Tests
+
+The tests require test resources (snapshots, harness) from the official [copilot-sdk](https://github.com/github/copilot-sdk) repository. The build automatically clones this repository during the `generate-test-resources` phase:
+
+```bash
+mvn clean test
+```
+
+The official SDK repository is cloned to `target/copilot-sdk/` and the `copilot.tests.dir` property is set to point to its `test/` folder.
+
+If you want to use a different location for the SDK repository (e.g., you already have it cloned locally), you can override the properties:
+
+```bash
+mvn test -Dcopilot.sdk.clone.dir=/path/to/copilot-sdk -Dcopilot.tests.dir=/path/to/copilot-sdk/test
 ```
 
 ## License

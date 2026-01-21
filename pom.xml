@@ -40,6 +40,9 @@
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Directory where the copilot-sdk repo will be cloned for tests -->
+        <copilot.sdk.clone.dir>${project.build.directory}/copilot-sdk</copilot.sdk.clone.dir>
+        <copilot.tests.dir>${copilot.sdk.clone.dir}/test</copilot.tests.dir>
     </properties>
 
     <dependencies>
@@ -76,10 +79,59 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
             </plugin>
+            <!-- Clone the official copilot-sdk repository for test resources -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.2</version>
+                <executions>
+                    <execution>
+                        <id>clone-copilot-sdk</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>git</executable>
+                            <arguments>
+                                <argument>clone</argument>
+                                <argument>--depth</argument>
+                                <argument>1</argument>
+                                <argument>https://github.com/github/copilot-sdk.git</argument>
+                                <argument>${copilot.sdk.clone.dir}</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                                <successCode>128</successCode> <!-- Already exists -->
+                            </successCodes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-harness-dependencies</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <workingDirectory>${copilot.sdk.clone.dir}/test/harness</workingDirectory>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.4</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <copilot.tests.dir>${copilot.tests.dir}</copilot.tests.dir>
+                        <copilot.sdk.dir>${copilot.sdk.clone.dir}</copilot.sdk.dir>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>

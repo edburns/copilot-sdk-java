@@ -1,0 +1,51 @@
+name: "SDK E2E Tests"
+
+env:
+  HUSKY: 0
+  PYTHONUTF8: 1
+  COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  merge_group:
+
+permissions:
+  contents: read
+
+jobs:
+
+  java-sdk:
+    name: "Java SDK Tests"
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-copilot
+      - uses: actions/setup-java@v5
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Run spotless check
+        run: |
+          mvn spotless:check
+          if [ $? -ne 0 ]; then
+            echo "❌ spotless:check failed. Please run 'mvn spotless:apply' in java"
+            exit 1
+          fi
+          echo "✅ spotless:check passed"
+
+      - name: Build SDK
+        run: mvn compile
+
+      - name: Run Java SDK tests
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          COPILOT_CLI_PATH: ${{ steps.cli-path.outputs.path }}
+        run: mvn verify
