@@ -82,9 +82,43 @@ jobs:
             - uses: actions/checkout@v6
             - name: Create GitHub Release
               run: |
-                  gh release create "${{ needs.publish-maven.outputs.version }}" \
+                  VERSION="${{ needs.publish-maven.outputs.version }}"
+                  GROUP_ID="io.github.copilot-community-sdk"
+                  ARTIFACT_ID="copilot-sdk"
+                  
+                  RELEASE_NOTES=$(cat <<EOF
+                  ## Installation
+
+                  ### Maven
+                  \`\`\`xml
+                  <dependency>
+                      <groupId>${GROUP_ID}</groupId>
+                      <artifactId>${ARTIFACT_ID}</artifactId>
+                      <version>${VERSION}</version>
+                  </dependency>
+                  \`\`\`
+
+                  ### Gradle (Kotlin DSL)
+                  \`\`\`kotlin
+                  implementation("${GROUP_ID}:${ARTIFACT_ID}:${VERSION}")
+                  \`\`\`
+
+                  ### Gradle (Groovy DSL)
+                  \`\`\`groovy
+                  implementation '${GROUP_ID}:${ARTIFACT_ID}:${VERSION}'
+                  \`\`\`
+
+                  📦 [View on Maven Central](https://central.sonatype.com/artifact/${GROUP_ID}/${ARTIFACT_ID}/${VERSION})
+
+                  ---
+
+                  EOF
+                  )
+                  
+                  gh release create "${VERSION}" \
                     ${{ github.event.inputs.prerelease == 'true' && '--prerelease' || '' }} \
-                    --title "Java SDK v${{ needs.publish-maven.outputs.version }}" \
+                    --title "Java SDK v${VERSION}" \
+                    --notes "${RELEASE_NOTES}" \
                     --generate-notes \
                     --target ${{ github.sha }}
               env:
