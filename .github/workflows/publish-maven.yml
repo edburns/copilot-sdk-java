@@ -41,7 +41,7 @@ jobs:
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
 
-            - uses: ./.github/setup-copilot
+            - uses: ./.github/actions/setup-copilot
 
             - name: Set up JDK 21
               uses: actions/setup-java@v5
