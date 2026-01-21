@@ -7,14 +7,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.copilot</groupId>
+    <groupId>io.github.copilot-community-sdk</groupId>
     <artifactId>copilot-sdk</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>GitHub Copilot SDK</name>
+    <name>GitHub Copilot Community SDK :: Java</name>
     <description>SDK for programmatic control of GitHub Copilot CLI</description>
-    <url>https://github.com/github/copilot-sdk</url>
+    <url>https://github.com/copilot-community-sdk/copilot-sdk-java</url>
 
     <licenses>
         <license>
@@ -25,16 +25,16 @@
 
     <developers>
         <developer>
-            <name>GitHub</name>
-            <organization>GitHub</organization>
-            <organizationUrl>https://github.com</organizationUrl>
+            <name>GitHub Copilot Community SDK</name>
+            <organization>GitHub Copilot Community SDK</organization>
+            <organizationUrl>https://github.com/copilot-community-sdk</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/github/copilot-sdk.git</connection>
-        <developerConnection>scm:git:ssh://github.com:github/copilot-sdk.git</developerConnection>
-        <url>https://github.com/github/copilot-sdk</url>
+        <connection>scm:git:git://github.com/copilot-community-sdk/copilot-sdk-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com:copilot-community-sdk/copilot-sdk-java.git</developerConnection>
+        <url>https://github.com/copilot-community-sdk/copilot-sdk-java</url>
     </scm>
 
     <properties>
