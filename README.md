@@ -6,7 +6,7 @@ Java SDK for programmatic control of GitHub Copilot CLI.
 
 ## Requirements
 
-- Java 21 or later
+- Java 17 or later
 - GitHub Copilot CLI installed and in PATH (or provide custom `cliPath`)
 
 ## Installation
