@@ -458,6 +458,22 @@ If you want to use a different location for the SDK repository (e.g., you alread
 mvn test -Dcopilot.sdk.clone.dir=/path/to/copilot-sdk -Dcopilot.tests.dir=/path/to/copilot-sdk/test
 ```
 
+## Contributing
+
+### Setting Up Git Hooks
+
+This project uses a pre-commit hook to ensure code formatting standards are met before each commit. To enable the hook, run:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The pre-commit hook runs `mvn spotless:check` and will fail the commit if there are formatting issues. To fix formatting issues, run:
+
+```bash
+mvn spotless:apply
+```
+
 ## License
 
 MIT
