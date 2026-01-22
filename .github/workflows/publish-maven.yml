@@ -178,7 +178,7 @@ jobs:
                   
                   gh release create "v${VERSION}" \
                     ${{ inputs.prerelease == true && '--prerelease' || '' }} \
-                    --title "Copilot Community Java SDK ${VERSION}" \
+                    --title "Copilot Java SDK ${VERSION}" \
                     --notes "${RELEASE_NOTES}" \
                     --generate-notes \
                     --target "v${VERSION}"
