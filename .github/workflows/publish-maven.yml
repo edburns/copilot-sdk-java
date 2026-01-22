@@ -176,11 +176,11 @@ jobs:
                   EOF
                   )
                   
-                  gh release create "v${VERSION}" \
+                  gh release create "${VERSION}" \
                     ${{ inputs.prerelease == true && '--prerelease' || '' }} \
-                    --title "Java SDK v${VERSION}" \
+                    --title "Copilot Community Java SDK ${VERSION}" \
                     --notes "${RELEASE_NOTES}" \
                     --generate-notes \
-                    --target "v${VERSION}"
+                    --target "${VERSION}"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
