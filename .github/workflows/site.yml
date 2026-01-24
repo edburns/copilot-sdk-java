@@ -34,10 +34,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
 
       - name: Build Maven Site with Javadoc
-        run: ./mvnw site -DskipTests -Dcheckstyle.skip=true
+        run: ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
