@@ -20,27 +20,27 @@
 
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
-            <item name="Documentation" href="docs.html"/>
+            <item name="Documentation" href="documentation.html"/>
         </menu>
 
         <menu name="Documentation">
-            <item name="API Reference" href="docs.html#API_Reference">
-                <item name="CopilotClient" href="docs.html#CopilotClient"/>
-                <item name="CopilotSession" href="docs.html#CopilotSession"/>
+            <item name="API Reference" href="documentation.html#API_Reference">
+                <item name="CopilotClient" href="documentation.html#CopilotClient"/>
+                <item name="CopilotSession" href="documentation.html#CopilotSession"/>
             </item>
-            <item name="Event Types" href="docs.html#Event_Types"/>
-            <item name="Streaming" href="docs.html#Streaming"/>
-            <item name="Listing Models" href="docs.html#Listing_Models"/>
-            <item name="Advanced Usage" href="docs.html#Advanced_Usage">
-                <item name="Manual Server Control" href="docs.html#Manual_Server_Control"/>
-                <item name="Tools" href="docs.html#Tools"/>
-                <item name="System Message Customization" href="docs.html#System_Message_Customization"/>
-                <item name="Multiple Sessions" href="docs.html#Multiple_Sessions"/>
-                <item name="File Attachments" href="docs.html#File_Attachments"/>
-                <item name="Bring Your Own Key (BYOK)" href="docs.html#Bring_Your_Own_Key_.28BYOK.29"/>
-                <item name="Permission Handling" href="docs.html#Permission_Handling"/>
+            <item name="Event Types" href="documentation.html#Event_Types"/>
+            <item name="Streaming" href="documentation.html#Streaming"/>
+            <item name="Listing Models" href="documentation.html#Listing_Models"/>
+            <item name="Advanced Usage" href="documentation.html#Advanced_Usage">
+                <item name="Manual Server Control" href="documentation.html#Manual_Server_Control"/>
+                <item name="Tools" href="documentation.html#Tools"/>
+                <item name="System Message Customization" href="documentation.html#System_Message_Customization"/>
+                <item name="Multiple Sessions" href="documentation.html#Multiple_Sessions"/>
+                <item name="File Attachments" href="documentation.html#File_Attachments"/>
+                <item name="Bring Your Own Key (BYOK)" href="documentation.html#Bring_Your_Own_Key_.28BYOK.29"/>
+                <item name="Permission Handling" href="documentation.html#Permission_Handling"/>
             </item>
-            <item name="Error Handling" href="docs.html#Error_Handling"/>
+            <item name="Error Handling" href="documentation.html#Error_Handling"/>
         </menu>
 
         <menu ref="reports"/>

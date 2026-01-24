@@ -122,7 +122,7 @@ The `jbang-example.java` file includes the dependency declaration and can be run
 
 ## Documentation
 
-For detailed API reference and advanced usage examples, see the [Documentation](src/site/markdown/docs.md).
+For detailed API reference and advanced usage examples, see the [Documentation](src/site/markdown/documentation.md).
 
 ## Building and Testing
 
