@@ -78,14 +78,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
             </plugin>
-            <!-- Copy README.md and images to site directory -->
+            <!-- Copy README.md to site directory as index.md -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>copy-docs-to-site</id>
+                        <id>copy-readme-to-site</id>
                         <phase>pre-site</phase>
                         <goals>
                             <goal>run</goal>
@@ -94,16 +94,6 @@
                             <target>
                                 <copy file="${project.basedir}/README.md" 
                                       tofile="${project.basedir}/src/site/markdown/index.md"/>
-                                <!-- Copy images referenced in README.md to site root -->
-                                <mkdir dir="${project.basedir}/src/site/resources"/>
-                                <copy todir="${project.basedir}/src/site/resources">
-                                    <fileset dir="${project.basedir}">
-                                        <include name="*.png"/>
-                                        <include name="*.jpg"/>
-                                        <include name="*.gif"/>
-                                        <include name="*.svg"/>
-                                    </fileset>
-                                </copy>
                             </target>
                         </configuration>
                     </execution>

@@ -10,7 +10,7 @@ Java SDK for programmatic control of GitHub Copilot CLI.
 > **Note:** This SDK may change in breaking ways.
 
 <p align="center">
-  <img src="src/site/resources/image.png" alt="Copilot SDK for Java" />
+  <img width="480" src="image.png" alt="Copilot SDK for Java" />
 </p>
 
 ## Table of Contents
