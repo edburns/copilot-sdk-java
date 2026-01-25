@@ -149,38 +149,14 @@ jobs:
                   GROUP_ID="io.github.copilot-community-sdk"
                   ARTIFACT_ID="copilot-sdk"
                   
-                  RELEASE_NOTES=$(cat <<EOF
-                  # Installation
-
-                  📦 [View on Maven Central](https://central.sonatype.com/artifact/${GROUP_ID}/${ARTIFACT_ID}/${VERSION})
-
-                  ## Maven
-                  \`\`\`xml
-                  <dependency>
-                      <groupId>${GROUP_ID}</groupId>
-                      <artifactId>${ARTIFACT_ID}</artifactId>
-                      <version>${VERSION}</version>
-                  </dependency>
-                  \`\`\`
-
-                  ## Gradle (Kotlin DSL)
-                  \`\`\`kotlin
-                  implementation("${GROUP_ID}:${ARTIFACT_ID}:${VERSION}")
-                  \`\`\`
-
-                  ## Gradle (Groovy DSL)
-                  \`\`\`groovy
-                  implementation '${GROUP_ID}:${ARTIFACT_ID}:${VERSION}'
-                  \`\`\`
-
-                  EOF
-                  )
+                  # Generate release notes from template
+                  export VERSION GROUP_ID ARTIFACT_ID
+                  RELEASE_NOTES=$(envsubst < .github/workflows/notes.template)
                   
                   gh release create "v${VERSION}" \
                     ${{ inputs.prerelease == true && '--prerelease' || '' }} \
                     --title "Copilot Java SDK ${VERSION}" \
                     --notes "${RELEASE_NOTES}" \
-                    --generate-notes \
-                    --target "v${VERSION}"
+                    --generate-notes
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

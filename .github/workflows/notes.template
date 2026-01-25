@@ -1,0 +1,22 @@
+# Installation
+  
+📦 [View on Maven Central](https://central.sonatype.com/artifact/${GROUP_ID}/${ARTIFACT_ID}/${VERSION})
+
+## Maven
+```xml
+<dependency>
+    <groupId>${GROUP_ID}</groupId>
+    <artifactId>${ARTIFACT_ID}</artifactId>
+    <version>${VERSION}</version>
+</dependency>
+```
+
+## Gradle (Kotlin DSL)
+```kotlin
+implementation("${GROUP_ID}:${ARTIFACT_ID}:${VERSION}")
+```
+
+## Gradle (Groovy DSL)
+```groovy
+implementation '${GROUP_ID}:${ARTIFACT_ID}:${VERSION}'
+```
