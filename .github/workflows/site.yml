@@ -1,33 +1,51 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Workflow for deploying versioned documentation to GitHub Pages
 name: Deploy Maven Site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the default branch (publishes to /snapshot/)
   push:
     branches: ["main"]
+    paths:
+      - 'src/site/**'
+      - 'src/main/java/**'
+      - 'pom.xml'
+      - '.github/workflows/site.yml'
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Runs on release publish (publishes to / and /vX.Y.Z/)
+  release:
+    types: [published]
+
+  # Allows manual trigger
   workflow_dispatch:
+    inputs:
+      publish_as_latest:
+        description: 'Also publish as latest (root path)?'
+        type: boolean
+        default: false
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Build Maven Site
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.ref }}
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -35,8 +53,103 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Determine version and paths
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            VERSION="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION#v}"  # Remove 'v' prefix if present
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+            echo "deploy_path=$VERSION" >> $GITHUB_OUTPUT
+          else
+            # For main branch pushes
+            CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+            echo "deploy_path=snapshot" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build Maven Site with Javadoc
         run: ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      - name: Initialize gh-pages if needed
+        run: |
+          if [ ! -d "gh-pages" ]; then
+            mkdir -p gh-pages
+            cd gh-pages
+            git init
+            git checkout -b gh-pages
+          fi
+
+      - name: Prepare versioned documentation
+        run: |
+          DEPLOY_PATH="${{ steps.version.outputs.deploy_path }}"
+          
+          # Remove old version of this specific path (if exists)
+          rm -rf "gh-pages/$DEPLOY_PATH"
+          
+          # Copy new site to versioned path
+          mkdir -p "gh-pages/$DEPLOY_PATH"
+          cp -r target/site/* "gh-pages/$DEPLOY_PATH/"
+          
+          # For releases, also update the root (latest)
+          if [[ "${{ steps.version.outputs.is_release }}" == "true" ]] || [[ "${{ inputs.publish_as_latest }}" == "true" ]]; then
+            # Preserve versioned folders when updating root
+            find gh-pages -maxdepth 1 -type f -delete
+            find gh-pages -maxdepth 1 -type d -name "[0-9]*" -prune -o -type d ! -name gh-pages ! -name snapshot ! -name .git -exec rm -rf {} + 2>/dev/null || true
+            
+            # Copy site to root (latest release)
+            cp -r target/site/* gh-pages/
+          fi
+          
+          # Copy version index page from template
+          cp .github/templates/versions.html gh-pages/versions.html
+
+      - name: Update version list
+        run: |
+          cd gh-pages
+          
+          # Find all version directories
+          VERSIONS=$(find . -maxdepth 1 -type d -name "[0-9]*" | sed 's|./||' | sort -Vr)
+          HAS_SNAPSHOT=$([ -d "snapshot" ] && echo "true" || echo "false")
+          
+          # Generate version links
+          VERSION_HTML=""
+          
+          # Add latest (root) link
+          VERSION_HTML+='<li><a href="./">Latest Release</a><span class="badge latest">latest</span></li>'
+          
+          # Add snapshot if exists
+          if [ "$HAS_SNAPSHOT" = "true" ]; then
+            VERSION_HTML+='<li><a href="./snapshot/">Development (main branch)</a><span class="badge snapshot">snapshot</span></li>'
+          fi
+          
+          # Add versioned releases
+          for v in $VERSIONS; do
+            VERSION_HTML+="<li><a href=\"./$v/\">Version $v</a><span class=\"badge archived\">$v</span></li>"
+          done
+          
+          # Update the versions.html using the placeholder
+          sed -i "s|<!-- VERSION_LIST_PLACEHOLDER -->|$VERSION_HTML|" versions.html
+
+      - name: Deploy to GitHub Pages
+        run: |
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Deploy documentation: ${{ steps.version.outputs.deploy_path }}"
+          git push origin gh-pages --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -44,17 +157,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          # Upload the generated site
-          path: 'target/site'
+          path: 'gh-pages'
 
-  # Deploy to GitHub Pages
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
