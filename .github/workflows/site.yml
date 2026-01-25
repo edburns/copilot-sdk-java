@@ -82,11 +82,13 @@ jobs:
 
       - name: Initialize gh-pages if needed
         run: |
-          if [ ! -d "gh-pages" ]; then
+          if [ ! -d "gh-pages/.git" ]; then
+            rm -rf gh-pages
             mkdir -p gh-pages
             cd gh-pages
             git init
             git checkout -b gh-pages
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           fi
 
       - name: Prepare versioned documentation
@@ -145,9 +147,16 @@ jobs:
           cd gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Set remote URL with token for authentication
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" 2>/dev/null || \
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          
           git add -A
           git diff --staged --quiet || git commit -m "Deploy documentation: ${{ steps.version.outputs.deploy_path }}"
-          git push origin gh-pages --force
+          
+          # Push, creating the branch if it doesn't exist
+          git push -u origin gh-pages --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
