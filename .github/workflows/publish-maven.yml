@@ -1,4 +1,4 @@
-name: Publish Java SDK to Maven Central
+name: Publish to Maven Central
 
 env:
     HUSKY: 0

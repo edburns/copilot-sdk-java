@@ -1,5 +1,5 @@
 # Workflow for deploying versioned documentation to GitHub Pages
-name: Deploy Maven Site to Pages
+name: Deploy Documentation
 
 on:
   # Runs on pushes targeting the default branch (publishes to /snapshot/)

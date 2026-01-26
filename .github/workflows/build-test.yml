@@ -1,4 +1,4 @@
-name: "SDK E2E Tests"
+name: "Build & Test"
 
 env:
   COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
