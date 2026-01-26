@@ -185,6 +185,7 @@
 <li><a href="#Bring_Your_Own_Key_.28BYOK.29">Bring Your Own Key (BYOK)</a></li>
 <li><a href="#Permission_Handling">Permission Handling</a></li>
 <li><a href="#Infinite_Sessions">Infinite Sessions</a></li>
+<li><a href="#MCP_Servers">MCP Servers</a></li>
 </ul></li>
 <li><a href="#Error_Handling">Error Handling</a></li>
 </ul></section><section><a id="API_Reference"></a>
@@ -577,7 +578,23 @@ if (workspacePath != null) {
 ).get();
 
 // session.getWorkspacePath() will return null
-</code></pre></section></section></section><section><a id="Error_Handling"></a>
+</code></pre></section></section><section><a id="MCP_Servers"></a>
+<h3>MCP Servers</h3>
+<p>The Copilot SDK can integrate with MCP servers (Model Context Protocol) to extend the assistant's capabilities with external tools. MCP servers run as separate processes and expose tools that Copilot can invoke during conversations.</p>
+<p>&#x1f4d6; <strong><a href="mcp.html">Full MCP documentation &#x2192;</a></strong> - Learn about local vs remote servers, all configuration options, and troubleshooting.</p>
+<p>Quick example:</p>
+
+<pre class="prettyprint"><code class="language-java">Map&lt;String, Object&gt; filesystemServer = new HashMap&lt;&gt;();
+filesystemServer.put(&quot;type&quot;, &quot;local&quot;);
+filesystemServer.put(&quot;command&quot;, &quot;npx&quot;);
+filesystemServer.put(&quot;args&quot;, List.of(&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;, &quot;/tmp&quot;));
+filesystemServer.put(&quot;tools&quot;, List.of(&quot;*&quot;));
+
+var session = client.createSession(
+    new SessionConfig()
+        .setMcpServers(Map.of(&quot;filesystem&quot;, filesystemServer))
+).get();
+</code></pre></section></section><section><a id="Error_Handling"></a>
 <h2>Error Handling</h2>
 
 <pre class="prettyprint"><code class="language-java">try {
