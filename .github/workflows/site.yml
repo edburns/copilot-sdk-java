@@ -11,15 +11,23 @@ on:
       - 'pom.xml'
       - '.github/workflows/site.yml'
 
-  # Runs on release publish (publishes to / and /vX.Y.Z/)
+  # Runs on release publish (publishes to /latest/ and /vX.Y.Z/)
   release:
     types: [published]
 
   # Allows manual trigger
   workflow_dispatch:
     inputs:
+      version:
+        description: 'Specific version/tag to build (leave empty for snapshot from main)'
+        type: string
+        default: ''
       publish_as_latest:
-        description: 'Also publish as latest (root path)?'
+        description: 'Also publish as latest?'
+        type: boolean
+        default: false
+      rebuild_all_versions:
+        description: 'Rebuild documentation for all release tags?'
         type: boolean
         default: false
 
@@ -44,7 +52,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.ref }}
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -52,26 +59,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Determine version and paths
-        id: version
-        run: |
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            VERSION="${{ github.event.release.tag_name }}"
-            VERSION="${VERSION#v}"  # Remove 'v' prefix if present
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "is_release=true" >> $GITHUB_OUTPUT
-            echo "deploy_path=$VERSION" >> $GITHUB_OUTPUT
-          else
-            # For main branch pushes
-            CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
-            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-            echo "is_release=false" >> $GITHUB_OUTPUT
-            echo "deploy_path=snapshot" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Build Maven Site with Javadoc
-        run: ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
 
       - name: Checkout site branch
         uses: actions/checkout@v6
@@ -91,52 +78,138 @@ jobs:
             git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           fi
 
-      - name: Prepare versioned documentation
+      - name: Get all release tags
+        id: tags
         run: |
-          DEPLOY_PATH="${{ steps.version.outputs.deploy_path }}"
+          # Get all tags that look like version numbers (v1.0.0 or 1.0.0)
+          TAGS=$(git tag -l | grep -E '^v?[0-9]+\.[0-9]+' | sort -Vr)
+          echo "all_tags<<EOF" >> $GITHUB_OUTPUT
+          echo "$TAGS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           
-          # Remove old version of this specific path (if exists)
-          rm -rf "site/$DEPLOY_PATH"
+          # Get the latest tag
+          LATEST_TAG=$(echo "$TAGS" | head -n 1)
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
           
-          # Copy new site to versioned path
-          mkdir -p "site/$DEPLOY_PATH"
-          cp -r target/site/* "site/$DEPLOY_PATH/"
+          # Determine what to build
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "build_tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          elif [[ -n "${{ inputs.version }}" ]]; then
+            # Manual trigger with specific version
+            VERSION="${{ inputs.version }}"
+            # Add 'v' prefix if not present for tag lookup
+            if [[ ! "$VERSION" =~ ^v ]]; then
+              TAG="v$VERSION"
+            else
+              TAG="$VERSION"
+            fi
+            echo "build_tag=$TAG" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "build_tag=" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build snapshot documentation (main branch)
+        if: steps.tags.outputs.is_release == 'false' && inputs.rebuild_all_versions != true
+        run: |
+          ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
           
-          # For releases, also update the root (latest)
-          if [[ "${{ steps.version.outputs.is_release }}" == "true" ]] || [[ "${{ inputs.publish_as_latest }}" == "true" ]]; then
-            # Preserve versioned folders when updating root
-            find site -maxdepth 1 -type f -delete
-            find site -maxdepth 1 -type d -name "[0-9]*" -prune -o -type d ! -name site ! -name snapshot ! -name .git -exec rm -rf {} + 2>/dev/null || true
-            
-            # Copy site to root (latest release)
-            cp -r target/site/* site/
+          rm -rf "site/snapshot"
+          mkdir -p "site/snapshot"
+          cp -r target/site/* "site/snapshot/"
+
+      - name: Build documentation for specific version
+        if: steps.tags.outputs.is_release == 'true' && inputs.rebuild_all_versions != true
+        run: |
+          TAG="${{ steps.tags.outputs.build_tag }}"
+          VERSION="${TAG#v}"  # Remove 'v' prefix
+          
+          echo "Building documentation for $TAG (version $VERSION)"
+          git checkout "$TAG"
+          
+          ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
+          
+          rm -rf "site/$VERSION"
+          mkdir -p "site/$VERSION"
+          cp -r target/site/* "site/$VERSION/"
+          
+          # Update /latest/ if this is a release event or publish_as_latest is true
+          if [[ "${{ github.event_name }}" == "release" ]] || [[ "${{ inputs.publish_as_latest }}" == "true" ]]; then
+            rm -rf "site/latest"
+            mkdir -p "site/latest"
+            cp -r target/site/* "site/latest/"
           fi
           
-          # Copy version index page from template
+          git checkout main
+
+      - name: Build documentation for all release tags
+        if: inputs.rebuild_all_versions == true
+        run: |
+          LATEST_TAG="${{ steps.tags.outputs.latest_tag }}"
+          
+          while IFS= read -r TAG; do
+            if [[ -z "$TAG" ]]; then continue; fi
+            
+            VERSION="${TAG#v}"  # Remove 'v' prefix
+            echo "Building documentation for $TAG (version $VERSION)"
+            
+            git checkout "$TAG"
+            ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
+            
+            rm -rf "site/$VERSION"
+            mkdir -p "site/$VERSION"
+            cp -r target/site/* "site/$VERSION/"
+            
+            # If this is the latest tag, also update /latest/
+            if [[ "$TAG" == "$LATEST_TAG" ]]; then
+              rm -rf "site/latest"
+              mkdir -p "site/latest"
+              cp -r target/site/* "site/latest/"
+            fi
+            
+          done <<< "${{ steps.tags.outputs.all_tags }}"
+          
+          # Return to main and build snapshot
+          git checkout main
+          ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
+          
+          rm -rf "site/snapshot"
+          mkdir -p "site/snapshot"
+          cp -r target/site/* "site/snapshot/"
+
+      - name: Copy version index page
+        run: |
           cp .github/templates/versions.html site/versions.html
 
-      - name: Update version list
+      - name: Update version list from git tags
         run: |
           cd site
           
-          # Find all version directories
-          VERSIONS=$(find . -maxdepth 1 -type d -name "[0-9]*" | sed 's|./||' | sort -Vr)
+          # Get versions from git tags (already sorted by version, descending)
+          VERSIONS=$(git -C .. tag -l | grep -E '^v?[0-9]+\.[0-9]+' | sed 's/^v//' | sort -Vr)
           HAS_SNAPSHOT=$([ -d "snapshot" ] && echo "true" || echo "false")
+          HAS_LATEST=$([ -d "latest" ] && echo "true" || echo "false")
           
           # Generate version links
           VERSION_HTML=""
           
-          # Add latest (root) link
-          VERSION_HTML+='<li><a href="./">Latest Release</a><span class="badge latest">latest</span></li>'
+          # Add latest link if exists
+          if [ "$HAS_LATEST" = "true" ]; then
+            VERSION_HTML+='<li><a href="./latest/">Latest Release</a><span class="badge latest">latest</span></li>'
+          fi
           
           # Add snapshot if exists
           if [ "$HAS_SNAPSHOT" = "true" ]; then
             VERSION_HTML+='<li><a href="./snapshot/">Development (main branch)</a><span class="badge snapshot">snapshot</span></li>'
           fi
           
-          # Add versioned releases
+          # Add versioned releases from tags
           for v in $VERSIONS; do
-            VERSION_HTML+="<li><a href=\"./$v/\">Version $v</a><span class=\"badge archived\">$v</span></li>"
+            if [ -d "$v" ]; then
+              VERSION_HTML+="<li><a href=\"./$v/\">Version $v</a><span class=\"badge archived\">$v</span></li>"
+            fi
           done
           
           # Update the versions.html using the placeholder
@@ -153,7 +226,17 @@ jobs:
             git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           
           git add -A
-          git diff --staged --quiet || git commit -m "Deploy documentation: ${{ steps.version.outputs.deploy_path }}"
+          
+          # Create descriptive commit message
+          if [[ "${{ inputs.rebuild_all_versions }}" == "true" ]]; then
+            COMMIT_MSG="Rebuild documentation for all versions"
+          elif [[ "${{ steps.tags.outputs.is_release }}" == "true" ]]; then
+            COMMIT_MSG="Deploy documentation: ${{ steps.tags.outputs.build_tag }}"
+          else
+            COMMIT_MSG="Deploy documentation: snapshot"
+          fi
+          
+          git diff --staged --quiet || git commit -m "$COMMIT_MSG"
           
           # Push, creating the branch if it doesn't exist
           git push -u origin site --force
