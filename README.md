@@ -1,6 +1,6 @@
 # Copilot SDK for Java
 
-[![Build](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/sdk-build.yml/badge.svg)](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/sdk-build.yml)
+[![Build](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/build-test.yml/badge.svg)](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/build-test.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.copilot-community-sdk/copilot-sdk)](https://central.sonatype.com/artifact/io.github.copilot-community-sdk/copilot-sdk)
 [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://openjdk.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
