@@ -91,6 +91,27 @@ jobs:
                   echo "- **Release version:** $RELEASE_VERSION" >> $GITHUB_STEP_SUMMARY
                   echo "- **Next development version:** $DEV_VERSION" >> $GITHUB_STEP_SUMMARY
 
+            - name: Update documentation with release version
+              id: update-docs
+              run: |
+                  VERSION="${{ steps.versions.outputs.release_version }}"
+                  
+                  # Update version in README.md
+                  sed -i "s|<version>[0-9]*\.[0-9]*\.[0-9]*</version>|<version>${VERSION}</version>|g" README.md
+                  sed -i "s|copilot-sdk:[0-9]*\.[0-9]*\.[0-9]*|copilot-sdk:${VERSION}|g" README.md
+                  
+                  # Update version in jbang-example.java
+                  sed -i "s|copilot-sdk:[0-9]*\.[0-9]*\.[0-9]*|copilot-sdk:${VERSION}|g" jbang-example.java
+                  
+                  # Commit the documentation changes before release:prepare (requires clean working directory)
+                  git add README.md jbang-example.java
+                  git commit -m "docs: update version references to ${VERSION}"
+                  
+                  # Save the commit SHA for potential rollback
+                  echo "docs_commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+                  
+                  git push origin main
+
             - name: Prepare Release
               run: |
                   mvn -B release:prepare \
@@ -114,25 +135,15 @@ jobs:
                   MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
                   MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
-            - name: Update documentation with the released version
+            - name: Rollback documentation commit on failure
+              if: failure() && steps.update-docs.outputs.docs_commit_sha != ''
               run: |
-                  VERSION="${{ steps.versions.outputs.release_version }}"
-                  
-                  # Update version in README.md
-                  sed -i "s|<version>[0-9]*\.[0-9]*\.[0-9]*</version>|<version>${VERSION}</version>|g" README.md
-                  sed -i "s|copilot-sdk:[0-9]*\.[0-9]*\.[0-9]*|copilot-sdk:${VERSION}|g" README.md
-                  
-                  # Update version in jbang-example.java
-                  sed -i "s|copilot-sdk:[0-9]*\.[0-9]*\.[0-9]*|copilot-sdk:${VERSION}|g" jbang-example.java
-                  
-                  # Stage the documentation changes (will be committed by release:prepare)
-                  git add README.md jbang-example.java
-
-                  # Commit
-                  git commit -m "Update documentation for version ${VERSION}"
-
-                  # Push
+                  echo "Release failed, rolling back documentation commit..."
+                  git revert --no-edit ${{ steps.update-docs.outputs.docs_commit_sha }}
                   git push origin main
+                  
+                  # Also run Maven release:rollback to clean up any partial release state
+                  mvn -B release:rollback || true
 
     github-release:
         name: Create GitHub Release
