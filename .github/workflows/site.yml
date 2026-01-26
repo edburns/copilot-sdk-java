@@ -181,7 +181,7 @@ jobs:
 
       - name: Copy version index page
         run: |
-          cp .github/templates/versions.html site/versions.html
+          cp .github/templates/versions.html site/index.html
 
       - name: Update version list from git tags
         run: |
@@ -212,8 +212,8 @@ jobs:
             fi
           done
           
-          # Update the versions.html using the placeholder
-          sed -i "s|<!-- VERSION_LIST_PLACEHOLDER -->|$VERSION_HTML|" versions.html
+          # Update the index.html using the placeholder
+          sed -i "s|<!-- VERSION_LIST_PLACEHOLDER -->|$VERSION_HTML|" index.html
 
       - name: Deploy to GitHub Pages
         run: |

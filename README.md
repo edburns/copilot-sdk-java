@@ -15,15 +15,15 @@ Java SDK for programmatic control of GitHub Copilot CLI.
 
 ## Table of Contents
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Try it with JBang](#try-it-with-jbang)
-- [Documentation](#documentation)
-- [Building and Testing](#building-and-testing)
-- [Projects Using This SDK](#projects-using-this-sdk)
-- [Contributing](#contributing)
-- [License](#license)
+- [Requirements](#Requirements)
+- [Installation](#Installation)
+- [Quick Start](#Quick_Start)
+- [Try it with JBang](#Try_it_with_JBang)
+- [Documentation](#Documentation)
+- [Building and Testing](#Building_and_Testing)
+- [Projects Using This SDK](#Projects_Using_This_SDK)
+- [Contributing](#Contributing)
+- [License](#License)
 
 ## Requirements
 
