@@ -6,10 +6,9 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'src/site/**'
-      - 'src/main/java/**'
       - 'pom.xml'
-      - '.github/workflows/site.yml'
+      - 'src/**'
+      - '.github/**'
 
   # Runs on release publish (publishes to /latest/ and /vX.Y.Z/)
   release:
