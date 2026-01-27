@@ -12,8 +12,6 @@ This guide covers common use cases for the Copilot SDK for Java. For complete AP
 - [Choosing a Model](#Choosing_a_Model)
 - [Session Management](#Session_Management)
 
-📖 **[Advanced Usage →](advanced.html)** - Tools, BYOK, MCP Servers, Infinite Sessions, and more.
-
 ---
 
 ## Basic Usage
@@ -189,4 +187,4 @@ client.deleteSession(sessionId).get();
 
 - 📖 **[Advanced Usage](advanced.html)** - Tools, BYOK, MCP Servers, System Messages, Infinite Sessions
 - 📖 **[MCP Servers](mcp.html)** - Integrate external tools via Model Context Protocol
-- 📖 **[Javadoc](apidocs/index.html)** - Complete API reference
+- 📖 **[API Javadoc](apidocs/index.html)** - Complete API reference
