@@ -235,6 +235,7 @@ import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 public class WeatherAssistant {
     public static void main(String[] args) throws Exception {
@@ -280,6 +281,19 @@ public class WeatherAssistant {
             System.out.println("🌤️  Weather Assistant (type 'exit' to quit)");
             System.out.println("   Try: 'What's the weather in Paris?'\n");
 
+            var done = new AtomicReference<CompletableFuture<Void>>();
+
+            // Register listener once, outside the loop
+            session.on(event -> {
+                if (event instanceof AssistantMessageDeltaEvent delta) {
+                    System.out.print(delta.getData().getDeltaContent());
+                } else if (event instanceof SessionIdleEvent) {
+                    System.out.println();
+                    var f = done.get();
+                    if (f != null) f.complete(null);
+                }
+            });
+
             while (true) {
                 System.out.print("You: ");
                 String input = scanner.nextLine();
@@ -288,20 +302,11 @@ public class WeatherAssistant {
                     break;
                 }
 
-                var done = new CompletableFuture<Void>();
-
-                session.on(event -> {
-                    if (event instanceof AssistantMessageDeltaEvent delta) {
-                        System.out.print(delta.getData().getDeltaContent());
-                    } else if (event instanceof SessionIdleEvent) {
-                        System.out.println("\n");
-                        done.complete(null);
-                    }
-                });
+                done.set(new CompletableFuture<>());
 
                 System.out.print("Assistant: ");
                 session.send(new MessageOptions().setPrompt(input)).get();
-                done.get();
+                done.get().get();
             }
         }
     }
