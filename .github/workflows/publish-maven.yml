@@ -182,3 +182,17 @@ jobs:
                   gh release create "${GH_ARGS[@]}"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    deploy-site:
+        name: Deploy Documentation
+        needs: [publish-maven, github-release]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Trigger site deployment
+              run: |
+                  gh workflow run deploy-site.yml \
+                    --repo ${{ github.repository }} \
+                    -f version="${{ needs.publish-maven.outputs.version }}" \
+                    -f publish_as_latest=true
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
