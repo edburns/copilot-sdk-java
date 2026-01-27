@@ -2,45 +2,16 @@
 
 > ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
 
-This page covers advanced features and configurations for the Copilot SDK for Java.
-
-## Table of Contents
-
-- [Manual Server Control](#Manual_Server_Control)
-- [Tools](#Tools)
-- [System Message Customization](#System_Message_Customization)
-- [Multiple Sessions](#Multiple_Sessions)
-- [File Attachments](#File_Attachments)
-- [Bring Your Own Key (BYOK)](#Bring_Your_Own_Key_.28BYOK.29)
-- [Permission Handling](#Permission_Handling)
-- [Infinite Sessions](#Infinite_Sessions)
-- [MCP Servers](#MCP_Servers)
-- [Error Handling](#Error_Handling)
+This guide covers advanced scenarios for extending and customizing your Copilot integration.
 
 ---
 
-## Manual Server Control
+## Custom Tools
+
+Let the AI call back into your application to fetch data or perform actions.
 
 ```java
-var client = new CopilotClient(
-    new CopilotClientOptions().setAutoStart(false)
-);
-
-// Start manually
-client.start().get();
-
-// Use client...
-
-// Stop manually
-client.stop().get();
-```
-
-## Tools
-
-You can let the CLI call back into your process when the model needs capabilities you own:
-
-```java
-// Define a record for the tool's arguments (recommended)
+// Define strongly-typed arguments with a record
 record IssueArgs(String id) {}
 
 var lookupTool = ToolDefinition.create(
@@ -54,88 +25,79 @@ var lookupTool = ToolDefinition.create(
         "required", List.of("id")
     ),
     invocation -> {
-        // Option 1: Type-safe argument access using records (recommended)
         IssueArgs args = invocation.getArgumentsAs(IssueArgs.class);
         return CompletableFuture.completedFuture(fetchIssue(args.id()));
-        
-        // Option 2: Map-based access (alternative)
-        // Map<String, Object> args = invocation.getArguments();
-        // String id = (String) args.get("id");
-        // return CompletableFuture.completedFuture(fetchIssue(id));
     }
 );
 
 var session = client.createSession(
     new SessionConfig()
-        .setModel("gpt-5")
         .setTools(List.of(lookupTool))
 ).get();
 ```
 
-## System Message Customization
+See [ToolDefinition](apidocs/com/github/copilot/sdk/ToolDefinition.html) Javadoc for schema details.
 
-Control the system prompt using `SystemMessageConfig` in session config:
+---
+
+## System Messages
+
+Customize the AI's behavior by adding rules or replacing the default prompt.
+
+### Adding Rules
+
+Use `APPEND` mode to add constraints while keeping default guardrails:
 
 ```java
 var session = client.createSession(
     new SessionConfig()
-        .setModel("gpt-5")
         .setSystemMessage(new SystemMessageConfig()
             .setMode(SystemMessageMode.APPEND)
             .setContent("""
-                <workflow_rules>
+                <rules>
                 - Always check for security vulnerabilities
-                - Suggest performance improvements when applicable
-                </workflow_rules>
+                - Suggest performance improvements
+                </rules>
             """))
 ).get();
 ```
 
-For full control (removes all guardrails), use `REPLACE` mode:
+### Full Control
+
+Use `REPLACE` mode for complete control (removes default guardrails):
 
 ```java
 var session = client.createSession(
     new SessionConfig()
-        .setModel("gpt-5")
         .setSystemMessage(new SystemMessageConfig()
             .setMode(SystemMessageMode.REPLACE)
-            .setContent("You are a helpful assistant."))
+            .setContent("You are a helpful coding assistant."))
 ).get();
 ```
 
-## Multiple Sessions
-
-```java
-var session1 = client.createSession(
-    new SessionConfig().setModel("gpt-5")
-).get();
-
-var session2 = client.createSession(
-    new SessionConfig().setModel("claude-sonnet-4.5")
-).get();
-
-// Both sessions are independent
-session1.send(new MessageOptions().setPrompt("Hello from session 1")).get();
-session2.send(new MessageOptions().setPrompt("Hello from session 2")).get();
-```
+---
 
 ## File Attachments
 
+Include files as context for the AI to analyze.
+
 ```java
 session.send(new MessageOptions()
-    .setPrompt("Analyze this file")
+    .setPrompt("Review this file for bugs")
     .setAttachments(List.of(
         new Attachment()
             .setType("file")
             .setPath("/path/to/file.java")
-            .setDisplayName("My File")
+            .setDisplayName("MyService.java")
     ))
 ).get();
 ```
 
+---
+
 ## Bring Your Own Key (BYOK)
 
-Use a custom API provider:
+Use your own OpenAI or Azure OpenAI API key instead of GitHub Copilot.
 
 ```java
 var session = client.createSession(
@@ -143,20 +105,70 @@ var session = client.createSession(
         .setProvider(new ProviderConfig()
             .setType("openai")
             .setBaseUrl("https://api.openai.com/v1")
-            .setApiKey("your-api-key"))
+            .setApiKey("sk-..."))
 ).get();
 ```
 
-## Permission Handling
+---
 
-Handle permission requests from the CLI:
+## Infinite Sessions
+
+Run long conversations without hitting context limits.
+
+When enabled (default), the session automatically compacts older messages as the context window fills up.
 
 ```java
 var session = client.createSession(
     new SessionConfig()
-        .setModel("gpt-5")
+        .setInfiniteSessions(new InfiniteSessionConfig()
+            .setEnabled(true)
+            .setBackgroundCompactionThreshold(0.80)  // Start compacting at 80%
+            .setBufferExhaustionThreshold(0.95))     // Block at 95%
+).get();
+
+// Access the workspace where session state is persisted
+String workspace = session.getWorkspacePath();
+```
+
+For short conversations, disable to avoid overhead:
+
+```java
+new InfiniteSessionConfig().setEnabled(false)
+```
+
+---
+
+## MCP Servers
+
+Extend the AI with external tools via the Model Context Protocol.
+
+```java
+Map<String, Object> server = Map.of(
+    "type", "local",
+    "command", "npx",
+    "args", List.of("-y", "@modelcontextprotocol/server-filesystem", "/tmp"),
+    "tools", List.of("*")
+);
+
+var session = client.createSession(
+    new SessionConfig()
+        .setMcpServers(Map.of("filesystem", server))
+).get();
+```
+
+📖 **[Full MCP documentation →](mcp.html)** for local/remote servers and all options.
+
+---
+
+## Permission Handling
+
+Approve or deny permission requests from the AI.
+
+```java
+var session = client.createSession(
+    new SessionConfig()
         .setOnPermissionRequest((request, invocation) -> {
-            // Approve or deny the permission request
+            // Inspect request and approve/deny
             var result = new PermissionRequestResult();
             result.setKind("user-approved");
             return CompletableFuture.completedFuture(result);
@@ -164,107 +176,42 @@ var session = client.createSession(
 ).get();
 ```
 
-## Infinite Sessions
+---
 
-Infinite sessions enable automatic context management for long-running conversations. When enabled (default), the session automatically manages context window limits through background compaction and persists state to a workspace directory.
+## Manual Server Control
 
-### How It Works
-
-As conversations grow, they eventually approach the model's context window limit. Infinite sessions solve this by:
-
-1. **Background Compaction**: When context utilization reaches the background threshold (default 80%), the session starts compacting older messages asynchronously while continuing to process new messages.
-
-2. **Buffer Exhaustion Protection**: If context reaches the exhaustion threshold (default 95%) before compaction completes, the session blocks until compaction finishes to prevent overflow.
-
-3. **Workspace Persistence**: Session state is persisted to a workspace directory containing:
-   - `checkpoints/` - Session checkpoints for resumption
-   - `plan.md` - Current conversation plan
-   - `files/` - Associated files
-
-### Configuration
+Control the CLI lifecycle yourself instead of auto-start.
 
 ```java
-var infiniteConfig = new InfiniteSessionConfig()
-    .setEnabled(true)
-    .setBackgroundCompactionThreshold(0.80)  // Start compacting at 80% utilization
-    .setBufferExhaustionThreshold(0.95);     // Block at 95% until compaction completes
+var client = new CopilotClient(
+    new CopilotClientOptions().setAutoStart(false)
+);
 
-var session = client.createSession(
-    new SessionConfig()
-        .setModel("gpt-5")
-        .setInfiniteSessions(infiniteConfig)
-).get();
+client.start().get();   // Start manually
+// ... use client ...
+client.stop().get();    // Stop manually
 ```
 
-### Configuration Options
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `enabled` | `true` | Whether infinite sessions are enabled |
-| `backgroundCompactionThreshold` | `0.80` | Context utilization (0.0-1.0) at which background compaction starts |
-| `bufferExhaustionThreshold` | `0.95` | Context utilization (0.0-1.0) at which the session blocks until compaction completes |
-
-### Accessing the Workspace
-
-When infinite sessions are enabled, you can access the workspace path:
-
-```java
-var session = client.createSession(
-    new SessionConfig()
-        .setModel("gpt-5")
-        .setInfiniteSessions(new InfiniteSessionConfig().setEnabled(true))
-).get();
-
-String workspacePath = session.getWorkspacePath();
-if (workspacePath != null) {
-    System.out.println("Session workspace: " + workspacePath);
-    // Access checkpoints/, plan.md, files/ subdirectories
-}
-```
-
-### Disabling Infinite Sessions
-
-For short conversations where context management isn't needed:
-
-```java
-var session = client.createSession(
-    new SessionConfig()
-        .setModel("gpt-5")
-        .setInfiniteSessions(new InfiniteSessionConfig().setEnabled(false))
-).get();
-
-// session.getWorkspacePath() will return null
-```
-
-## MCP Servers
-
-The Copilot SDK can integrate with MCP servers (Model Context Protocol) to extend the assistant's capabilities with external tools. MCP servers run as separate processes and expose tools that Copilot can invoke during conversations.
-
-📖 **[Full MCP documentation →](mcp.html)** - Learn about local vs remote servers, all configuration options, and troubleshooting.
-
-Quick example:
-
-```java
-Map<String, Object> filesystemServer = new HashMap<>();
-filesystemServer.put("type", "local");
-filesystemServer.put("command", "npx");
-filesystemServer.put("args", List.of("-y", "@modelcontextprotocol/server-filesystem", "/tmp"));
-filesystemServer.put("tools", List.of("*"));
-
-var session = client.createSession(
-    new SessionConfig()
-        .setMcpServers(Map.of("filesystem", filesystemServer))
-).get();
-```
+---
 
 ## Error Handling
 
+All SDK methods return `CompletableFuture`. Errors surface via `ExecutionException`:
+
 ```java
 try {
-    var session = client.createSession().get();
     session.send(new MessageOptions().setPrompt("Hello")).get();
 } catch (ExecutionException ex) {
-    Throwable cause = ex.getCause();
-    System.err.println("Error: " + cause.getMessage());
+    System.err.println("Error: " + ex.getCause().getMessage());
 }
+```
+
+For reactive error handling, use `exceptionally()` or `handle()`:
+
+```java
+session.send(new MessageOptions().setPrompt("Hello"))
+    .exceptionally(ex -> {
+        System.err.println("Failed: " + ex.getMessage());
+        return null;
+    });
 ```

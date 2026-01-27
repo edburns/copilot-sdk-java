@@ -37,32 +37,26 @@
             <item name="Introduction" href="index.html"/>
             <item name="Getting Started" href="getting-started.html"/>
             <item name="Documentation" href="documentation.html"/>
-            <item name="Advanced Usage" href="advanced.html"/>
             <item name="MCP Servers" href="mcp.html"/>
-            <item name="Javadoc" href="apidocs/index.html"/>
+            <item name="Advanced Usage" href="advanced.html"/>
+            <item name="API Javadoc" href="apidocs/index.html"/>
         </menu>
 
-        <menu name="Documentation">
-            <item name="API Reference" href="documentation.html#API_Reference">
-                <item name="CopilotClient" href="documentation.html#CopilotClient"/>
-                <item name="CopilotSession" href="documentation.html#CopilotSession"/>
-            </item>
-            <item name="Event Types" href="documentation.html#Event_Types"/>
-            <item name="Streaming" href="documentation.html#Streaming"/>
-            <item name="Listing Models" href="documentation.html#Listing_Models"/>
+        <menu name="Guides">
+            <item name="Basic Usage" href="documentation.html#Basic_Usage"/>
+            <item name="Handling Responses" href="documentation.html#Handling_Responses"/>
+            <item name="Streaming" href="documentation.html#Streaming_Responses"/>
+            <item name="Choosing a Model" href="documentation.html#Choosing_a_Model"/>
+            <item name="Session Management" href="documentation.html#Session_Management"/>
         </menu>
 
         <menu name="Advanced">
-            <item name="Manual Server Control" href="advanced.html#Manual_Server_Control"/>
-            <item name="Tools" href="advanced.html#Tools"/>
-            <item name="System Message Customization" href="advanced.html#System_Message_Customization"/>
-            <item name="Multiple Sessions" href="advanced.html#Multiple_Sessions"/>
+            <item name="Custom Tools" href="advanced.html#Custom_Tools"/>
+            <item name="System Messages" href="advanced.html#System_Messages"/>
             <item name="File Attachments" href="advanced.html#File_Attachments"/>
-            <item name="Bring Your Own Key (BYOK)" href="advanced.html#Bring_Your_Own_Key_.28BYOK.29"/>
-            <item name="Permission Handling" href="advanced.html#Permission_Handling"/>
+            <item name="BYOK" href="advanced.html#Bring_Your_Own_Key_.28BYOK.29"/>
             <item name="Infinite Sessions" href="advanced.html#Infinite_Sessions"/>
             <item name="MCP Servers" href="advanced.html#MCP_Servers"/>
-            <item name="Error Handling" href="advanced.html#Error_Handling"/>
         </menu>
 
         <menu ref="reports"/>
