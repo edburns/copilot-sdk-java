@@ -352,6 +352,7 @@ import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 public class WeatherAssistant {
     public static void main(String[] args) throws Exception {
@@ -397,6 +398,19 @@ public class WeatherAssistant {
             System.out.println(&quot;&#x1f324;&#xfe0f;  Weather Assistant (type 'exit' to quit)&quot;);
             System.out.println(&quot;   Try: 'What's the weather in Paris?'\n&quot;);
 
+            var done = new AtomicReference&lt;CompletableFuture&lt;Void&gt;&gt;();
+
+            // Register listener once, outside the loop
+            session.on(event -&gt; {
+                if (event instanceof AssistantMessageDeltaEvent delta) {
+                    System.out.print(delta.getData().getDeltaContent());
+                } else if (event instanceof SessionIdleEvent) {
+                    System.out.println();
+                    var f = done.get();
+                    if (f != null) f.complete(null);
+                }
+            });
+
             while (true) {
                 System.out.print(&quot;You: &quot;);
                 String input = scanner.nextLine();
@@ -405,20 +419,11 @@ public class WeatherAssistant {
                     break;
                 }
 
-                var done = new CompletableFuture&lt;Void&gt;();
-
-                session.on(event -&gt; {
-                    if (event instanceof AssistantMessageDeltaEvent delta) {
-                        System.out.print(delta.getData().getDeltaContent());
-                    } else if (event instanceof SessionIdleEvent) {
-                        System.out.println(&quot;\n&quot;);
-                        done.complete(null);
-                    }
-                });
+                done.set(new CompletableFuture&lt;&gt;());
 
                 System.out.print(&quot;Assistant: &quot;);
                 session.send(new MessageOptions().setPrompt(input)).get();
-                done.get();
+                done.get().get();
             }
         }
     }
