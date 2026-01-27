@@ -171,8 +171,12 @@ Copilot: In Tokyo it's 75&#xb0;F and sunny. Great day to be outside!
 
 <pre class="prettyprint"><code class="language-bash">copilot --version
 </code></pre></section><section><a id="Step_1.3A_Install_the_SDK"></a>
-<h2>Step 1: Install the SDK</h2><section><a id="Maven"></a>
-<h3>Maven</h3>
+<h2>Step 1: Install the SDK</h2>
+<blockquote>
+
+<p>If you want to test a <em>-SNAPSHOT</em> version, you may have to clone the project's repository and install the library locally with <em>mvn install</em>.</p>
+</blockquote><section><a id="Apache_Maven"></a>
+<h3>Apache Maven</h3>
 <p>Add the dependency to your <code>pom.xml</code>:</p>
 
 <pre class="prettyprint"><code class="language-xml">&lt;dependency&gt;
@@ -187,7 +191,7 @@ Copilot: In Tokyo it's 75&#xb0;F and sunny. Great day to be outside!
 <pre class="prettyprint"><code class="language-groovy">implementation 'io.github.copilot-community-sdk:copilot-sdk:1.0.4-SNAPSHOT'
 </code></pre></section><section><a id="JBang_.28Quick_Start.29"></a>
 <h3>JBang (Quick Start)</h3>
-<p>For the fastest way to try the SDK without setting up a project:</p>
+<p>For the fastest way to try the SDK without setting up a project, use <a href="https://www.jbang.dev/" class="externalLink">JBang</a>. Create a file named <code>HelloCopilot.java</code> with the following header, and then proceed to Step 2 by appending the proposed content into this same file.</p>
 
 <pre class="prettyprint"><code class="language-bash">//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.4-SNAPSHOT
 </code></pre></section></section><section><a id="Step_2.3A_Send_Your_First_Message"></a>
@@ -216,9 +220,10 @@ public class HelloCopilot {
     }
 }
 </code></pre>
-<p>Run it:</p>
+<p>Run the code with your preferred build tool or IDE.</p>
+<p>Or run it directly with JBang:</p>
 
-<pre class="prettyprint"><code class="language-bash">java HelloCopilot.java
+<pre class="prettyprint"><code class="language-bash">jbang HelloCopilot.java
 </code></pre>
 <p><strong>You should see:</strong></p>
 
