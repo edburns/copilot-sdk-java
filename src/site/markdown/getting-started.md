@@ -156,7 +156,6 @@ Now for the powerful part. Let's give Copilot the ability to call your code by d
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -180,8 +179,8 @@ public class ToolExample {
                     "required", List.of("city")
                 ),
                 invocation -> {
-                    JsonNode params = (JsonNode) invocation.getArguments();
-                    String city = params.get("city").asText();
+                    Map<String, Object> params = invocation.getArguments();
+                    String city = (String) params.get("city");
                     
                     // In a real app, you'd call a weather API here
                     String[] conditions = {"sunny", "cloudy", "rainy", "partly cloudy"};
@@ -234,7 +233,6 @@ Let's put it all together into a useful interactive assistant:
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -259,8 +257,8 @@ public class WeatherAssistant {
                     "required", List.of("city")
                 ),
                 invocation -> {
-                    JsonNode params = (JsonNode) invocation.getArguments();
-                    String city = params.get("city").asText();
+                    Map<String, Object> params = invocation.getArguments();
+                    String city = (String) params.get("city");
                     String[] conditions = {"sunny", "cloudy", "rainy", "partly cloudy"};
                     int temp = new Random().nextInt(30) + 50;
                     String condition = conditions[new Random().nextInt(conditions.length)];
@@ -322,9 +320,9 @@ You've learned the core concepts of the Copilot SDK:
 
 **Explore more:**
 
-- [API Documentation](documentation.html) - Complete API reference
-- [MCP Integration](mcp.html) - Connect to Model Context Protocol servers
-- [Examples on GitHub](https://github.com/copilot-community-sdk/copilot-sdk-java/tree/main/examples)
+- [Documentation](documentation.html) - Basic usage and session management
+- [Advanced Usage](advanced.html) - Tools, BYOK, infinite sessions, and more
+- [MCP Servers](mcp.html) - Connect to Model Context Protocol servers
 
 ## Troubleshooting
 
