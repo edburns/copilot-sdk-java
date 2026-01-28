@@ -15,16 +15,34 @@ Before making any changes, **read and understand the existing Java SDK implement
 
 ## Workflow Overview
 
-1. Clone upstream repository
-2. Analyze diff since last merge
-3. Apply changes to Java SDK
-4. Test and fix issues
-5. Update documentation
-6. Leave changes uncommitted for review
+1. Create a new branch from main
+2. Clone upstream repository
+3. Analyze diff since last merge
+4. Apply changes to Java SDK (commit as you go)
+5. Test and fix issues
+6. Update documentation
+7. Push branch to remote for Pull Request review
 
 ---
 
-## Step 1: Clone Upstream Repository
+## Step 1: Create a New Branch
+
+Before starting any work, create a new branch from `main` to isolate the merge changes:
+
+```bash
+# Ensure we're on main and up to date
+git checkout main
+git pull origin main
+
+# Create a new branch with a descriptive name including the date
+BRANCH_NAME="merge-upstream-$(date +%Y%m%d)"
+git checkout -b "$BRANCH_NAME"
+echo "Created branch: $BRANCH_NAME"
+```
+
+**Important:** All changes will be committed to this branch as you work. This allows for proper review via Pull Request.
+
+## Step 2: Clone Upstream Repository
 
 Clone the official Copilot SDK repository into a temporary folder:
 
@@ -34,7 +52,7 @@ TEMP_DIR=$(mktemp -d)
 git clone --depth=100 "$UPSTREAM_REPO" "$TEMP_DIR/copilot-sdk"
 ```
 
-## Step 2: Read Last Merge Commit
+## Step 3: Read Last Merge Commit
 
 Read the commit hash from `.lastmerge` file in the Java SDK root:
 
@@ -43,7 +61,7 @@ LAST_MERGE_COMMIT=$(cat .lastmerge)
 echo "Last merged commit: $LAST_MERGE_COMMIT"
 ```
 
-## Step 3: Analyze Changes
+## Step 4: Analyze Changes
 
 Generate a diff between the last merged commit and HEAD of main:
 
@@ -60,7 +78,7 @@ Focus on analyzing:
 - `docs/` - Documentation updates
 - `sdk-protocol-version.json` - Protocol version changes
 
-## Step 4: Identify Changes to Port
+## Step 5: Identify Changes to Port
 
 For each change in the upstream diff, determine:
 
@@ -85,7 +103,7 @@ For each change in the upstream diff, determine:
 
 > **⚠️ Important:** When adding new documentation pages, always update `src/site/site.xml` to include them in the navigation menu.
 
-## Step 5: Apply Changes to Java SDK
+## Step 6: Apply Changes to Java SDK
 
 When porting changes:
 
@@ -98,6 +116,23 @@ Before modifying any code:
 3. **Check for existing abstractions** - The Java SDK may already have mechanisms that differ from .NET
 4. **Preserve backward compatibility** - Existing API signatures should not break unless absolutely necessary
 5. **When in doubt, match existing code** - Follow what's already in the Java SDK, not the upstream
+
+### Commit Changes Incrementally
+
+**Important:** Commit your changes as you work, grouping related changes together:
+
+```bash
+# After porting a feature or fix, commit with a descriptive message
+git add <changed-files>
+git commit -m "Port <feature/fix name> from upstream"
+
+# Example commits:
+# git commit -m "Port new authentication flow from upstream"
+# git commit -m "Add new message types from upstream protocol update"
+# git commit -m "Port bug fix for session handling from upstream"
+```
+
+This creates a clear history of changes that can be reviewed in the Pull Request.
 
 ### General Guidelines
 
@@ -132,7 +167,7 @@ Follow the existing Java SDK patterns:
 - **Match the style of surrounding code** - Consistency with existing code is more important than upstream patterns
 - **Prefer existing abstractions** - If the Java SDK already solves a problem differently than .NET, keep the Java approach
 
-## Step 6: Format and Run Tests
+## Step 7: Format and Run Tests
 
 After applying changes, format the code and run the test suite:
 
@@ -158,7 +193,7 @@ mvn clean test
 - **Null handling**: Add null checks where C# had nullable types
 - **JSON serialization**: Verify Jackson annotations are correct
 
-## Step 7: Build the Package
+## Step 8: Build the Package
 
 Once tests pass, build the complete package:
 
@@ -171,7 +206,7 @@ Verify:
 - No warnings (if possible)
 - JAR file is generated in `target/`
 
-## Step 8: Update Documentation
+## Step 9: Update Documentation
 
 Review and update documentation as needed:
 
@@ -180,40 +215,65 @@ Review and update documentation as needed:
 3. **Javadoc**: Add/update Javadoc comments for new/changed public APIs
 4. **CHANGELOG**: (if exists) Add entry for the changes
 
-## Step 9: Update Last Merge Reference
+## Step 10: Update Last Merge Reference
 
-Update the `.lastmerge` file with the new HEAD commit:
+Update the `.lastmerge` file with the new HEAD commit and commit this change:
 
 ```bash
 cd "$TEMP_DIR/copilot-sdk"
 NEW_COMMIT=$(git rev-parse origin/main)
-echo "$NEW_COMMIT" > /.lastmerge
+cd -  # Return to Java SDK directory
+echo "$NEW_COMMIT" > .lastmerge
+
+# Commit the .lastmerge update
+git add .lastmerge
+git commit -m "Update .lastmerge to $NEW_COMMIT"
 ```
 
-## Step 10: Final Review (DO NOT COMMIT)
+## Step 11: Push Branch and Create Pull Request
+
+Push the branch to remote so the changes can be reviewed via Pull Request:
+
+```bash
+# Push the branch to remote
+git push -u origin "$BRANCH_NAME"
+
+echo "Branch '$BRANCH_NAME' pushed to remote."
+echo "Create a Pull Request to review and merge the changes."
+```
+
+**Important:** After pushing, provide the user with:
+1. The branch name that was pushed
+2. A summary of the changes that were ported
+3. Instructions to create a Pull Request comparing the branch against `main`
+
+## Step 12: Final Review
 
 Before finishing:
 
-1. Run `git status` to see all changed files
-2. Run `git diff` to review all changes
+1. Run `git log --oneline main..$BRANCH_NAME` to review all commits
+2. Run `git diff main..$BRANCH_NAME --stat` to see a summary of all changes
 3. Ensure no unintended changes were made
 4. Verify code follows project conventions
-5. **DO NOT COMMIT** - leave changes staged/unstaged for user review
+5. Confirm the branch was pushed to remote
 
 ---
 
 ## Checklist
 
+- [ ] New branch created from `main`
 - [ ] Upstream repository cloned
 - [ ] Diff analyzed between `.lastmerge` commit and HEAD
 - [ ] New features/fixes identified
 - [ ] Changes ported to Java SDK following conventions
+- [ ] Changes committed incrementally with descriptive messages
 - [ ] `mvn test` passes
 - [ ] `mvn package` builds successfully
 - [ ] Documentation updated
 - [ ] `src/site/site.xml` updated if new documentation pages were added
 - [ ] `.lastmerge` file updated with new commit hash
-- [ ] Changes left uncommitted for review
+- [ ] Branch pushed to remote
+- [ ] User informed about Pull Request creation
 
 ---
 
