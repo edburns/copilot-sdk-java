@@ -47,6 +47,9 @@ jobs:
       - name: Build SDK and clone test harness
         run: mvn test-compile
 
+      - name: Verify Javadoc generation
+        run: mvn javadoc:javadoc -q
+
       - name: Install Copilot CLI from cloned SDK
         id: setup-copilot
         run: |
