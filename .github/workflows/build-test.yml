@@ -45,7 +45,7 @@ jobs:
           echo "✅ spotless:check passed"
 
       - name: Build SDK and clone test harness
-        run: mvn compile
+        run: mvn test-compile
 
       - name: Install Copilot CLI from cloned SDK
         id: setup-copilot
