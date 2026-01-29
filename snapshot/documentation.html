@@ -195,18 +195,35 @@ System.out.println(response.getData().getContent());
 
 <pre class="prettyprint"><code class="language-java">var done = new CompletableFuture&lt;Void&gt;();
 
-session.on(event -&gt; {
-    if (event instanceof AssistantMessageEvent msg) {
-        System.out.println(&quot;Response: &quot; + msg.getData().getContent());
-    } else if (event instanceof SessionErrorEvent err) {
-        System.err.println(&quot;Error: &quot; + err.getData().getMessage());
-    } else if (event instanceof SessionIdleEvent) {
-        done.complete(null);
-    }
+// Type-safe event handlers (recommended)
+session.on(AssistantMessageEvent.class, msg -&gt; {
+    System.out.println(&quot;Response: &quot; + msg.getData().getContent());
+});
+
+session.on(SessionErrorEvent.class, err -&gt; {
+    System.err.println(&quot;Error: &quot; + err.getData().getMessage());
+});
+
+session.on(SessionIdleEvent.class, idle -&gt; {
+    done.complete(null);
 });
 
 session.send(&quot;Tell me a joke&quot;).get();
 done.get(); // Wait for completion
+</code></pre>
+<p>You can also use a single handler for all events:</p>
+
+<pre class="prettyprint"><code class="language-java">session.on(event -&gt; {
+    switch (event) {
+        case AssistantMessageEvent msg -&gt; 
+            System.out.println(&quot;Response: &quot; + msg.getData().getContent());
+        case SessionErrorEvent err -&gt; 
+            System.err.println(&quot;Error: &quot; + err.getData().getMessage());
+        case SessionIdleEvent idle -&gt; 
+            done.complete(null);
+        default -&gt; { }
+    }
+});
 </code></pre></section><section><a id="Key_Event_Types"></a>
 <h3>Key Event Types</h3>
 <table class="table table-striped">
@@ -231,7 +248,16 @@ done.get(); // Wait for completion
 <td>Tool invocation started</td></tr>
 <tr class="a">
 <td><code>ToolExecutionCompleteEvent</code></td>
-<td>Tool invocation completed</td></tr></tbody>
+<td>Tool invocation completed</td></tr>
+<tr class="b">
+<td><code>SessionCompactionStartEvent</code></td>
+<td>Context compaction started (infinite sessions)</td></tr>
+<tr class="a">
+<td><code>SessionCompactionCompleteEvent</code></td>
+<td>Context compaction completed</td></tr>
+<tr class="b">
+<td><code>SessionUsageInfoEvent</code></td>
+<td>Token usage information</td></tr></tbody>
 </table>
 
 <p>See the <a href="apidocs/com/github/copilot/sdk/events/package-summary.html">events package Javadoc</a> for all event types.</p><hr /></section></section><section><a id="Streaming_Responses"></a>
@@ -312,7 +338,7 @@ client.deleteSession(sessionId).get();
 <h2>Next Steps</h2>
 <ul>
 
-<li>&#x1f4d6; <strong><a href="advanced.html">Advanced Usage</a></strong> - Tools, BYOK, MCP Servers, System Messages, Infinite Sessions</li>
+<li>&#x1f4d6; <strong><a href="advanced.html">Advanced Usage</a></strong> - Tools, BYOK, MCP Servers, System Messages, Infinite Sessions, Skills</li>
 <li>&#x1f4d6; <strong><a href="mcp.html">MCP Servers</a></strong> - Integrate external tools via Model Context Protocol</li>
 <li>&#x1f4d6; <strong><a href="apidocs/index.html">API Javadoc</a></strong> - Complete API reference</li>
 </ul></section></section>        </main>

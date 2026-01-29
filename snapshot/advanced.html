@@ -247,11 +247,24 @@ var session = client.createSession(
 
 // Access the workspace where session state is persisted
 String workspace = session.getWorkspacePath();
+</code></pre><section><a id="Compaction_Events"></a>
+<h3>Compaction Events</h3>
+<p>When compaction occurs, the session emits events that you can listen for:</p>
+
+<pre class="prettyprint"><code class="language-java">session.on(event -&gt; {
+    if (event instanceof SessionCompactionStartEvent start) {
+        System.out.println(&quot;Compaction started&quot;);
+    } else if (event instanceof SessionCompactionCompleteEvent complete) {
+        var data = complete.getData();
+        System.out.println(&quot;Compaction completed - success: &quot; + data.isSuccess() 
+            + &quot;, tokens removed: &quot; + data.getTokensRemoved());
+    }
+});
 </code></pre>
 <p>For short conversations, disable to avoid overhead:</p>
 
 <pre class="prettyprint"><code class="language-java">new InfiniteSessionConfig().setEnabled(false)
-</code></pre><hr /></section><section><a id="MCP_Servers"></a>
+</code></pre><hr /></section></section><section><a id="MCP_Servers"></a>
 <h2>MCP Servers</h2>
 <p>Extend the AI with external tools via the Model Context Protocol.</p>
 
@@ -267,7 +280,46 @@ var session = client.createSession(
         .setMcpServers(Map.of(&quot;filesystem&quot;, server))
 ).get();
 </code></pre>
-<p>&#x1f4d6; <strong><a href="mcp.html">Full MCP documentation &#x2192;</a></strong> for local/remote servers and all options.</p><hr /></section><section><a id="Permission_Handling"></a>
+<p>&#x1f4d6; <strong><a href="mcp.html">Full MCP documentation &#x2192;</a></strong> for local/remote servers and all options.</p><hr /></section><section><a id="Skills_Configuration"></a>
+<h2>Skills Configuration</h2>
+<p>Load custom skills from directories to extend the AI's capabilities with domain-specific knowledge.</p><section><a id="Loading_Skills"></a>
+<h3>Loading Skills</h3>
+<p>Skills are loaded from <code>SKILL.md</code> files in subdirectories of the specified skill directories:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setSkillDirectories(List.of(&quot;/path/to/skills&quot;))
+).get();
+</code></pre>
+<p>Each skill subdirectory should contain a <code>SKILL.md</code> file with YAML frontmatter:</p>
+
+<pre class="prettyprint"><code class="language-markdown">---
+name: my-skill
+description: A skill that provides domain-specific knowledge
+---
+
+# Skill Instructions
+
+Your skill instructions go here...
+</code></pre></section><section><a id="Disabling_Skills"></a>
+<h3>Disabling Skills</h3>
+<p>Disable specific skills by name:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setSkillDirectories(List.of(&quot;/path/to/skills&quot;))
+        .setDisabledSkills(List.of(&quot;my-skill&quot;))
+).get();
+</code></pre><hr /></section></section><section><a id="Custom_Configuration_Directory"></a>
+<h2>Custom Configuration Directory</h2>
+<p>Use a custom configuration directory for session settings:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setConfigDir(&quot;/path/to/custom/config&quot;)
+).get();
+</code></pre>
+<p>This is useful when you need to isolate session configuration or use different settings for different environments.</p><hr /></section><section><a id="Permission_Handling"></a>
 <h2>Permission Handling</h2>
 <p>Approve or deny permission requests from the AI.</p>
 
