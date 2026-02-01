@@ -16,12 +16,14 @@ Before making any changes, **read and understand the existing Java SDK implement
 ## Workflow Overview
 
 1. Create a new branch from main
-2. Clone upstream repository
-3. Analyze diff since last merge
-4. Apply changes to Java SDK (commit as you go)
-5. Test and fix issues
-6. Update documentation
-7. Push branch to remote for Pull Request review
+2. Update Copilot CLI to latest version
+3. Update README with minimum CLI version requirement
+4. Clone upstream repository
+5. Analyze diff since last merge
+6. Apply changes to Java SDK (commit as you go)
+7. Test and fix issues
+8. Update documentation
+9. Push branch to remote for Pull Request review
 
 ---
 
@@ -42,7 +44,32 @@ echo "Created branch: $BRANCH_NAME"
 
 **Important:** All changes will be committed to this branch as you work. This allows for proper review via Pull Request.
 
-## Step 2: Clone Upstream Repository
+## Step 2: Update Copilot CLI
+
+Update the locally installed GitHub Copilot CLI to the latest version:
+
+```bash
+copilot update
+```
+
+After updating, capture the new version and update the README.md to reflect the minimum version requirement:
+
+```bash
+# Get the current version
+CLI_VERSION=$(copilot --version | head -n 1 | awk '{print $NF}')
+echo "Updated Copilot CLI to version: $CLI_VERSION"
+```
+
+Update the Requirements section in `README.md` to specify the minimum CLI version requirement. Locate the line mentioning "GitHub Copilot CLI installed" and update it to include the version information.
+
+Commit this change before proceeding:
+
+```bash
+git add README.md
+git commit -m "Update Copilot CLI minimum version requirement to $CLI_VERSION"
+```
+
+## Step 3: Clone Upstream Repository
 
 Clone the official Copilot SDK repository into a temporary folder:
 
@@ -52,7 +79,7 @@ TEMP_DIR=$(mktemp -d)
 git clone --depth=100 "$UPSTREAM_REPO" "$TEMP_DIR/copilot-sdk"
 ```
 
-## Step 3: Read Last Merge Commit
+## Step 4: Read Last Merge Commit
 
 Read the commit hash from `.lastmerge` file in the Java SDK root:
 
@@ -61,7 +88,7 @@ LAST_MERGE_COMMIT=$(cat .lastmerge)
 echo "Last merged commit: $LAST_MERGE_COMMIT"
 ```
 
-## Step 4: Analyze Changes
+## Step 5: Analyze Changes
 
 Generate a diff between the last merged commit and HEAD of main:
 
@@ -78,7 +105,7 @@ Focus on analyzing:
 - `docs/` - Documentation updates
 - `sdk-protocol-version.json` - Protocol version changes
 
-## Step 5: Identify Changes to Port
+## Step 6: Identify Changes to Port
 
 For each change in the upstream diff, determine:
 
@@ -103,7 +130,7 @@ For each change in the upstream diff, determine:
 
 > **⚠️ Important:** When adding new documentation pages, always update `src/site/site.xml` to include them in the navigation menu.
 
-## Step 6: Apply Changes to Java SDK
+## Step 7: Apply Changes to Java SDK
 
 When porting changes:
 
@@ -167,7 +194,7 @@ Follow the existing Java SDK patterns:
 - **Match the style of surrounding code** - Consistency with existing code is more important than upstream patterns
 - **Prefer existing abstractions** - If the Java SDK already solves a problem differently than .NET, keep the Java approach
 
-## Step 7: Format and Run Tests
+## Step 8: Format and Run Tests
 
 After applying changes, format the code and run the test suite:
 
@@ -193,7 +220,7 @@ mvn clean test
 - **Null handling**: Add null checks where C# had nullable types
 - **JSON serialization**: Verify Jackson annotations are correct
 
-## Step 8: Build the Package
+## Step 9: Build the Package
 
 Once tests pass, build the complete package:
 
@@ -206,7 +233,7 @@ Verify:
 - No warnings (if possible)
 - JAR file is generated in `target/`
 
-## Step 9: Update Documentation
+## Step 10: Update Documentation
 
 Review and update documentation as needed:
 
@@ -215,7 +242,7 @@ Review and update documentation as needed:
 3. **Javadoc**: Add/update Javadoc comments for new/changed public APIs
 4. **CHANGELOG**: (if exists) Add entry for the changes
 
-## Step 10: Update Last Merge Reference
+## Step 11: Update Last Merge Reference
 
 Update the `.lastmerge` file with the new HEAD commit and commit this change:
 
@@ -230,7 +257,7 @@ git add .lastmerge
 git commit -m "Update .lastmerge to $NEW_COMMIT"
 ```
 
-## Step 11: Push Branch and Create Pull Request
+## Step 12: Push Branch and Create Pull Request
 
 Push the branch to remote so the changes can be reviewed via Pull Request:
 
@@ -247,7 +274,7 @@ echo "Create a Pull Request to review and merge the changes."
 2. A summary of the changes that were ported
 3. Instructions to create a Pull Request comparing the branch against `main`
 
-## Step 12: Final Review
+## Step 13: Final Review
 
 Before finishing:
 
@@ -262,6 +289,8 @@ Before finishing:
 ## Checklist
 
 - [ ] New branch created from `main`
+- [ ] Copilot CLI updated to latest version
+- [ ] README.md updated with minimum CLI version requirement
 - [ ] Upstream repository cloned
 - [ ] Diff analyzed between `.lastmerge` commit and HEAD
 - [ ] New features/fixes identified
