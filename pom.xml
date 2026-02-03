@@ -106,28 +106,39 @@
                         </goals>
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+                                <!-- Load the target commit from .lastmerge file -->
+                                <loadfile property="copilot.sdk.commit" srcFile="${project.basedir}/.lastmerge">
+                                    <filterchain>
+                                        <striplinebreaks/>
+                                        <trim/>
+                                    </filterchain>
+                                </loadfile>
+
                                 <!-- Check if .git directory exists -->
                                 <condition property="repo.exists">
                                     <available file="${copilot.sdk.clone.dir}/.git" type="dir" />
                                 </condition>
 
-                                <!-- If repo exists, fetch and reset -->
+                                <!-- If repo exists, fetch and reset to the target commit -->
                                 <sequential if:set="repo.exists">
-                                    <echo message="Updating existing copilot-sdk repository..." />
+                                    <echo message="Updating existing copilot-sdk repository to commit ${copilot.sdk.commit}..." />
                                     <exec executable="git" dir="${copilot.sdk.clone.dir}" failonerror="true">
                                         <arg value="fetch" />
+                                        <arg value="--depth" />
+                                        <arg value="1" />
                                         <arg value="origin" />
+                                        <arg value="${copilot.sdk.commit}" />
                                     </exec>
                                     <exec executable="git" dir="${copilot.sdk.clone.dir}" failonerror="true">
                                         <arg value="reset" />
                                         <arg value="--hard" />
-                                        <arg value="origin/main" />
+                                        <arg value="FETCH_HEAD" />
                                     </exec>
                                 </sequential>
 
-                                <!-- If repo doesn't exist, clone it -->
+                                <!-- If repo doesn't exist, clone it at the specific commit -->
                                 <sequential unless:set="repo.exists">
-                                    <echo message="Cloning copilot-sdk repository..." />
+                                    <echo message="Cloning copilot-sdk repository at commit ${copilot.sdk.commit}..." />
                                     <delete dir="${copilot.sdk.clone.dir}" quiet="true" />
                                     <exec executable="git" failonerror="true">
                                         <arg value="clone" />
@@ -135,6 +146,18 @@
                                         <arg value="1" />
                                         <arg value="https://github.com/github/copilot-sdk.git" />
                                         <arg value="${copilot.sdk.clone.dir}" />
+                                    </exec>
+                                    <exec executable="git" dir="${copilot.sdk.clone.dir}" failonerror="true">
+                                        <arg value="fetch" />
+                                        <arg value="--depth" />
+                                        <arg value="1" />
+                                        <arg value="origin" />
+                                        <arg value="${copilot.sdk.commit}" />
+                                    </exec>
+                                    <exec executable="git" dir="${copilot.sdk.clone.dir}" failonerror="true">
+                                        <arg value="reset" />
+                                        <arg value="--hard" />
+                                        <arg value="FETCH_HEAD" />
                                     </exec>
                                 </sequential>
                             </target>
