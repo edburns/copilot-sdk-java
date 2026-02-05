@@ -8,7 +8,7 @@ inputs:
   jacoco-path:
     description: "Path to the JaCoCo XML report"
     required: false
-    default: "target/site/jacoco/jacoco.xml"
+    default: "target/site/jacoco-coverage/jacoco.xml"
   check-name:
     description: "Name for the check run"
     required: false
