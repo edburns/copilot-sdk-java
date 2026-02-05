@@ -296,6 +296,32 @@ var session = client.createSession(
 
 ---
 
+## Session Hooks
+
+Intercept tool execution and session lifecycle events using hooks.
+
+```java
+var hooks = new SessionHooks()
+    .setOnPreToolUse((input, invocation) -> {
+        System.out.println("Tool: " + input.getToolName());
+        return CompletableFuture.completedFuture(
+            new PreToolUseHookOutput().setPermissionDecision("allow")
+        );
+    })
+    .setOnPostToolUse((input, invocation) -> {
+        System.out.println("Result: " + input.getToolResult());
+        return CompletableFuture.completedFuture(null);
+    });
+
+var session = client.createSession(
+    new SessionConfig().setHooks(hooks)
+).get();
+```
+
+📖 **[Full Session Hooks documentation →](hooks.html)** for all 5 hook types, inputs/outputs, and examples.
+
+---
+
 ## Manual Server Control
 
 Control the CLI lifecycle yourself instead of auto-start.

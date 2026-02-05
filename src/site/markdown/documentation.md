@@ -8,7 +8,9 @@ This guide covers common use cases for the Copilot SDK for Java. For complete AP
 
 - [Basic Usage](#Basic_Usage)
 - [Handling Responses](#Handling_Responses)
+- [Event Types Reference](#Event_Types_Reference)
 - [Streaming Responses](#Streaming_Responses)
+- [Session Operations](#Session_Operations)
 - [Choosing a Model](#Choosing_a_Model)
 - [Session Management](#Session_Management)
 
@@ -99,15 +101,83 @@ session.on(event -> {
 | `AssistantMessageDeltaEvent` | Streaming chunk (when streaming enabled) |
 | `SessionIdleEvent` | Session finished processing |
 | `SessionErrorEvent` | An error occurred |
-| `SessionShutdownEvent` | Session is shutting down (with reason and exit code) |
-| `ToolExecutionStartEvent` | Tool invocation started |
-| `ToolExecutionCompleteEvent` | Tool invocation completed |
-| `SkillInvokedEvent` | A skill was invoked |
-| `SessionCompactionStartEvent` | Context compaction started (infinite sessions) |
-| `SessionCompactionCompleteEvent` | Context compaction completed |
-| `SessionUsageInfoEvent` | Token usage information |
 
-See the [events package Javadoc](apidocs/com/github/copilot/sdk/events/package-summary.html) for all event types.
+For the complete list of all 33 event types, see [Event Types Reference](#Event_Types_Reference) below.
+
+---
+
+## Event Types Reference
+
+The SDK supports 33 event types organized by category. All events extend `AbstractSessionEvent`.
+
+### Session Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `SessionStartEvent` | `session.start` | Session has started |
+| `SessionResumeEvent` | `session.resume` | Session was resumed |
+| `SessionIdleEvent` | `session.idle` | Session finished processing, ready for input |
+| `SessionErrorEvent` | `session.error` | An error occurred in the session |
+| `SessionInfoEvent` | `session.info` | Informational message from the session |
+| `SessionShutdownEvent` | `session.shutdown` | Session is shutting down (includes reason and exit code) |
+| `SessionModelChangeEvent` | `session.model_change` | The model was changed mid-session |
+| `SessionHandoffEvent` | `session.handoff` | Session handed off to another agent |
+| `SessionTruncationEvent` | `session.truncation` | Context was truncated due to limits |
+| `SessionSnapshotRewindEvent` | `session.snapshot_rewind` | Session rewound to a previous snapshot |
+| `SessionUsageInfoEvent` | `session.usage_info` | Token usage information |
+| `SessionCompactionStartEvent` | `session.compaction_start` | Context compaction started (infinite sessions) |
+| `SessionCompactionCompleteEvent` | `session.compaction_complete` | Context compaction completed |
+
+### Assistant Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `AssistantTurnStartEvent` | `assistant.turn_start` | Assistant began processing |
+| `AssistantIntentEvent` | `assistant.intent` | Assistant's detected intent |
+| `AssistantReasoningEvent` | `assistant.reasoning` | Full reasoning content (reasoning models) |
+| `AssistantReasoningDeltaEvent` | `assistant.reasoning_delta` | Streaming reasoning chunk |
+| `AssistantMessageEvent` | `assistant.message` | Complete assistant message |
+| `AssistantMessageDeltaEvent` | `assistant.message_delta` | Streaming message chunk |
+| `AssistantTurnEndEvent` | `assistant.turn_end` | Assistant finished processing |
+| `AssistantUsageEvent` | `assistant.usage` | Token usage for this turn |
+
+### Tool Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `ToolUserRequestedEvent` | `tool.user_requested` | User requested a tool invocation |
+| `ToolExecutionStartEvent` | `tool.execution_start` | Tool execution started |
+| `ToolExecutionProgressEvent` | `tool.execution_progress` | Tool execution progress update |
+| `ToolExecutionPartialResultEvent` | `tool.execution_partial_result` | Partial result from tool |
+| `ToolExecutionCompleteEvent` | `tool.execution_complete` | Tool execution completed |
+
+### User Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `UserMessageEvent` | `user.message` | User sent a message |
+| `PendingMessagesModifiedEvent` | `pending_messages.modified` | Pending message queue changed |
+
+### Subagent Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `SubagentStartedEvent` | `subagent.started` | Subagent was spawned |
+| `SubagentSelectedEvent` | `subagent.selected` | Subagent was selected for task |
+| `SubagentCompletedEvent` | `subagent.completed` | Subagent completed its task |
+| `SubagentFailedEvent` | `subagent.failed` | Subagent failed |
+
+### Other Events
+
+| Event | Type String | Description |
+|-------|-------------|-------------|
+| `AbortEvent` | `abort` | Operation was aborted |
+| `HookStartEvent` | `hook.start` | Hook execution started |
+| `HookEndEvent` | `hook.end` | Hook execution completed |
+| `SystemMessageEvent` | `system.message` | System-level message |
+| `SkillInvokedEvent` | `skill.invoked` | A skill was invoked |
+
+See the [events package Javadoc](apidocs/com/github/copilot/sdk/events/package-summary.html) for detailed event data structures.
 
 ---
 
@@ -136,6 +206,76 @@ session.on(event -> {
 
 session.send("Write a haiku about Java").get();
 done.get();
+```
+
+---
+
+## Session Operations
+
+### Get Conversation History
+
+Retrieve all messages and events from a session using `getMessages()`:
+
+```java
+List<AbstractSessionEvent> history = session.getMessages().get();
+
+for (AbstractSessionEvent event : history) {
+    switch (event) {
+        case UserMessageEvent user -> 
+            System.out.println("User: " + user.getData().getContent());
+        case AssistantMessageEvent assistant -> 
+            System.out.println("Assistant: " + assistant.getData().getContent());
+        case ToolExecutionCompleteEvent tool -> 
+            System.out.println("Tool: " + tool.getData().getToolName());
+        default -> { }
+    }
+}
+```
+
+This is useful for:
+- Displaying conversation history in a UI
+- Persisting conversations for later review
+- Debugging and logging session state
+
+### Abort Current Operation
+
+Cancel a long-running operation using `abort()`:
+
+```java
+// Start a potentially long operation
+var messageFuture = session.send("Analyze this large codebase...");
+
+// User clicks cancel button
+session.abort().get();
+
+// The session will emit an AbortEvent
+session.on(AbortEvent.class, evt -> {
+    System.out.println("Operation was cancelled");
+});
+```
+
+Use cases:
+- User-initiated cancellation in interactive applications
+- Timeout handling in automated pipelines
+- Graceful shutdown when application is closing
+
+### Custom Timeout
+
+Use `sendAndWait` with a custom timeout for CI/CD pipelines:
+
+```java
+try {
+    // 30-second timeout
+    var response = session.sendAndWait(
+        new MessageOptions().setPrompt("Quick question"),
+        30000  // timeout in milliseconds
+    ).get();
+} catch (ExecutionException e) {
+    if (e.getCause() instanceof TimeoutException) {
+        System.err.println("Request timed out");
+        session.abort().get();
+    }
+}
 ```
 
 ---
@@ -210,5 +350,6 @@ client.deleteSession(sessionId).get();
 ## Next Steps
 
 - 📖 **[Advanced Usage](advanced.html)** - Tools, BYOK, MCP Servers, System Messages, Infinite Sessions, Skills
+- 📖 **[Session Hooks](hooks.html)** - Intercept tool execution and session lifecycle events
 - 📖 **[MCP Servers](mcp.html)** - Integrate external tools via Model Context Protocol
 - 📖 **[API Javadoc](apidocs/index.html)** - Complete API reference
