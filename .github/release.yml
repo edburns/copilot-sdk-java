@@ -2,6 +2,8 @@
 # https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
 
 changelog:
+  header: |
+    📋 **Full Changelog**: See [CHANGELOG.md](https://github.com/copilot-community-sdk/copilot-sdk-java/blob/main/CHANGELOG.md) for detailed release notes.
   exclude:
     labels:
       - ignore-for-release
