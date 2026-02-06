@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResumeSessionConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub Copilot Community SDK :: Java</a> &gt; <a href="index.source.html" class="el_package">com.github.copilot.sdk.json</a> &gt; <span class="el_source">ResumeSessionConfig.java</span></div><h1>ResumeSessionConfig.java</h1><pre class="source lang-java linenums">/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *--------------------------------------------------------------------------------------------*/
+
+package com.github.copilot.sdk.json;
+
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/**
+ * Configuration for resuming an existing Copilot session.
+ * &lt;p&gt;
+ * This class provides options for configuring a resumed session, including tool
+ * registration, provider configuration, and streaming. All setter methods
+ * return {@code this} for method chaining.
+ *
+ * &lt;h2&gt;Example Usage&lt;/h2&gt;
+ *
+ * &lt;pre&gt;{@code
+ * var config = new ResumeSessionConfig().setStreaming(true).setTools(List.of(myTool));
+ *
+ * var session = client.resumeSession(sessionId, config).get();
+ * }&lt;/pre&gt;
+ *
+ * @see com.github.copilot.sdk.CopilotClient#resumeSession(String,
+ *      ResumeSessionConfig)
+ * @since 1.0.0
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+<span class="fc" id="L32">public class ResumeSessionConfig {</span>
+
+    private List&lt;ToolDefinition&gt; tools;
+    private ProviderConfig provider;
+    private String reasoningEffort;
+    private PermissionHandler onPermissionRequest;
+    private UserInputHandler onUserInputRequest;
+    private SessionHooks hooks;
+    private String workingDirectory;
+    private boolean disableResume;
+    private boolean streaming;
+    private Map&lt;String, Object&gt; mcpServers;
+    private List&lt;CustomAgentConfig&gt; customAgents;
+    private List&lt;String&gt; skillDirectories;
+    private List&lt;String&gt; disabledSkills;
+
+    /**
+     * Gets the custom tools for this session.
+     *
+     * @return the list of tool definitions
+     */
+    public List&lt;ToolDefinition&gt; getTools() {
+<span class="fc" id="L54">        return tools;</span>
+    }
+
+    /**
+     * Sets custom tools that the assistant can invoke during the session.
+     *
+     * @param tools
+     *            the list of tool definitions
+     * @return this config for method chaining
+     * @see ToolDefinition
+     */
+    public ResumeSessionConfig setTools(List&lt;ToolDefinition&gt; tools) {
+<span class="nc" id="L66">        this.tools = tools;</span>
+<span class="nc" id="L67">        return this;</span>
+    }
+
+    /**
+     * Gets the custom API provider configuration.
+     *
+     * @return the provider configuration
+     */
+    public ProviderConfig getProvider() {
+<span class="fc" id="L76">        return provider;</span>
+    }
+
+    /**
+     * Sets a custom API provider for BYOK scenarios.
+     *
+     * @param provider
+     *            the provider configuration
+     * @return this config for method chaining
+     * @see ProviderConfig
+     */
+    public ResumeSessionConfig setProvider(ProviderConfig provider) {
+<span class="nc" id="L88">        this.provider = provider;</span>
+<span class="nc" id="L89">        return this;</span>
+    }
+
+    /**
+     * Gets the reasoning effort level.
+     *
+     * @return the reasoning effort level (&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, or &quot;xhigh&quot;)
+     */
+    public String getReasoningEffort() {
+<span class="fc" id="L98">        return reasoningEffort;</span>
+    }
+
+    /**
+     * Sets the reasoning effort level for models that support it.
+     * &lt;p&gt;
+     * Valid values: &quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;xhigh&quot;.
+     *
+     * @param reasoningEffort
+     *            the reasoning effort level
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setReasoningEffort(String reasoningEffort) {
+<span class="nc" id="L111">        this.reasoningEffort = reasoningEffort;</span>
+<span class="nc" id="L112">        return this;</span>
+    }
+
+    /**
+     * Gets the permission request handler.
+     *
+     * @return the permission handler
+     */
+    public PermissionHandler getOnPermissionRequest() {
+<span class="fc" id="L121">        return onPermissionRequest;</span>
+    }
+
+    /**
+     * Sets a handler for permission requests from the assistant.
+     *
+     * @param onPermissionRequest
+     *            the permission handler
+     * @return this config for method chaining
+     * @see PermissionHandler
+     */
+    public ResumeSessionConfig setOnPermissionRequest(PermissionHandler onPermissionRequest) {
+<span class="fc" id="L133">        this.onPermissionRequest = onPermissionRequest;</span>
+<span class="fc" id="L134">        return this;</span>
+    }
+
+    /**
+     * Gets the user input request handler.
+     *
+     * @return the user input handler
+     */
+    public UserInputHandler getOnUserInputRequest() {
+<span class="fc" id="L143">        return onUserInputRequest;</span>
+    }
+
+    /**
+     * Sets a handler for user input requests from the agent.
+     *
+     * @param onUserInputRequest
+     *            the user input handler
+     * @return this config for method chaining
+     * @see UserInputHandler
+     */
+    public ResumeSessionConfig setOnUserInputRequest(UserInputHandler onUserInputRequest) {
+<span class="nc" id="L155">        this.onUserInputRequest = onUserInputRequest;</span>
+<span class="nc" id="L156">        return this;</span>
+    }
+
+    /**
+     * Gets the hook handlers configuration.
+     *
+     * @return the session hooks
+     */
+    public SessionHooks getHooks() {
+<span class="fc" id="L165">        return hooks;</span>
+    }
+
+    /**
+     * Sets hook handlers for session lifecycle events.
+     *
+     * @param hooks
+     *            the hooks configuration
+     * @return this config for method chaining
+     * @see SessionHooks
+     */
+    public ResumeSessionConfig setHooks(SessionHooks hooks) {
+<span class="nc" id="L177">        this.hooks = hooks;</span>
+<span class="nc" id="L178">        return this;</span>
+    }
+
+    /**
+     * Gets the working directory for the session.
+     *
+     * @return the working directory path
+     */
+    public String getWorkingDirectory() {
+<span class="fc" id="L187">        return workingDirectory;</span>
+    }
+
+    /**
+     * Sets the working directory for the session.
+     *
+     * @param workingDirectory
+     *            the working directory path
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setWorkingDirectory(String workingDirectory) {
+<span class="nc" id="L198">        this.workingDirectory = workingDirectory;</span>
+<span class="nc" id="L199">        return this;</span>
+    }
+
+    /**
+     * Returns whether the resume event is disabled.
+     *
+     * @return {@code true} if the session.resume event is suppressed
+     */
+    public boolean isDisableResume() {
+<span class="fc" id="L208">        return disableResume;</span>
+    }
+
+    /**
+     * Sets whether to disable the session.resume event.
+     * &lt;p&gt;
+     * When true, the session.resume event is not emitted.
+     *
+     * @param disableResume
+     *            {@code true} to suppress the resume event
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setDisableResume(boolean disableResume) {
+<span class="nc" id="L221">        this.disableResume = disableResume;</span>
+<span class="nc" id="L222">        return this;</span>
+    }
+
+    /**
+     * Returns whether streaming is enabled.
+     *
+     * @return {@code true} if streaming is enabled
+     */
+    public boolean isStreaming() {
+<span class="fc" id="L231">        return streaming;</span>
+    }
+
+    /**
+     * Sets whether to enable streaming of response chunks.
+     *
+     * @param streaming
+     *            {@code true} to enable streaming
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setStreaming(boolean streaming) {
+<span class="nc" id="L242">        this.streaming = streaming;</span>
+<span class="nc" id="L243">        return this;</span>
+    }
+
+    /**
+     * Gets the MCP server configurations.
+     *
+     * @return the MCP servers map
+     */
+    public Map&lt;String, Object&gt; getMcpServers() {
+<span class="fc" id="L252">        return mcpServers;</span>
+    }
+
+    /**
+     * Sets MCP (Model Context Protocol) server configurations.
+     *
+     * @param mcpServers
+     *            the MCP servers configuration map
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setMcpServers(Map&lt;String, Object&gt; mcpServers) {
+<span class="fc" id="L263">        this.mcpServers = mcpServers;</span>
+<span class="fc" id="L264">        return this;</span>
+    }
+
+    /**
+     * Gets the custom agent configurations.
+     *
+     * @return the list of custom agent configurations
+     */
+    public List&lt;CustomAgentConfig&gt; getCustomAgents() {
+<span class="fc" id="L273">        return customAgents;</span>
+    }
+
+    /**
+     * Sets custom agent configurations.
+     *
+     * @param customAgents
+     *            the list of custom agent configurations
+     * @return this config for method chaining
+     * @see CustomAgentConfig
+     */
+    public ResumeSessionConfig setCustomAgents(List&lt;CustomAgentConfig&gt; customAgents) {
+<span class="fc" id="L285">        this.customAgents = customAgents;</span>
+<span class="fc" id="L286">        return this;</span>
+    }
+
+    /**
+     * Gets the skill directories.
+     *
+     * @return the list of skill directory paths
+     */
+    public List&lt;String&gt; getSkillDirectories() {
+<span class="fc" id="L295">        return skillDirectories;</span>
+    }
+
+    /**
+     * Sets directories containing skill definitions.
+     *
+     * @param skillDirectories
+     *            the list of skill directory paths
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setSkillDirectories(List&lt;String&gt; skillDirectories) {
+<span class="nc" id="L306">        this.skillDirectories = skillDirectories;</span>
+<span class="nc" id="L307">        return this;</span>
+    }
+
+    /**
+     * Gets the disabled skills.
+     *
+     * @return the list of disabled skill names
+     */
+    public List&lt;String&gt; getDisabledSkills() {
+<span class="fc" id="L316">        return disabledSkills;</span>
+    }
+
+    /**
+     * Sets skills that should be disabled for this session.
+     *
+     * @param disabledSkills
+     *            the list of skill names to disable
+     * @return this config for method chaining
+     */
+    public ResumeSessionConfig setDisabledSkills(List&lt;String&gt; disabledSkills) {
+<span class="nc" id="L327">        this.disabledSkills = disabledSkills;</span>
+<span class="nc" id="L328">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
