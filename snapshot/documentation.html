@@ -600,7 +600,68 @@ var sessions = client.listSessions().get();
 
 // Resume a session
 var session = client.resumeSession(lastSessionId).get();
-</code></pre></section><section><a id="Clean_Up_Sessions"></a>
+</code></pre></section><section><a id="Resume_Options"></a>
+<h3>Resume Options</h3>
+<p>When resuming a session, you can optionally reconfigure many settings. This is useful when you need to change the model, update tool configurations, or modify behavior.</p>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Option</th>
+<th>Description</th></tr></thead><tbody>
+<tr class="b">
+<td><code>model</code></td>
+<td>Change the model for the resumed session</td></tr>
+<tr class="a">
+<td><code>systemMessage</code></td>
+<td>Override or extend the system prompt</td></tr>
+<tr class="b">
+<td><code>availableTools</code></td>
+<td>Restrict which tools are available</td></tr>
+<tr class="a">
+<td><code>excludedTools</code></td>
+<td>Disable specific tools</td></tr>
+<tr class="b">
+<td><code>provider</code></td>
+<td>Re-provide BYOK credentials (required for BYOK sessions)</td></tr>
+<tr class="a">
+<td><code>reasoningEffort</code></td>
+<td>Adjust reasoning effort level</td></tr>
+<tr class="b">
+<td><code>streaming</code></td>
+<td>Enable/disable streaming responses</td></tr>
+<tr class="a">
+<td><code>workingDirectory</code></td>
+<td>Change the working directory</td></tr>
+<tr class="b">
+<td><code>configDir</code></td>
+<td>Override configuration directory</td></tr>
+<tr class="a">
+<td><code>mcpServers</code></td>
+<td>Configure MCP servers</td></tr>
+<tr class="b">
+<td><code>customAgents</code></td>
+<td>Configure custom agents</td></tr>
+<tr class="a">
+<td><code>skillDirectories</code></td>
+<td>Directories to load skills from</td></tr>
+<tr class="b">
+<td><code>disabledSkills</code></td>
+<td>Skills to disable</td></tr>
+<tr class="a">
+<td><code>infiniteSessions</code></td>
+<td>Configure infinite session behavior</td></tr></tbody>
+</table>
+
+<p><strong>Example: Changing Model on Resume</strong></p>
+
+<pre class="prettyprint"><code class="language-java">// Resume with a different model
+var config = new ResumeSessionConfig()
+    .setModel(&quot;claude-sonnet-4&quot;)    // Switch to a different model
+    .setReasoningEffort(&quot;high&quot;);    // Increase reasoning effort
+
+var session = client.resumeSession(&quot;user-123-task-456&quot;, config).get();
+</code></pre>
+<p>See <a href="apidocs/com/github/copilot/sdk/json/ResumeSessionConfig.html">ResumeSessionConfig</a> Javadoc for complete options.</p></section><section><a id="Clean_Up_Sessions"></a>
 <h3>Clean Up Sessions</h3>
 
 <pre class="prettyprint"><code class="language-java">// Delete a specific session
