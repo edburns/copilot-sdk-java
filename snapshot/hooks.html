@@ -313,8 +313,8 @@ var session = client.createSession(
     .setOnPreToolUse((input, invocation) -&gt; {
         if (input.getToolName().equals(&quot;search_code&quot;)) {
             // Add project root to search path
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectNode modifiedArgs = mapper.createObjectNode();
+            var mapper = new ObjectMapper();
+            var modifiedArgs = mapper.createObjectNode();
             modifiedArgs.put(&quot;path&quot;, &quot;/my/project/src&quot;);
             modifiedArgs.set(&quot;query&quot;, input.getToolArgs().get(&quot;query&quot;));
             
@@ -514,7 +514,7 @@ var session = client.createSession(
         System.out.println(&quot;Session ended: &quot; + input.getReason());
         
         // Clean up session resources
-        ResourceManager resources = sessionResources.remove(invocation.getSessionId());
+        var resources = sessionResources.remove(invocation.getSessionId());
         if (resources != null) {
             resources.close();
         }

@@ -184,7 +184,7 @@ System.out.println(result.getData().getContent());
 <h2>Local Servers</h2>
 <p>Run a tool as a subprocess (stdin/stdout communication).</p>
 
-<pre class="prettyprint"><code class="language-java">Map&lt;String, Object&gt; server = new HashMap&lt;&gt;();
+<pre class="prettyprint"><code class="language-java">var server = new HashMap&lt;String, Object&gt;();
 server.put(&quot;type&quot;, &quot;local&quot;);
 server.put(&quot;command&quot;, &quot;node&quot;);
 server.put(&quot;args&quot;, List.of(&quot;./mcp-server.js&quot;));

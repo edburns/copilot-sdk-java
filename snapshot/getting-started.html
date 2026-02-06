@@ -309,13 +309,13 @@ public class ToolExample {
                     &quot;required&quot;, List.of(&quot;city&quot;)
                 ),
                 invocation -&gt; {
-                    Map&lt;String, Object&gt; params = invocation.getArguments();
-                    String city = (String) params.get(&quot;city&quot;);
+                    var params = invocation.getArguments();
+                    var city = (String) params.get(&quot;city&quot;);
                     
                     // In a real app, you'd call a weather API here
                     String[] conditions = {&quot;sunny&quot;, &quot;cloudy&quot;, &quot;rainy&quot;, &quot;partly cloudy&quot;};
                     int temp = new Random().nextInt(30) + 50;
-                    String condition = conditions[new Random().nextInt(conditions.length)];
+                    var condition = conditions[new Random().nextInt(conditions.length)];
                     
                     return CompletableFuture.completedFuture(Map.of(
                         &quot;city&quot;, city,
@@ -384,11 +384,11 @@ public class WeatherAssistant {
                     &quot;required&quot;, List.of(&quot;city&quot;)
                 ),
                 invocation -&gt; {
-                    Map&lt;String, Object&gt; params = invocation.getArguments();
-                    String city = (String) params.get(&quot;city&quot;);
+                    var params = invocation.getArguments();
+                    var city = (String) params.get(&quot;city&quot;);
                     String[] conditions = {&quot;sunny&quot;, &quot;cloudy&quot;, &quot;rainy&quot;, &quot;partly cloudy&quot;};
                     int temp = new Random().nextInt(30) + 50;
-                    String condition = conditions[new Random().nextInt(conditions.length)];
+                    var condition = conditions[new Random().nextInt(conditions.length)];
                     return CompletableFuture.completedFuture(Map.of(
                         &quot;city&quot;, city,
                         &quot;temperature&quot;, temp + &quot;&#xb0;F&quot;,

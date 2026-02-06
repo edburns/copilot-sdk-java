@@ -490,9 +490,9 @@ done.get();
 <h3>Get Conversation History</h3>
 <p>Retrieve all messages and events from a session using <code>getMessages()</code>:</p>
 
-<pre class="prettyprint"><code class="language-java">List&lt;AbstractSessionEvent&gt; history = session.getMessages().get();
+<pre class="prettyprint"><code class="language-java">var history = session.getMessages().get();
 
-for (AbstractSessionEvent event : history) {
+for (var event : history) {
     switch (event) {
         case UserMessageEvent user -&gt; 
             System.out.println(&quot;User: &quot; + user.getData().getContent());
@@ -552,9 +552,9 @@ session.on(AbortEvent.class, evt -&gt; {
 <h3>List Available Models</h3>
 <p>Query available models before creating a session:</p>
 
-<pre class="prettyprint"><code class="language-java">List&lt;ModelInfo&gt; models = client.listModels().get();
+<pre class="prettyprint"><code class="language-java">var models = client.listModels().get();
 
-for (ModelInfo model : models) {
+for (var model : models) {
     System.out.printf(&quot;%s (%s)%n&quot;, model.getId(), model.getName());
 }
 </code></pre></section><section><a id="Use_a_Specific_Model"></a>
@@ -585,10 +585,10 @@ System.out.println(&quot;Claude: &quot; + future2.get().getData().getContent());
 <h3>Resume a Previous Session</h3>
 
 <pre class="prettyprint"><code class="language-java">// Get the last session ID
-String lastSessionId = client.getLastSessionId().get();
+var lastSessionId = client.getLastSessionId().get();
 
 // Or list all sessions
-List&lt;SessionMetadata&gt; sessions = client.listSessions().get();
+var sessions = client.listSessions().get();
 
 // Resume a session
 var session = client.resumeSession(lastSessionId).get();

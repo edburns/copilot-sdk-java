@@ -255,7 +255,7 @@ var session = client.createSession(
 ).get();
 
 // Access the workspace where session state is persisted
-String workspace = session.getWorkspacePath();
+var workspace = session.getWorkspacePath();
 </code></pre><section><a id="Compaction_Events"></a>
 <h3>Compaction Events</h3>
 <p>When compaction occurs, the session emits events that you can listen for:</p>
@@ -341,7 +341,7 @@ Your skill instructions go here...
             if (request.getChoices() != null &amp;&amp; !request.getChoices().isEmpty()) {
                 System.out.println(&quot;Options: &quot; + request.getChoices());
                 // Return one of the provided choices
-                String selectedChoice = request.getChoices().get(0);
+                var selectedChoice = request.getChoices().get(0);
                 return CompletableFuture.completedFuture(
                     new UserInputResponse()
                         .setAnswer(selectedChoice)
@@ -350,7 +350,7 @@ Your skill instructions go here...
             }
             
             // Freeform input
-            String userAnswer = getUserInput(); // your input method
+            var userAnswer = getUserInput(); // your input method
             return CompletableFuture.completedFuture(
                 new UserInputResponse()
                     .setAnswer(userAnswer)
@@ -420,7 +420,7 @@ client.stop().get();    // Stop manually
 <p>Subscribe to lifecycle events to be notified when sessions are created, deleted, updated, or change foreground/background state.</p><section><a id="Subscribing_to_All_Lifecycle_Events"></a>
 <h3>Subscribing to All Lifecycle Events</h3>
 
-<pre class="prettyprint"><code class="language-java">AutoCloseable subscription = client.onLifecycle(event -&gt; {
+<pre class="prettyprint"><code class="language-java">var subscription = client.onLifecycle(event -&gt; {
     System.out.println(&quot;Session &quot; + event.getSessionId() + &quot;: &quot; + event.getType());
     
     if (event.getMetadata() != null) {
@@ -436,7 +436,7 @@ subscription.close();
 <pre class="prettyprint"><code class="language-java">import com.github.copilot.sdk.json.SessionLifecycleEventTypes;
 
 // Listen only for session creation
-AutoCloseable subscription = client.onLifecycle(
+var subscription = client.onLifecycle(
     SessionLifecycleEventTypes.CREATED,
     event -&gt; System.out.println(&quot;New session: &quot; + event.getSessionId())
 );
@@ -454,7 +454,7 @@ AutoCloseable subscription = client.onLifecycle(
 <p>When connecting to a server running in TUI+server mode (<code>--ui-server</code>), you can control which session is displayed in the TUI.</p><section><a id="Getting_the_Foreground_Session"></a>
 <h3>Getting the Foreground Session</h3>
 
-<pre class="prettyprint"><code class="language-java">String sessionId = client.getForegroundSessionId().get();
+<pre class="prettyprint"><code class="language-java">var sessionId = client.getForegroundSessionId().get();
 if (sessionId != null) {
     System.out.println(&quot;TUI is displaying session: &quot; + sessionId);
 }
