@@ -209,6 +209,7 @@
 
 <li><a href="#Event_Handler_Exceptions">Event Handler Exceptions</a></li>
 <li><a href="#Custom_Event_Error_Handler">Custom Event Error Handler</a></li>
+<li><a href="#Event_Error_Policy">Event Error Policy</a></li>
 </ul></li>
 </ul><hr /></section><section><a id="Custom_Tools"></a>
 <h2>Custom Tools</h2>
@@ -528,11 +529,14 @@ if (sessionId != null) {
     });
 </code></pre><section><a id="Event_Handler_Exceptions"></a>
 <h3>Event Handler Exceptions</h3>
-<p>If an event handler throws an exception, the SDK catches it, logs it at
-<code>SEVERE</code> level, and continues dispatching to remaining handlers. This means
-one faulty handler will never block others from receiving events:</p>
+<p>If an event handler registered via <code>session.on()</code> throws an exception, the SDK
+catches it and logs it at <code>WARNING</code> level. By default, dispatch <strong>stops</strong> after
+the first handler error (<code>PROPAGATE_AND_LOG_ERRORS</code> policy). You can opt in to
+continue dispatching despite errors using <code>SUPPRESS_AND_LOG_ERRORS</code>:</p>
 
-<pre class="prettyprint"><code class="language-java">// This handler throws, but the second handler still runs
+<pre class="prettyprint"><code class="language-java">// With SUPPRESS_AND_LOG_ERRORS, second handler still runs
+session.setEventErrorPolicy(EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS);
+
 session.on(AssistantMessageEvent.class, msg -&gt; {
     throw new RuntimeException(&quot;bug in handler 1&quot;);
 });
@@ -542,17 +546,11 @@ session.on(AssistantMessageEvent.class, msg -&gt; {
     System.out.println(msg.getData().getContent());
 });
 </code></pre>
-<blockquote>
-
-<p><strong>Note:</strong> This exception isolation behavior is consistent with the Node.js,
-Go, and Python Copilot SDKs, which all catch handler errors per-handler. The
-.NET SDK is an exception &#x2014; handler errors propagate there and can prevent
-subsequent handlers from running.</p>
-</blockquote></section><section><a id="Custom_Event_Error_Handler"></a>
+<p>Errors are <strong>always logged</strong> at <code>WARNING</code> level regardless of the policy or
+whether a custom error handler is set.</p></section><section><a id="Custom_Event_Error_Handler"></a>
 <h3>Custom Event Error Handler</h3>
-<p>By default, handler exceptions are logged at <code>SEVERE</code> level using
-<code>java.util.logging</code>. You can replace this with a custom
-<code>EventErrorHandler</code> to integrate with your own logging, metrics, or
+<p>Set a custom <code>EventErrorHandler</code> for additional handling beyond the default
+logging &#x2014; such as metrics, alerts, or integration with external
 error-reporting systems:</p>
 
 <pre class="prettyprint"><code class="language-java">session.setEventErrorHandler((event, exception) -&gt; {
@@ -563,11 +561,51 @@ error-reporting systems:</p>
 </code></pre>
 <p>The error handler receives both the event that was being dispatched and the
 exception that was thrown. If the error handler itself throws, that exception
-is silently caught and logged to prevent cascading failures.</p>
-<p>Pass <code>null</code> to restore the default logging behavior:</p>
+is caught and logged at <code>SEVERE</code>, and dispatch is stopped to prevent cascading
+failures.</p>
+<p>Pass <code>null</code> to use only the default logging behavior:</p>
 
 <pre class="prettyprint"><code class="language-java">session.setEventErrorHandler(null);
-</code></pre></section></section></section>        </main>
+</code></pre></section><section><a id="Event_Error_Policy"></a>
+<h3>Event Error Policy</h3>
+<p>By default, the SDK propagates errors and stops dispatch on the first handler
+error (<code>EventErrorPolicy.PROPAGATE_AND_LOG_ERRORS</code>). You can opt in to
+<strong>suppress</strong> errors so that all handlers execute despite errors:</p>
+
+<pre class="prettyprint"><code class="language-java">session.setEventErrorPolicy(EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS);
+</code></pre>
+<p>The <code>EventErrorHandler</code> (if set) is always invoked regardless of the policy &#x2014;
+the policy only controls whether remaining handlers execute after the error
+handler returns. Errors are always logged at <code>WARNING</code> level.</p>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Policy</th>
+<th>Behavior</th></tr></thead><tbody>
+<tr class="b">
+<td><code>PROPAGATE_AND_LOG_ERRORS</code> (default)</td>
+<td>Log the error; dispatch halts after the first error</td></tr>
+<tr class="a">
+<td><code>SUPPRESS_AND_LOG_ERRORS</code></td>
+<td>Log the error; all remaining handlers execute</td></tr></tbody>
+</table>
+
+<p>You can combine both for full control:</p>
+
+<pre class="prettyprint"><code class="language-java">// Log errors via custom handler and suppress (continue dispatching)
+session.setEventErrorPolicy(EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS);
+session.setEventErrorHandler((event, ex) -&gt;
+    logger.error(&quot;Handler failed, continuing: {}&quot;, ex.getMessage(), ex));
+</code></pre>
+<p>Or switch policies dynamically:</p>
+
+<pre class="prettyprint"><code class="language-java">// Start strict (propagate errors, stop dispatch)
+session.setEventErrorPolicy(EventErrorPolicy.PROPAGATE_AND_LOG_ERRORS);
+
+// Later, switch to lenient mode (suppress errors, continue)
+session.setEventErrorPolicy(EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS);
+</code></pre>
+<p>See <a href="apidocs/com/github/copilot/sdk/EventErrorPolicy.html">EventErrorPolicy</a> and <a href="apidocs/com/github/copilot/sdk/EventErrorHandler.html">EventErrorHandler</a> Javadoc for details.</p></section></section></section>        </main>
       </div>
     </div>
     <hr/>
