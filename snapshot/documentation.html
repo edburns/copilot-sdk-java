@@ -207,7 +207,9 @@ System.out.println(response.getData().getContent());
 
 <p><strong>Exception isolation:</strong> If a handler throws an exception, the SDK logs the
 error and continues dispatching to remaining handlers. One misbehaving handler
-will never prevent others from executing.</p>
+will never prevent others from executing. You can customize error handling with
+<code>session.setEventErrorHandler()</code> &#x2014; see the
+<a href="advanced.html#Custom_Event_Error_Handler">Advanced Usage</a> guide.</p>
 </blockquote>
 
 <pre class="prettyprint"><code class="language-java">var done = new CompletableFuture&lt;Void&gt;();
