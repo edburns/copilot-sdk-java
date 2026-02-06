@@ -2,13 +2,11 @@
 name: Deploy Documentation
 
 on:
-  # Runs on pushes targeting the default branch (publishes to /snapshot/)
-  push:
-    branches: ["main"]
-    paths:
-      - 'pom.xml'
-      - 'src/**'
-      - '.github/**'
+  # Runs after Build & Test succeeds on main (publishes to /snapshot/)
+  workflow_run:
+    workflows: ["Build & Test"]
+    types: [completed]
+    branches: [main]
 
   # Runs on release publish (publishes to /latest/ and /vX.Y.Z/)
   release:
@@ -43,6 +41,8 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    # Skip if triggered by workflow_run that failed
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -111,11 +111,31 @@ jobs:
             echo "is_release=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Download JaCoCo exec from Build & Test
+        if: steps.tags.outputs.is_release == 'false' && inputs.rebuild_all_versions != true && github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-exec
+          path: /tmp/jacoco-exec
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
       - name: Build snapshot documentation (main branch)
         if: steps.tags.outputs.is_release == 'false' && inputs.rebuild_all_versions != true
         run: |
-          # Run tests with JaCoCo coverage for snapshot builds
-          ./mvnw clean verify site -Dcheckstyle.skip=true
+          # Compile sources (needed for javadoc and other reports)
+          ./mvnw clean compile -DskipTests -Dcheckstyle.skip=true
+          
+          # Restore JaCoCo exec if available from Build & Test
+          if [ -f "/tmp/jacoco-exec/sdk-tests.exec" ]; then
+            mkdir -p target/jacoco-test-results
+            cp /tmp/jacoco-exec/sdk-tests.exec target/jacoco-test-results/
+            echo "JaCoCo exec restored — coverage report will be included"
+          fi
+          
+          # Generate site (JaCoCo report plugin picks up the exec file)
+          ./mvnw site -DskipTests -Dcheckstyle.skip=true
           
           rm -rf "site/snapshot"
           mkdir -p "site/snapshot"
@@ -172,9 +192,9 @@ jobs:
             
           done <<< "${{ steps.tags.outputs.all_tags }}"
           
-          # Return to main and build snapshot with JaCoCo coverage
+          # Return to main and build snapshot
           git checkout main
-          ./mvnw clean verify site -Dcheckstyle.skip=true
+          ./mvnw clean site -DskipTests -Dcheckstyle.skip=true
           
           rm -rf "site/snapshot"
           mkdir -p "site/snapshot"
