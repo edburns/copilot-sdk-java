@@ -203,6 +203,12 @@ System.out.println(response.getData().getContent());
 </code></pre></section><section><a id="Event-Based_Processing"></a>
 <h3>Event-Based Processing</h3>
 <p>For more control, subscribe to events and use <code>send()</code>:</p>
+<blockquote>
+
+<p><strong>Exception isolation:</strong> If a handler throws an exception, the SDK logs the
+error and continues dispatching to remaining handlers. One misbehaving handler
+will never prevent others from executing.</p>
+</blockquote>
 
 <pre class="prettyprint"><code class="language-java">var done = new CompletableFuture&lt;Void&gt;();
 
