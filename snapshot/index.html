@@ -212,13 +212,10 @@ public class Example {
             ).get();
 
             var done = new CompletableFuture&lt;Void&gt;();
-            session.on(evt -&gt; {
-                if (evt instanceof AssistantMessageEvent msg) {
-                    System.out.println(msg.getData().getContent());
-                } else if (evt instanceof SessionIdleEvent) {
-                    done.complete(null);
-                }
+            session.on(AssistantMessageEvent.class, msg -&gt; {
+                System.out.println(msg.getData().getContent());
             });
+            session.on(SessionIdleEvent.class, idle -&gt; done.complete(null));
 
             session.send(new MessageOptions().setPrompt(&quot;What is 2+2?&quot;)).get();
             done.get();
@@ -267,13 +264,10 @@ class hello {
             client.start().get();
             var session = client.createSession(new SessionConfig()).get();
             var done = new CompletableFuture&lt;Void&gt;();
-            session.on(evt -&gt; {
-                if (evt instanceof AssistantMessageEvent msg) {
-                    System.out.print(msg.getData().getContent());
-                } else if (evt instanceof SessionIdleEvent) {
-                    done.complete(null);
-                }
+            session.on(AssistantMessageEvent.class, msg -&gt; {
+                System.out.print(msg.getData().getContent());
             });
+            session.on(SessionIdleEvent.class, idle -&gt; done.complete(null));
             session.send(new MessageOptions().setPrompt(&quot;Say hello!&quot;)).get();
             done.get();
         }

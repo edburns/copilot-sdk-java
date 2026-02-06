@@ -473,14 +473,14 @@ done.get(); // Wait for completion
 
 var done = new CompletableFuture&lt;Void&gt;();
 
-session.on(event -&gt; {
-    if (event instanceof AssistantMessageDeltaEvent delta) {
-        // Print each chunk as it arrives
-        System.out.print(delta.getData().getDeltaContent());
-    } else if (event instanceof SessionIdleEvent) {
-        System.out.println(); // Newline at end
-        done.complete(null);
-    }
+session.on(AssistantMessageDeltaEvent.class, delta -&gt; {
+    // Print each chunk as it arrives
+    System.out.print(delta.getData().getDeltaContent());
+});
+
+session.on(SessionIdleEvent.class, idle -&gt; {
+    System.out.println(); // Newline at end
+    done.complete(null);
 });
 
 session.send(&quot;Write a haiku about Java&quot;).get();
