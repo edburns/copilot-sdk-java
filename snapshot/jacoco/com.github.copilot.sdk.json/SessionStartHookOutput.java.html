@@ -4,6 +4,7 @@
 
 package com.github.copilot.sdk.json;
 
+import java.util.Collections;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.7
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L20">public class SessionStartHookOutput {</span>
+<span class="nc" id="L21">public class SessionStartHookOutput {</span>
 
     @JsonProperty(&quot;additionalContext&quot;)
     private String additionalContext;
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the additional context, or {@code null}
      */
     public String getAdditionalContext() {
-<span class="nc" id="L34">        return additionalContext;</span>
+<span class="nc" id="L35">        return additionalContext;</span>
     }
 
     /**
@@ -42,8 +43,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this instance for method chaining
      */
     public SessionStartHookOutput setAdditionalContext(String additionalContext) {
-<span class="nc" id="L45">        this.additionalContext = additionalContext;</span>
-<span class="nc" id="L46">        return this;</span>
+<span class="nc" id="L46">        this.additionalContext = additionalContext;</span>
+<span class="nc" id="L47">        return this;</span>
     }
 
     /**
@@ -52,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the modified configuration map, or {@code null}
      */
     public Map&lt;String, Object&gt; getModifiedConfig() {
-<span class="nc" id="L55">        return modifiedConfig;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        return modifiedConfig == null ? null : Collections.unmodifiableMap(modifiedConfig);</span>
     }
 
     /**
@@ -63,8 +64,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this instance for method chaining
      */
     public SessionStartHookOutput setModifiedConfig(Map&lt;String, Object&gt; modifiedConfig) {
-<span class="nc" id="L66">        this.modifiedConfig = modifiedConfig;</span>
-<span class="nc" id="L67">        return this;</span>
+<span class="nc" id="L67">        this.modifiedConfig = modifiedConfig;</span>
+<span class="nc" id="L68">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

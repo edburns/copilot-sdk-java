@@ -4,6 +4,7 @@
 
 package com.github.copilot.sdk.json;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="fc" id="L36">public final class ToolResultObject {</span>
+<span class="nc" id="L37">public final class ToolResultObject {</span>
 
     @JsonProperty(&quot;textResultForLlm&quot;)
     private String textResultForLlm;
@@ -41,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     @JsonProperty(&quot;binaryResultsForLlm&quot;)
     private List&lt;ToolBinaryResult&gt; binaryResultsForLlm;
 
-<span class="fc" id="L44">    @JsonProperty(&quot;resultType&quot;)</span>
+<span class="nc" id="L45">    @JsonProperty(&quot;resultType&quot;)</span>
     private String resultType = &quot;success&quot;;
 
     @JsonProperty(&quot;error&quot;)
@@ -59,7 +60,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the text result
      */
     public String getTextResultForLlm() {
-<span class="fc" id="L62">        return textResultForLlm;</span>
+<span class="nc" id="L63">        return textResultForLlm;</span>
     }
 
     /**
@@ -70,8 +71,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this result for method chaining
      */
     public ToolResultObject setTextResultForLlm(String textResultForLlm) {
-<span class="fc" id="L73">        this.textResultForLlm = textResultForLlm;</span>
-<span class="fc" id="L74">        return this;</span>
+<span class="nc" id="L74">        this.textResultForLlm = textResultForLlm;</span>
+<span class="nc" id="L75">        return this;</span>
     }
 
     /**
@@ -80,7 +81,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the list of binary results
      */
     public List&lt;ToolBinaryResult&gt; getBinaryResultsForLlm() {
-<span class="fc" id="L83">        return binaryResultsForLlm;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        return binaryResultsForLlm == null ? null : Collections.unmodifiableList(binaryResultsForLlm);</span>
     }
 
     /**
@@ -91,8 +92,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this result for method chaining
      */
     public ToolResultObject setBinaryResultsForLlm(List&lt;ToolBinaryResult&gt; binaryResultsForLlm) {
-<span class="nc" id="L94">        this.binaryResultsForLlm = binaryResultsForLlm;</span>
-<span class="nc" id="L95">        return this;</span>
+<span class="nc" id="L95">        this.binaryResultsForLlm = binaryResultsForLlm;</span>
+<span class="nc" id="L96">        return this;</span>
     }
 
     /**
@@ -101,7 +102,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the result type (&quot;success&quot; or &quot;error&quot;)
      */
     public String getResultType() {
-<span class="fc" id="L104">        return resultType;</span>
+<span class="nc" id="L105">        return resultType;</span>
     }
 
     /**
@@ -112,8 +113,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this result for method chaining
      */
     public ToolResultObject setResultType(String resultType) {
-<span class="fc" id="L115">        this.resultType = resultType;</span>
-<span class="fc" id="L116">        return this;</span>
+<span class="nc" id="L116">        this.resultType = resultType;</span>
+<span class="nc" id="L117">        return this;</span>
     }
 
     /**
@@ -122,7 +123,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the error message, or {@code null} if successful
      */
     public String getError() {
-<span class="fc" id="L125">        return error;</span>
+<span class="nc" id="L126">        return error;</span>
     }
 
     /**
@@ -133,8 +134,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this result for method chaining
      */
     public ToolResultObject setError(String error) {
-<span class="fc" id="L136">        this.error = error;</span>
-<span class="fc" id="L137">        return this;</span>
+<span class="nc" id="L137">        this.error = error;</span>
+<span class="nc" id="L138">        return this;</span>
     }
 
     /**
@@ -143,7 +144,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the session log text
      */
     public String getSessionLog() {
-<span class="fc" id="L146">        return sessionLog;</span>
+<span class="nc" id="L147">        return sessionLog;</span>
     }
 
     /**
@@ -154,8 +155,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this result for method chaining
      */
     public ToolResultObject setSessionLog(String sessionLog) {
-<span class="nc" id="L157">        this.sessionLog = sessionLog;</span>
-<span class="nc" id="L158">        return this;</span>
+<span class="nc" id="L158">        this.sessionLog = sessionLog;</span>
+<span class="nc" id="L159">        return this;</span>
     }
 
     /**
@@ -164,12 +165,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the telemetry map
      */
     public Map&lt;String, Object&gt; getToolTelemetry() {
-<span class="fc" id="L167">        return toolTelemetry;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        return toolTelemetry == null ? null : Collections.unmodifiableMap(toolTelemetry);</span>
     }
 
     public ToolResultObject setToolTelemetry(Map&lt;String, Object&gt; toolTelemetry) {
-<span class="nc" id="L171">        this.toolTelemetry = toolTelemetry;</span>
-<span class="nc" id="L172">        return this;</span>
+<span class="nc" id="L172">        this.toolTelemetry = toolTelemetry;</span>
+<span class="nc" id="L173">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

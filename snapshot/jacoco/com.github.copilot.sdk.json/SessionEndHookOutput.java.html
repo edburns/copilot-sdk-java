@@ -4,6 +4,7 @@
 
 package com.github.copilot.sdk.json;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.7
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L20">public class SessionEndHookOutput {</span>
+<span class="nc" id="L21">public class SessionEndHookOutput {</span>
 
     @JsonProperty(&quot;suppressOutput&quot;)
     private Boolean suppressOutput;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return {@code true} to suppress output, or {@code null}
      */
     public Boolean getSuppressOutput() {
-<span class="nc" id="L37">        return suppressOutput;</span>
+<span class="nc" id="L38">        return suppressOutput;</span>
     }
 
     /**
@@ -45,8 +46,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this instance for method chaining
      */
     public SessionEndHookOutput setSuppressOutput(Boolean suppressOutput) {
-<span class="nc" id="L48">        this.suppressOutput = suppressOutput;</span>
-<span class="nc" id="L49">        return this;</span>
+<span class="nc" id="L49">        this.suppressOutput = suppressOutput;</span>
+<span class="nc" id="L50">        return this;</span>
     }
 
     /**
@@ -55,7 +56,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the cleanup actions, or {@code null}
      */
     public List&lt;String&gt; getCleanupActions() {
-<span class="nc" id="L58">        return cleanupActions;</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        return cleanupActions == null ? null : Collections.unmodifiableList(cleanupActions);</span>
     }
 
     /**
@@ -66,8 +67,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this instance for method chaining
      */
     public SessionEndHookOutput setCleanupActions(List&lt;String&gt; cleanupActions) {
-<span class="nc" id="L69">        this.cleanupActions = cleanupActions;</span>
-<span class="nc" id="L70">        return this;</span>
+<span class="nc" id="L70">        this.cleanupActions = cleanupActions;</span>
+<span class="nc" id="L71">        return this;</span>
     }
 
     /**
@@ -76,7 +77,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return the session summary, or {@code null}
      */
     public String getSessionSummary() {
-<span class="nc" id="L79">        return sessionSummary;</span>
+<span class="nc" id="L80">        return sessionSummary;</span>
     }
 
     /**
@@ -87,8 +88,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return this instance for method chaining
      */
     public SessionEndHookOutput setSessionSummary(String sessionSummary) {
-<span class="nc" id="L90">        this.sessionSummary = sessionSummary;</span>
-<span class="nc" id="L91">        return this;</span>
+<span class="nc" id="L91">        this.sessionSummary = sessionSummary;</span>
+<span class="nc" id="L92">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

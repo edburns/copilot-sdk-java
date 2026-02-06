@@ -7,6 +7,7 @@ package com.github.copilot.sdk.events;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L34">public final class AssistantMessageEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L35">public final class AssistantMessageEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantMessageData data;
@@ -43,7 +44,7 @@ import java.util.List;
      */
     @Override
     public String getType() {
-<span class="fc" id="L46">        return &quot;assistant.message&quot;;</span>
+<span class="nc" id="L47">        return &quot;assistant.message&quot;;</span>
     }
 
     /**
@@ -52,7 +53,7 @@ import java.util.List;
      * @return the message data containing content and tool requests
      */
     public AssistantMessageData getData() {
-<span class="fc" id="L55">        return data;</span>
+<span class="nc" id="L56">        return data;</span>
     }
 
     /**
@@ -62,14 +63,14 @@ import java.util.List;
      *            the message data
      */
     public void setData(AssistantMessageData data) {
-<span class="fc" id="L65">        this.data = data;</span>
-<span class="fc" id="L66">    }</span>
+<span class="nc" id="L66">        this.data = data;</span>
+<span class="nc" id="L67">    }</span>
 
     /**
      * Contains the assistant message content and metadata.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L72">    public static class AssistantMessageData {</span>
+<span class="nc" id="L73">    public static class AssistantMessageData {</span>
 
         @JsonProperty(&quot;messageId&quot;)
         private String messageId;
@@ -98,7 +99,7 @@ import java.util.List;
          * @return the message ID
          */
         public String getMessageId() {
-<span class="nc" id="L101">            return messageId;</span>
+<span class="nc" id="L102">            return messageId;</span>
         }
 
         /**
@@ -108,8 +109,8 @@ import java.util.List;
          *            the message ID
          */
         public void setMessageId(String messageId) {
-<span class="fc" id="L111">            this.messageId = messageId;</span>
-<span class="fc" id="L112">        }</span>
+<span class="nc" id="L112">            this.messageId = messageId;</span>
+<span class="nc" id="L113">        }</span>
 
         /**
          * Gets the text content of the assistant's message.
@@ -117,7 +118,7 @@ import java.util.List;
          * @return the message content
          */
         public String getContent() {
-<span class="fc" id="L120">            return content;</span>
+<span class="nc" id="L121">            return content;</span>
         }
 
         /**
@@ -127,8 +128,8 @@ import java.util.List;
          *            the message content
          */
         public void setContent(String content) {
-<span class="fc" id="L130">            this.content = content;</span>
-<span class="fc" id="L131">        }</span>
+<span class="nc" id="L131">            this.content = content;</span>
+<span class="nc" id="L132">        }</span>
 
         /**
          * Gets the list of tool requests made by the assistant.
@@ -136,7 +137,7 @@ import java.util.List;
          * @return the tool requests, or {@code null} if none
          */
         public List&lt;ToolRequest&gt; getToolRequests() {
-<span class="nc" id="L139">            return toolRequests;</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            return toolRequests == null ? null : Collections.unmodifiableList(toolRequests);</span>
         }
 
         /**
@@ -146,8 +147,8 @@ import java.util.List;
          *            the tool requests
          */
         public void setToolRequests(List&lt;ToolRequest&gt; toolRequests) {
-<span class="fc" id="L149">            this.toolRequests = toolRequests;</span>
-<span class="fc" id="L150">        }</span>
+<span class="nc" id="L150">            this.toolRequests = toolRequests;</span>
+<span class="nc" id="L151">        }</span>
 
         /**
          * Gets the parent tool call ID if this message is in response to a tool.
@@ -155,7 +156,7 @@ import java.util.List;
          * @return the parent tool call ID, or {@code null}
          */
         public String getParentToolCallId() {
-<span class="nc" id="L158">            return parentToolCallId;</span>
+<span class="nc" id="L159">            return parentToolCallId;</span>
         }
 
         /**
@@ -165,8 +166,8 @@ import java.util.List;
          *            the parent tool call ID
          */
         public void setParentToolCallId(String parentToolCallId) {
-<span class="nc" id="L168">            this.parentToolCallId = parentToolCallId;</span>
-<span class="nc" id="L169">        }</span>
+<span class="nc" id="L169">            this.parentToolCallId = parentToolCallId;</span>
+<span class="nc" id="L170">        }</span>
 
         /**
          * Gets the opaque reasoning content (encrypted/encoded).
@@ -174,7 +175,7 @@ import java.util.List;
          * @return the opaque reasoning content, or {@code null}
          */
         public String getReasoningOpaque() {
-<span class="nc" id="L177">            return reasoningOpaque;</span>
+<span class="nc" id="L178">            return reasoningOpaque;</span>
         }
 
         /**
@@ -184,8 +185,8 @@ import java.util.List;
          *            the opaque reasoning content
          */
         public void setReasoningOpaque(String reasoningOpaque) {
-<span class="nc" id="L187">            this.reasoningOpaque = reasoningOpaque;</span>
-<span class="nc" id="L188">        }</span>
+<span class="nc" id="L188">            this.reasoningOpaque = reasoningOpaque;</span>
+<span class="nc" id="L189">        }</span>
 
         /**
          * Gets the human-readable reasoning text.
@@ -193,7 +194,7 @@ import java.util.List;
          * @return the reasoning text, or {@code null}
          */
         public String getReasoningText() {
-<span class="nc" id="L196">            return reasoningText;</span>
+<span class="nc" id="L197">            return reasoningText;</span>
         }
 
         /**
@@ -203,8 +204,8 @@ import java.util.List;
          *            the reasoning text
          */
         public void setReasoningText(String reasoningText) {
-<span class="nc" id="L206">            this.reasoningText = reasoningText;</span>
-<span class="nc" id="L207">        }</span>
+<span class="nc" id="L207">            this.reasoningText = reasoningText;</span>
+<span class="nc" id="L208">        }</span>
 
         /**
          * Gets the encrypted content.
@@ -212,7 +213,7 @@ import java.util.List;
          * @return the encrypted content, or {@code null}
          */
         public String getEncryptedContent() {
-<span class="nc" id="L215">            return encryptedContent;</span>
+<span class="nc" id="L216">            return encryptedContent;</span>
         }
 
         /**
@@ -222,14 +223,14 @@ import java.util.List;
          *            the encrypted content
          */
         public void setEncryptedContent(String encryptedContent) {
-<span class="nc" id="L225">            this.encryptedContent = encryptedContent;</span>
-<span class="nc" id="L226">        }</span>
+<span class="nc" id="L226">            this.encryptedContent = encryptedContent;</span>
+<span class="nc" id="L227">        }</span>
 
         /**
          * Represents a request from the assistant to invoke a tool.
          */
         @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L232">        public static class ToolRequest {</span>
+<span class="nc" id="L233">        public static class ToolRequest {</span>
 
             @JsonProperty(&quot;toolCallId&quot;)
             private String toolCallId;
@@ -246,7 +247,7 @@ import java.util.List;
              * @return the tool call ID
              */
             public String getToolCallId() {
-<span class="nc" id="L249">                return toolCallId;</span>
+<span class="nc" id="L250">                return toolCallId;</span>
             }
 
             /**
@@ -256,8 +257,8 @@ import java.util.List;
              *            the tool call ID
              */
             public void setToolCallId(String toolCallId) {
-<span class="fc" id="L259">                this.toolCallId = toolCallId;</span>
-<span class="fc" id="L260">            }</span>
+<span class="nc" id="L260">                this.toolCallId = toolCallId;</span>
+<span class="nc" id="L261">            }</span>
 
             /**
              * Gets the name of the tool to invoke.
@@ -265,7 +266,7 @@ import java.util.List;
              * @return the tool name
              */
             public String getName() {
-<span class="nc" id="L268">                return name;</span>
+<span class="nc" id="L269">                return name;</span>
             }
 
             /**
@@ -275,8 +276,8 @@ import java.util.List;
              *            the tool name
              */
             public void setName(String name) {
-<span class="fc" id="L278">                this.name = name;</span>
-<span class="fc" id="L279">            }</span>
+<span class="nc" id="L279">                this.name = name;</span>
+<span class="nc" id="L280">            }</span>
 
             /**
              * Gets the arguments to pass to the tool.
@@ -284,7 +285,7 @@ import java.util.List;
              * @return the tool arguments (typically a Map or JsonNode)
              */
             public Object getArguments() {
-<span class="nc" id="L287">                return arguments;</span>
+<span class="nc" id="L288">                return arguments;</span>
             }
 
             /**
@@ -294,8 +295,8 @@ import java.util.List;
              *            the tool arguments
              */
             public void setArguments(Object arguments) {
-<span class="fc" id="L297">                this.arguments = arguments;</span>
-<span class="fc" id="L298">            }</span>
+<span class="nc" id="L298">                this.arguments = arguments;</span>
+<span class="nc" id="L299">            }</span>
         }
     }
 }
