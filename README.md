@@ -3,8 +3,12 @@
 [![Build](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/build-test.yml/badge.svg)](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/build-test.yml)
 [![Site](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/deploy-site.yml/badge.svg)](https://github.com/copilot-community-sdk/copilot-sdk-java/actions/workflows/deploy-site.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.copilot-community-sdk/copilot-sdk)](https://central.sonatype.com/artifact/io.github.copilot-community-sdk/copilot-sdk)
+[![Javadoc](https://javadoc.io/badge2/io.github.copilot-community-sdk/copilot-sdk/javadoc.svg)](https://javadoc.io/doc/io.github.copilot-community-sdk/copilot-sdk)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen)](https://copilot-community-sdk.github.io/copilot-sdk-java/)
 [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://openjdk.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Release](https://img.shields.io/github/v/release/copilot-community-sdk/copilot-sdk-java)](https://github.com/copilot-community-sdk/copilot-sdk-java/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/copilot-community-sdk/copilot-sdk-java)](https://github.com/copilot-community-sdk/copilot-sdk-java/stargazers)
 
 > ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. This SDK may change in breaking ways. Use at your own risk.
 
