@@ -1031,96 +1031,97 @@ public class CopilotClient implements AutoCloseable {
 <span class="fc" id="L1031">        Integer detectedPort = null;</span>
 <span class="fc bfc" id="L1032" title="All 2 branches covered.">        if (!options.isUseStdio()) {</span>
             // Wait for port announcement
-<span class="fc" id="L1034">            BufferedReader reader = new BufferedReader(</span>
-<span class="fc" id="L1035">                    new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));</span>
-<span class="fc" id="L1036">            Pattern portPattern = Pattern.compile(&quot;listening on port (\\d+)&quot;, Pattern.CASE_INSENSITIVE);</span>
-<span class="fc" id="L1037">            long deadline = System.currentTimeMillis() + 30000;</span>
+<span class="fc" id="L1034">            try (BufferedReader reader = new BufferedReader(</span>
+<span class="fc" id="L1035">                    new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {</span>
+<span class="fc" id="L1036">                Pattern portPattern = Pattern.compile(&quot;listening on port (\\d+)&quot;, Pattern.CASE_INSENSITIVE);</span>
+<span class="fc" id="L1037">                long deadline = System.currentTimeMillis() + 30000;</span>
 
-<span class="pc bpc" id="L1039" title="1 of 2 branches missed.">            while (System.currentTimeMillis() &lt; deadline) {</span>
-<span class="fc" id="L1040">                String line = reader.readLine();</span>
-<span class="pc bpc" id="L1041" title="1 of 2 branches missed.">                if (line == null) {</span>
-<span class="nc" id="L1042">                    throw new IOException(&quot;CLI process exited unexpectedly&quot;);</span>
+<span class="pc bpc" id="L1039" title="1 of 2 branches missed.">                while (System.currentTimeMillis() &lt; deadline) {</span>
+<span class="fc" id="L1040">                    String line = reader.readLine();</span>
+<span class="pc bpc" id="L1041" title="1 of 2 branches missed.">                    if (line == null) {</span>
+<span class="nc" id="L1042">                        throw new IOException(&quot;CLI process exited unexpectedly&quot;);</span>
+                    }
+
+<span class="fc" id="L1045">                    Matcher matcher = portPattern.matcher(line);</span>
+<span class="pc bpc" id="L1046" title="1 of 2 branches missed.">                    if (matcher.find()) {</span>
+<span class="fc" id="L1047">                        detectedPort = Integer.parseInt(matcher.group(1));</span>
+<span class="fc" id="L1048">                        break;</span>
+                    }
+<span class="nc" id="L1050">                }</span>
+
+<span class="pc bpc" id="L1052" title="1 of 2 branches missed.">                if (detectedPort == null) {</span>
+<span class="nc" id="L1053">                    process.destroyForcibly();</span>
+<span class="nc" id="L1054">                    throw new IOException(&quot;Timeout waiting for CLI to announce port&quot;);</span>
                 }
-
-<span class="fc" id="L1045">                Matcher matcher = portPattern.matcher(line);</span>
-<span class="pc bpc" id="L1046" title="1 of 2 branches missed.">                if (matcher.find()) {</span>
-<span class="fc" id="L1047">                    detectedPort = Integer.parseInt(matcher.group(1));</span>
-<span class="fc" id="L1048">                    break;</span>
-                }
-<span class="nc" id="L1050">            }</span>
-
-<span class="pc bpc" id="L1052" title="1 of 2 branches missed.">            if (detectedPort == null) {</span>
-<span class="nc" id="L1053">                process.destroyForcibly();</span>
-<span class="nc" id="L1054">                throw new IOException(&quot;Timeout waiting for CLI to announce port&quot;);</span>
             }
         }
 
-<span class="fc" id="L1058">        return new ProcessInfo(process, detectedPort);</span>
+<span class="fc" id="L1059">        return new ProcessInfo(process, detectedPort);</span>
     }
 
     private List&lt;String&gt; resolveCliCommand(String cliPath, List&lt;String&gt; args) {
-<span class="fc" id="L1062">        boolean isJsFile = cliPath.toLowerCase().endsWith(&quot;.js&quot;);</span>
+<span class="fc" id="L1063">        boolean isJsFile = cliPath.toLowerCase().endsWith(&quot;.js&quot;);</span>
 
-<span class="pc bpc" id="L1064" title="1 of 2 branches missed.">        if (isJsFile) {</span>
-<span class="fc" id="L1065">            List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L1066">            result.add(&quot;node&quot;);</span>
-<span class="fc" id="L1067">            result.add(cliPath);</span>
-<span class="fc" id="L1068">            result.addAll(args);</span>
-<span class="fc" id="L1069">            return result;</span>
+<span class="pc bpc" id="L1065" title="1 of 2 branches missed.">        if (isJsFile) {</span>
+<span class="fc" id="L1066">            List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1067">            result.add(&quot;node&quot;);</span>
+<span class="fc" id="L1068">            result.add(cliPath);</span>
+<span class="fc" id="L1069">            result.addAll(args);</span>
+<span class="fc" id="L1070">            return result;</span>
         }
 
         // On Windows, use cmd /c to resolve the executable
-<span class="nc" id="L1073">        String os = System.getProperty(&quot;os.name&quot;).toLowerCase();</span>
-<span class="nc bnc" id="L1074" title="All 4 branches missed.">        if (os.contains(&quot;win&quot;) &amp;&amp; !new File(cliPath).isAbsolute()) {</span>
-<span class="nc" id="L1075">            List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L1076">            result.add(&quot;cmd&quot;);</span>
-<span class="nc" id="L1077">            result.add(&quot;/c&quot;);</span>
-<span class="nc" id="L1078">            result.add(cliPath);</span>
-<span class="nc" id="L1079">            result.addAll(args);</span>
-<span class="nc" id="L1080">            return result;</span>
+<span class="nc" id="L1074">        String os = System.getProperty(&quot;os.name&quot;).toLowerCase();</span>
+<span class="nc bnc" id="L1075" title="All 4 branches missed.">        if (os.contains(&quot;win&quot;) &amp;&amp; !new File(cliPath).isAbsolute()) {</span>
+<span class="nc" id="L1076">            List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L1077">            result.add(&quot;cmd&quot;);</span>
+<span class="nc" id="L1078">            result.add(&quot;/c&quot;);</span>
+<span class="nc" id="L1079">            result.add(cliPath);</span>
+<span class="nc" id="L1080">            result.addAll(args);</span>
+<span class="nc" id="L1081">            return result;</span>
         }
 
-<span class="nc" id="L1083">        List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L1084">        result.add(cliPath);</span>
-<span class="nc" id="L1085">        result.addAll(args);</span>
-<span class="nc" id="L1086">        return result;</span>
+<span class="nc" id="L1084">        List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L1085">        result.add(cliPath);</span>
+<span class="nc" id="L1086">        result.addAll(args);</span>
+<span class="nc" id="L1087">        return result;</span>
     }
 
     private Connection connectToServer(Process process, String tcpHost, Integer tcpPort) throws IOException {
         JsonRpcClient rpc;
 
-<span class="fc bfc" id="L1092" title="All 2 branches covered.">        if (options.isUseStdio()) {</span>
-<span class="pc bpc" id="L1093" title="1 of 2 branches missed.">            if (process == null) {</span>
-<span class="nc" id="L1094">                throw new IllegalStateException(&quot;CLI process not started&quot;);</span>
+<span class="fc bfc" id="L1093" title="All 2 branches covered.">        if (options.isUseStdio()) {</span>
+<span class="pc bpc" id="L1094" title="1 of 2 branches missed.">            if (process == null) {</span>
+<span class="nc" id="L1095">                throw new IllegalStateException(&quot;CLI process not started&quot;);</span>
             }
-<span class="fc" id="L1096">            rpc = JsonRpcClient.fromProcess(process);</span>
+<span class="fc" id="L1097">            rpc = JsonRpcClient.fromProcess(process);</span>
         } else {
-<span class="pc bpc" id="L1098" title="2 of 4 branches missed.">            if (tcpHost == null || tcpPort == null) {</span>
-<span class="nc" id="L1099">                throw new IllegalStateException(&quot;Cannot connect because TCP host or port are not available&quot;);</span>
+<span class="pc bpc" id="L1099" title="2 of 4 branches missed.">            if (tcpHost == null || tcpPort == null) {</span>
+<span class="nc" id="L1100">                throw new IllegalStateException(&quot;Cannot connect because TCP host or port are not available&quot;);</span>
             }
-<span class="fc" id="L1101">            Socket socket = new Socket(tcpHost, tcpPort);</span>
-<span class="fc" id="L1102">            rpc = JsonRpcClient.fromSocket(socket);</span>
+<span class="fc" id="L1102">            Socket socket = new Socket(tcpHost, tcpPort);</span>
+<span class="fc" id="L1103">            rpc = JsonRpcClient.fromSocket(socket);</span>
         }
 
-<span class="fc" id="L1105">        return new Connection(rpc, process);</span>
+<span class="fc" id="L1106">        return new Connection(rpc, process);</span>
     }
 
     @Override
     public void close() {
-<span class="pc bpc" id="L1110" title="1 of 2 branches missed.">        if (disposed)</span>
-<span class="nc" id="L1111">            return;</span>
-<span class="fc" id="L1112">        disposed = true;</span>
+<span class="pc bpc" id="L1111" title="1 of 2 branches missed.">        if (disposed)</span>
+<span class="nc" id="L1112">            return;</span>
+<span class="fc" id="L1113">        disposed = true;</span>
         try {
-<span class="fc" id="L1114">            forceStop().get(5, TimeUnit.SECONDS);</span>
-<span class="nc" id="L1115">        } catch (Exception e) {</span>
-<span class="nc" id="L1116">            LOG.log(Level.FINE, &quot;Error during close&quot;, e);</span>
-<span class="fc" id="L1117">        }</span>
-<span class="fc" id="L1118">    }</span>
+<span class="fc" id="L1115">            forceStop().get(5, TimeUnit.SECONDS);</span>
+<span class="nc" id="L1116">        } catch (Exception e) {</span>
+<span class="nc" id="L1117">            LOG.log(Level.FINE, &quot;Error during close&quot;, e);</span>
+<span class="fc" id="L1118">        }</span>
+<span class="fc" id="L1119">    }</span>
 
-<span class="fc" id="L1120">    private static record ProcessInfo(Process process, Integer port) {</span>
+<span class="fc" id="L1121">    private static record ProcessInfo(Process process, Integer port) {</span>
     };
 
-<span class="fc" id="L1123">    private static record Connection(JsonRpcClient rpc, Process process) {</span>
+<span class="fc" id="L1124">    private static record Connection(JsonRpcClient rpc, Process process) {</span>
     };
 
 }
