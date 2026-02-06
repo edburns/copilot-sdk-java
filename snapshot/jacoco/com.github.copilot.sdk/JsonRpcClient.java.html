@@ -89,7 +89,7 @@ class JsonRpcClient implements AutoCloseable {
      * Creates a JSON-RPC client using TCP socket.
      */
     public static JsonRpcClient fromSocket(Socket socket) throws IOException {
-<span class="nc" id="L92">        return new JsonRpcClient(socket.getInputStream(), socket.getOutputStream(), socket, null);</span>
+<span class="fc" id="L92">        return new JsonRpcClient(socket.getInputStream(), socket.getOutputStream(), socket, null);</span>
     }
 
     /**
@@ -188,7 +188,7 @@ class JsonRpcClient implements AutoCloseable {
                 // Using BufferedReader would cause issues with multi-byte UTF-8 characters.
 <span class="fc" id="L189">                BufferedInputStream bis = new BufferedInputStream(inputStream);</span>
 
-<span class="fc bfc" id="L191" title="All 2 branches covered.">                while (running) {</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">                while (running) {</span>
                     // Read headers line by line
 <span class="fc" id="L193">                    int contentLength = -1;</span>
 <span class="fc" id="L194">                    StringBuilder headerLine = new StringBuilder();</span>
@@ -243,11 +243,11 @@ class JsonRpcClient implements AutoCloseable {
 
 <span class="fc" id="L244">                    handleMessage(content);</span>
 <span class="fc" id="L245">                }</span>
-<span class="nc" id="L246">            } catch (Exception e) {</span>
-<span class="nc bnc" id="L247" title="All 2 branches missed.">                if (running) {</span>
+<span class="fc" id="L246">            } catch (Exception e) {</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                if (running) {</span>
 <span class="nc" id="L248">                    LOG.log(Level.SEVERE, &quot;Error in JSON-RPC reader&quot;, e);</span>
                 }
-<span class="fc" id="L250">            }</span>
+<span class="nc" id="L250">            }</span>
 <span class="fc" id="L251">        });</span>
 <span class="fc" id="L252">    }</span>
 
@@ -321,14 +321,14 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc" id="L321">        pendingRequests.clear();</span>
 
         try {
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">            if (socket != null) {</span>
-<span class="nc" id="L325">                socket.close();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">            if (socket != null) {</span>
+<span class="fc" id="L325">                socket.close();</span>
             }
 <span class="nc" id="L327">        } catch (IOException e) {</span>
 <span class="nc" id="L328">            LOG.log(Level.FINE, &quot;Error closing socket&quot;, e);</span>
 <span class="fc" id="L329">        }</span>
 
-<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (process != null) {</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (process != null) {</span>
 <span class="fc" id="L332">            process.destroy();</span>
         }
 <span class="fc" id="L334">    }</span>
