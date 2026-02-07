@@ -13,99 +13,73 @@ You are an expert Java developer tasked with porting changes from the official C
 
 Before making any changes, **read and understand the existing Java SDK implementation** to ensure new code integrates seamlessly.
 
+## Utility Scripts
+
+The `.github/scripts/` directory contains helper scripts that automate the repeatable parts of this workflow. **Use these scripts instead of running the commands manually.**
+
+| Script | Purpose |
+|---|---|
+| `.github/scripts/merge-upstream-start.sh` | Creates branch, updates CLI, clones upstream, reads `.lastmerge`, prints commit summary |
+| `.github/scripts/merge-upstream-diff.sh` | Detailed diff analysis grouped by area (`.NET src`, tests, snapshots, docs, etc.) |
+| `.github/scripts/merge-upstream-finish.sh` | Runs format + test + build, updates `.lastmerge`, commits, pushes branch |
+| `.github/scripts/format-and-test.sh` | Standalone `spotless:apply` + `mvn clean verify` (useful during porting too) |
+
+All scripts write/read a `.merge-env` file (git-ignored) to share state (branch name, upstream dir, last-merge commit).
+
 ## Workflow Overview
 
-1. Create a new branch from main
-2. Update Copilot CLI to latest version
+1. Run `./.github/scripts/merge-upstream-start.sh` (creates branch, clones upstream, shows summary)
+2. Run `./.github/scripts/merge-upstream-diff.sh` (analyze changes)
 3. Update README with minimum CLI version requirement
-4. Clone upstream repository
-5. Analyze diff since last merge
-6. Apply changes to Java SDK (commit as you go)
-7. Test and fix issues
-8. Update documentation
-9. Push branch to remote for Pull Request review
+4. Port changes to Java SDK (commit as you go)
+5. Run `./.github/scripts/format-and-test.sh` frequently while porting
+6. Update documentation
+7. Run `./.github/scripts/merge-upstream-finish.sh` (final test + push)
+8. Create Pull Request
 
 ---
 
-## Step 1: Create a New Branch
+## Steps 1-2: Initialize and Analyze
 
-Before starting any work, create a new branch from `main` to isolate the merge changes:
-
-```bash
-# Ensure we're on main and up to date
-git checkout main
-git pull origin main
-
-# Create a new branch with a descriptive name including the date
-BRANCH_NAME="merge-upstream-$(date +%Y%m%d)"
-git checkout -b "$BRANCH_NAME"
-echo "Created branch: $BRANCH_NAME"
-```
-
-**Important:** All changes will be committed to this branch as you work. This allows for proper review via Pull Request.
-
-## Step 2: Update Copilot CLI
-
-Update the locally installed GitHub Copilot CLI to the latest version:
+Run the start script to create a branch, update the CLI, clone the upstream repo, and see a summary of new commits:
 
 ```bash
-copilot update
+./.github/scripts/merge-upstream-start.sh
 ```
 
-After updating, capture the new version and update the README.md to reflect the minimum version requirement:
+This writes a `.merge-env` file used by the other scripts. It outputs:
+- The branch name created
+- The Copilot CLI version
+- The upstream dir path
+- A short log of upstream commits since `.lastmerge`
+
+Then run the diff script for a detailed breakdown by area:
 
 ```bash
-# Get the current version
-CLI_VERSION=$(copilot --version | head -n 1 | awk '{print $NF}')
-echo "Updated Copilot CLI to version: $CLI_VERSION"
+./.github/scripts/merge-upstream-diff.sh          # stat only
+./.github/scripts/merge-upstream-diff.sh --full   # full diffs
 ```
 
-Update the Requirements section in `README.md` to specify the minimum CLI version requirement. Locate the line mentioning "GitHub Copilot CLI installed" and update it to include the version information.
+The diff script groups changes into: .NET source, .NET tests, test snapshots, documentation, protocol/config, Go/Node.js/Python SDKs, and other files.
+
+## Step 3: Update README with CLI Version
+
+After the start script runs, check the CLI version it printed (also saved in `.merge-env` as `CLI_VERSION`). Update the Requirements section in `README.md` and `src/site/markdown/index.md` to specify the minimum CLI version requirement.
 
 Commit this change before proceeding:
 
 ```bash
-git add README.md
-git commit -m "Update Copilot CLI minimum version requirement to $CLI_VERSION"
+git add README.md src/site/markdown/index.md
+git commit -m "Update Copilot CLI minimum version requirement"
 ```
 
-## Step 3: Clone Upstream Repository
+## Step 4: Identify Changes to Port
 
-Clone the official Copilot SDK repository into a temporary folder:
-
-```bash
-UPSTREAM_REPO="https://github.com/github/copilot-sdk.git"
-TEMP_DIR=$(mktemp -d)
-git clone --depth=100 "$UPSTREAM_REPO" "$TEMP_DIR/copilot-sdk"
-```
-
-## Step 4: Read Last Merge Commit
-
-Read the commit hash from `.lastmerge` file in the Java SDK root:
-
-```bash
-LAST_MERGE_COMMIT=$(cat .lastmerge)
-echo "Last merged commit: $LAST_MERGE_COMMIT"
-```
-
-## Step 5: Analyze Changes
-
-Generate a diff between the last merged commit and HEAD of main:
-
-```bash
-cd "$TEMP_DIR/copilot-sdk"
-git fetch origin main
-git log --oneline "$LAST_MERGE_COMMIT"..origin/main
-git diff "$LAST_MERGE_COMMIT"..origin/main --stat
-```
-
-Focus on analyzing:
+Using the output from `merge-upstream-diff.sh`, focus on:
 - `dotnet/src/` - Primary reference implementation
 - `dotnet/test/` - Test cases to port
 - `docs/` - Documentation updates
 - `sdk-protocol-version.json` - Protocol version changes
-
-## Step 6: Identify Changes to Port
 
 For each change in the upstream diff, determine:
 
@@ -243,14 +217,19 @@ Commit tests separately or together with their corresponding implementation chan
 
 ## Step 8: Format and Run Tests
 
-After applying changes, format the code and run the test suite:
+After applying changes, use the convenience script:
 
 ```bash
-mvn spotless:apply
-mvn clean test
+./.github/scripts/format-and-test.sh          # format + full verify
+./.github/scripts/format-and-test.sh --debug  # with debug logging
 ```
 
-**Important:** Always run `mvn spotless:apply` before testing to ensure code formatting is consistent with project standards.
+Or for quicker iteration during porting:
+
+```bash
+./.github/scripts/format-and-test.sh --format-only   # just spotless
+./.github/scripts/format-and-test.sh --test-only     # skip formatting
+```
 
 ### If Tests Fail
 
@@ -337,28 +316,13 @@ Ensure consistency across all documentation files:
 - Code examples should use the same patterns and be tested
 - Links to Javadoc should use correct paths (`apidocs/...`)
 
-## Step 11: Update Last Merge Reference
+## Steps 11-12: Finish, Push, and Create Pull Request
 
-Update the `.lastmerge` file with the new HEAD commit and commit this change:
-
-```bash
-cd "$TEMP_DIR/copilot-sdk"
-NEW_COMMIT=$(git rev-parse origin/main)
-cd -  # Return to Java SDK directory
-echo "$NEW_COMMIT" > .lastmerge
-
-# Commit the .lastmerge update
-git add .lastmerge
-git commit -m "Update .lastmerge to $NEW_COMMIT"
-```
-
-## Step 12: Push Branch and Create Pull Request
-
-Push the branch to remote and create a Pull Request automatically:
+Run the finish script which updates `.lastmerge`, runs a final build, and pushes the branch:
 
 ```bash
-# Push the branch to remote
-git push -u origin "$BRANCH_NAME"
+./.github/scripts/merge-upstream-finish.sh            # full format + test + push
+./.github/scripts/merge-upstream-finish.sh --skip-tests  # if tests already passed
 ```
 
 **After pushing, create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`).**
