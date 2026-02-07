@@ -35,7 +35,9 @@ jobs:
       - name: Download dependencies
         run: mvn dependency:go-offline -B
 
-      - name: Verify gh CLI is authenticated
-        run: gh auth status
+      - name: Configure gh CLI authentication
+        run: |
+          echo "GH_TOKEN=${{ github.token }}" >> "$GITHUB_ENV"
+          gh auth status
         env:
           GH_TOKEN: ${{ github.token }}
