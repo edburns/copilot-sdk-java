@@ -105,14 +105,6 @@ jobs:
 
           Follow the [agentic-merge-upstream](.github/prompts/agentic-merge-upstream.prompt.md) prompt to port these changes to the Java SDK.
 
-          **Key steps:**
-          1. Run `.github/scripts/merge-upstream-start.sh` to initialize
-          2. Run `.github/scripts/merge-upstream-diff.sh --full` to analyze changes
-          3. Port relevant changes from the .NET SDK to Java, following existing patterns
-          4. Run `.github/scripts/format-and-test.sh` to validate
-          5. Run `.github/scripts/merge-upstream-finish.sh` to finalize
-
-          Update documentation (README.md, CHANGELOG.md, src/site/markdown/) for any user-facing changes.
           ISSUE_BODY
           )
 
