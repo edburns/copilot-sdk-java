@@ -20,14 +20,23 @@ cd "$ROOT_DIR"
 UPSTREAM_REPO="https://github.com/github/copilot-sdk.git"
 ENV_FILE="$ROOT_DIR/.merge-env"
 
-# ── 1. Create branch ──────────────────────────────────────────
-echo "▸ Ensuring we are on main and up to date…"
-git checkout main
-git pull origin main
+# ── 1. Create branch (or reuse existing) ─────────────────────
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-BRANCH_NAME="merge-upstream-$(date +%Y%m%d)"
-echo "▸ Creating branch: $BRANCH_NAME"
-git checkout -b "$BRANCH_NAME"
+if [[ "$CURRENT_BRANCH" != "main" ]]; then
+    # Already on a non-main branch (e.g., coding agent's auto-created PR branch).
+    # Stay on this branch — do not create a new one.
+    BRANCH_NAME="$CURRENT_BRANCH"
+    echo "▸ Already on branch '$BRANCH_NAME' — reusing it (coding agent mode)."
+    git pull origin main --no-edit 2>/dev/null || echo "  (pull from main skipped or fast-forward not possible)"
+else
+    echo "▸ Ensuring main is up to date…"
+    git pull origin main
+
+    BRANCH_NAME="merge-upstream-$(date +%Y%m%d)"
+    echo "▸ Creating branch: $BRANCH_NAME"
+    git checkout -b "$BRANCH_NAME"
+fi
 
 # ── 2. Update Copilot CLI ────────────────────────────────────
 echo "▸ Updating Copilot CLI…"
