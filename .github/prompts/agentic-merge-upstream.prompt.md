@@ -333,7 +333,13 @@ Run the finish script which updates `.lastmerge`, runs a final build, and pushes
 mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
 ```
 
-> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, close the auto-created pull request, then close the triggering issue as "not planned" with a comment explaining that no changes were applicable.
+> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, you **MUST** close the auto-created pull request and the triggering issue using these exact MCP tool calls:
+>
+> 1. Close the PR: `mcp_github_update_pull_request(owner: "copilot-community-sdk", repo: "copilot-sdk-java", pullNumber: <PR_NUMBER>, state: "closed")`
+> 2. Comment on the issue: `mcp_github_add_issue_comment(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, body: "No relevant upstream changes to port. Closing as not planned.")`
+> 3. Close the issue: `mcp_github_update_issue(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, state: "closed", state_reason: "not_planned")`
+>
+> **Do NOT skip these steps.** All three tool calls are required when there are no changes to port.
 
 **If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`). Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`. Then add the label:
 
