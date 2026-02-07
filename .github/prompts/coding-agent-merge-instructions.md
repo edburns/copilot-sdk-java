@@ -10,9 +10,9 @@ Commit changes incrementally. Update .lastmerge when done.
 IMPORTANT: A pull request has already been created automatically for you — do NOT create a new
 one. Push your commits to the current branch, and the existing PR will be updated.
 
-Add the 'upstream-sync' label to the existing PR using:
+Add the 'upstream-sync' label to the existing PR using the GitHub MCP tool:
 
-    gh pr edit <PR_NUMBER> --add-label upstream-sync
+    mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
 
 If after analyzing the upstream diff there are no relevant changes to port to the Java SDK,
 close the pull request that was automatically created for you, then close this issue as

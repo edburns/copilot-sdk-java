@@ -327,18 +327,18 @@ Run the finish script which updates `.lastmerge`, runs a final build, and pushes
 
 ### PR Handling: Coding Agent vs. Manual Workflow
 
-**If running as a Copilot coding agent** (triggered via GitHub issue assignment by the weekly sync workflow), a pull request has **already been created automatically** for you. Do NOT create a new one. Just push your commits to the current branch — the existing PR will be updated. Add the `upstream-sync` label to the existing PR:
+**If running as a Copilot coding agent** (triggered via GitHub issue assignment by the weekly sync workflow), a pull request has **already been created automatically** for you. Do NOT create a new one. Just push your commits to the current branch — the existing PR will be updated. Add the `upstream-sync` label to the existing PR using the GitHub MCP tool:
 
-```bash
-gh pr edit <PR_NUMBER> --add-label "upstream-sync"
+```
+mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
 ```
 
 > **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, close the auto-created pull request, then close the triggering issue as "not planned" with a comment explaining that no changes were applicable.
 
 **If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`). Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`. Then add the label:
 
-```bash
-gh pr edit <PR_NUMBER> --add-label "upstream-sync"
+```
+mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
 ```
 
 The PR body should include:
@@ -414,7 +414,7 @@ Before finishing:
 - [ ] `.lastmerge` file updated with new commit hash
 - [ ] Branch pushed to remote
 - [ ] **Pull Request finalized** (coding agent: push to existing PR; manual: create via `mcp_github_create_pull_request`)
-- [ ] **`upstream-sync` label added** to the PR via `gh pr edit --add-label "upstream-sync"`
+- [ ] **`upstream-sync` label added** to the PR via `mcp_github_add_issue_labels`
 - [ ] PR URL provided to user
 
 ---
