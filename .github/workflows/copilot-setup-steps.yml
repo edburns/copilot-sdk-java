@@ -32,6 +32,3 @@ jobs:
 
       - name: Download dependencies
         run: mvn dependency:go-offline -B
-
-      - name: Install Copilot CLI
-        id: setup-copilot
