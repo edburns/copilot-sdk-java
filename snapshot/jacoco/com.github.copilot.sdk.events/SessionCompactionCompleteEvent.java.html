@@ -64,85 +64,147 @@ import com.fasterxml.jackson.annotation.JsonProperty;
         @JsonProperty(&quot;checkpointPath&quot;)
         private String checkpointPath;
 
+        @JsonProperty(&quot;compactionTokensUsed&quot;)
+        private CompactionTokensUsed compactionTokensUsed;
+
+        @JsonProperty(&quot;requestId&quot;)
+        private String requestId;
+
         public boolean isSuccess() {
-<span class="fc" id="L68">            return success;</span>
+<span class="fc" id="L74">            return success;</span>
         }
 
         public void setSuccess(boolean success) {
-<span class="fc" id="L72">            this.success = success;</span>
-<span class="fc" id="L73">        }</span>
+<span class="fc" id="L78">            this.success = success;</span>
+<span class="fc" id="L79">        }</span>
 
         public String getError() {
-<span class="nc" id="L76">            return error;</span>
+<span class="nc" id="L82">            return error;</span>
         }
 
         public void setError(String error) {
-<span class="nc" id="L80">            this.error = error;</span>
-<span class="nc" id="L81">        }</span>
+<span class="nc" id="L86">            this.error = error;</span>
+<span class="nc" id="L87">        }</span>
 
         public Double getPreCompactionTokens() {
-<span class="nc" id="L84">            return preCompactionTokens;</span>
+<span class="nc" id="L90">            return preCompactionTokens;</span>
         }
 
         public void setPreCompactionTokens(Double preCompactionTokens) {
-<span class="fc" id="L88">            this.preCompactionTokens = preCompactionTokens;</span>
-<span class="fc" id="L89">        }</span>
+<span class="fc" id="L94">            this.preCompactionTokens = preCompactionTokens;</span>
+<span class="fc" id="L95">        }</span>
 
         public Double getPostCompactionTokens() {
-<span class="nc" id="L92">            return postCompactionTokens;</span>
+<span class="nc" id="L98">            return postCompactionTokens;</span>
         }
 
         public void setPostCompactionTokens(Double postCompactionTokens) {
-<span class="nc" id="L96">            this.postCompactionTokens = postCompactionTokens;</span>
-<span class="nc" id="L97">        }</span>
+<span class="nc" id="L102">            this.postCompactionTokens = postCompactionTokens;</span>
+<span class="nc" id="L103">        }</span>
 
         public Double getPreCompactionMessagesLength() {
-<span class="nc" id="L100">            return preCompactionMessagesLength;</span>
+<span class="nc" id="L106">            return preCompactionMessagesLength;</span>
         }
 
         public void setPreCompactionMessagesLength(Double preCompactionMessagesLength) {
-<span class="fc" id="L104">            this.preCompactionMessagesLength = preCompactionMessagesLength;</span>
-<span class="fc" id="L105">        }</span>
+<span class="fc" id="L110">            this.preCompactionMessagesLength = preCompactionMessagesLength;</span>
+<span class="fc" id="L111">        }</span>
 
         public Double getMessagesRemoved() {
-<span class="nc" id="L108">            return messagesRemoved;</span>
+<span class="nc" id="L114">            return messagesRemoved;</span>
         }
 
         public void setMessagesRemoved(Double messagesRemoved) {
-<span class="nc" id="L112">            this.messagesRemoved = messagesRemoved;</span>
-<span class="nc" id="L113">        }</span>
+<span class="nc" id="L118">            this.messagesRemoved = messagesRemoved;</span>
+<span class="nc" id="L119">        }</span>
 
         public Double getTokensRemoved() {
-<span class="nc" id="L116">            return tokensRemoved;</span>
+<span class="nc" id="L122">            return tokensRemoved;</span>
         }
 
         public void setTokensRemoved(Double tokensRemoved) {
-<span class="nc" id="L120">            this.tokensRemoved = tokensRemoved;</span>
-<span class="nc" id="L121">        }</span>
+<span class="nc" id="L126">            this.tokensRemoved = tokensRemoved;</span>
+<span class="nc" id="L127">        }</span>
 
         public String getSummaryContent() {
-<span class="nc" id="L124">            return summaryContent;</span>
+<span class="nc" id="L130">            return summaryContent;</span>
         }
 
         public void setSummaryContent(String summaryContent) {
-<span class="fc" id="L128">            this.summaryContent = summaryContent;</span>
-<span class="fc" id="L129">        }</span>
+<span class="fc" id="L134">            this.summaryContent = summaryContent;</span>
+<span class="fc" id="L135">        }</span>
 
         public Double getCheckpointNumber() {
-<span class="nc" id="L132">            return checkpointNumber;</span>
+<span class="nc" id="L138">            return checkpointNumber;</span>
         }
 
         public void setCheckpointNumber(Double checkpointNumber) {
-<span class="fc" id="L136">            this.checkpointNumber = checkpointNumber;</span>
-<span class="fc" id="L137">        }</span>
+<span class="fc" id="L142">            this.checkpointNumber = checkpointNumber;</span>
+<span class="fc" id="L143">        }</span>
 
         public String getCheckpointPath() {
-<span class="nc" id="L140">            return checkpointPath;</span>
+<span class="nc" id="L146">            return checkpointPath;</span>
         }
 
         public void setCheckpointPath(String checkpointPath) {
-<span class="fc" id="L144">            this.checkpointPath = checkpointPath;</span>
-<span class="fc" id="L145">        }</span>
+<span class="fc" id="L150">            this.checkpointPath = checkpointPath;</span>
+<span class="fc" id="L151">        }</span>
+
+        public CompactionTokensUsed getCompactionTokensUsed() {
+<span class="nc" id="L154">            return compactionTokensUsed;</span>
+        }
+
+        public void setCompactionTokensUsed(CompactionTokensUsed compactionTokensUsed) {
+<span class="fc" id="L158">            this.compactionTokensUsed = compactionTokensUsed;</span>
+<span class="fc" id="L159">        }</span>
+
+        public String getRequestId() {
+<span class="nc" id="L162">            return requestId;</span>
+        }
+
+        public void setRequestId(String requestId) {
+<span class="nc" id="L166">            this.requestId = requestId;</span>
+<span class="nc" id="L167">        }</span>
+    }
+
+    /**
+     * Token usage information for the compaction operation.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+<span class="fc" id="L174">    public static class CompactionTokensUsed {</span>
+
+        @JsonProperty(&quot;input&quot;)
+        private double input;
+
+        @JsonProperty(&quot;output&quot;)
+        private double output;
+
+        @JsonProperty(&quot;cachedInput&quot;)
+        private double cachedInput;
+
+        public double getInput() {
+<span class="nc" id="L186">            return input;</span>
+        }
+
+        public void setInput(double input) {
+<span class="fc" id="L190">            this.input = input;</span>
+<span class="fc" id="L191">        }</span>
+
+        public double getOutput() {
+<span class="nc" id="L194">            return output;</span>
+        }
+
+        public void setOutput(double output) {
+<span class="fc" id="L198">            this.output = output;</span>
+<span class="fc" id="L199">        }</span>
+
+        public double getCachedInput() {
+<span class="nc" id="L202">            return cachedInput;</span>
+        }
+
+        public void setCachedInput(double cachedInput) {
+<span class="fc" id="L206">            this.cachedInput = cachedInput;</span>
+<span class="fc" id="L207">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
