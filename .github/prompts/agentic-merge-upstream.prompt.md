@@ -327,24 +327,24 @@ Run the finish script which updates `.lastmerge`, runs a final build, and pushes
 
 ### PR Handling: Coding Agent vs. Manual Workflow
 
-**If running as a Copilot coding agent** (triggered via GitHub issue assignment by the weekly sync workflow), a pull request has **already been created automatically** for you. Do NOT create a new one. Just push your commits to the current branch — the existing PR will be updated. Add the `upstream-sync` label to the existing PR using the GitHub MCP tool:
+**If running as a Copilot coding agent** (triggered via GitHub issue assignment by the weekly sync workflow), a pull request has **already been created automatically** for you. Do NOT create a new one. Just push your commits to the current branch — the existing PR will be updated. Add the `upstream-sync` label to the existing PR by running this command in a terminal:
 
-```
-mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
+```bash
+gh pr edit --add-label "upstream-sync"
 ```
 
-> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, you **MUST** close the auto-created pull request and the triggering issue using these exact MCP tool calls:
+> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, you **MUST** close the auto-created pull request and the triggering issue by running these commands in a terminal:
 >
-> 1. Close the PR: `mcp_github_update_pull_request(owner: "copilot-community-sdk", repo: "copilot-sdk-java", pullNumber: <PR_NUMBER>, state: "closed")`
-> 2. Comment on the issue: `mcp_github_add_issue_comment(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, body: "No relevant upstream changes to port. Closing as not planned.")`
-> 3. Close the issue: `mcp_github_update_issue(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, state: "closed", state_reason: "not_planned")`
+> 1. Close the PR: `gh pr close $(gh pr view --json number --jq .number) --comment "No relevant upstream changes to port to the Java SDK."`
+> 2. Close the issue: `gh issue close ISSUE_NUMBER --reason "not planned" --comment "No relevant upstream changes to port to the Java SDK. Closing as not planned."` (replace ISSUE_NUMBER with the actual issue number)
 >
-> **Do NOT skip these steps.** All three tool calls are required when there are no changes to port.
+> **CRITICAL: You MUST run these `gh` CLI commands in a terminal. Do NOT skip these steps.** Both commands are required when there are no changes to port.
 
-**If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`). Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`. Then add the label:
+**If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using `gh` CLI or the GitHub MCP tool. Then add the label:
 
-```
-mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
+```bash
+gh pr create --base main --title "Merge upstream SDK changes (YYYY-MM-DD)" --body-file /dev/stdin <<< "$PR_BODY"
+gh pr edit --add-label "upstream-sync"
 ```
 
 The PR body should include:

@@ -10,23 +10,20 @@ Commit changes incrementally. Update .lastmerge when done.
 IMPORTANT: A pull request has already been created automatically for you — do NOT create a new
 one. Push your commits to the current branch, and the existing PR will be updated.
 
-Add the 'upstream-sync' label to the existing PR using the GitHub MCP tool:
+Add the 'upstream-sync' label to the existing PR by running this command in a terminal:
 
-    mcp_github_add_issue_labels(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <PR_NUMBER>, labels: ["upstream-sync"])
+    gh pr edit --add-label "upstream-sync"
 
 If after analyzing the upstream diff there are no relevant changes to port to the Java SDK,
-you MUST close the pull request and the issue. Use these exact GitHub MCP tool calls:
+you MUST close the pull request and the issue. Run the following commands in a terminal:
 
 1. Close the auto-created pull request:
 
-    mcp_github_update_pull_request(owner: "copilot-community-sdk", repo: "copilot-sdk-java", pullNumber: <PR_NUMBER>, state: "closed")
+    gh pr close $(gh pr view --json number --jq .number) --comment "No relevant upstream changes to port to the Java SDK."
 
-2. Add a comment to the issue explaining no changes were needed:
+2. Close the triggering issue as 'not planned' (replace ISSUE_NUMBER with the actual issue number from the issue that was assigned to you):
 
-    mcp_github_add_issue_comment(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, body: "No relevant upstream changes to port to the Java SDK. Closing as not planned.")
+    gh issue close ISSUE_NUMBER --reason "not planned" --comment "No relevant upstream changes to port to the Java SDK. Closing as not planned."
 
-3. Close the issue as 'not planned':
-
-    mcp_github_update_issue(owner: "copilot-community-sdk", repo: "copilot-sdk-java", issue_number: <ISSUE_NUMBER>, state: "closed", state_reason: "not_planned")
-
-Do NOT skip these steps. All three tool calls are required.
+CRITICAL: You MUST run these gh CLI commands in a terminal. Do NOT skip these steps.
+Both the PR close and issue close commands are required when there are no changes to port.
