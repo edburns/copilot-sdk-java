@@ -1,0 +1,19 @@
+<!-- Custom instructions for the Copilot coding agent when triggered by the weekly upstream sync workflow. -->
+<!-- This file is read by .github/workflows/weekly-upstream-sync.yml and passed as custom_instructions. -->
+
+Follow the agentic-merge-upstream prompt at .github/prompts/agentic-merge-upstream.prompt.md
+to port upstream changes to the Java SDK.
+
+Use the utility scripts in .github/scripts/ for initialization, diffing, formatting, and testing.
+Commit changes incrementally. Update .lastmerge when done.
+
+IMPORTANT: A pull request has already been created automatically for you — do NOT create a new
+one. Push your commits to the current branch, and the existing PR will be updated.
+
+Add the 'upstream-sync' label to the existing PR using:
+
+    gh pr edit <PR_NUMBER> --add-label upstream-sync
+
+If after analyzing the upstream diff there are no relevant changes to port to the Java SDK,
+close the pull request that was automatically created for you, then close this issue as
+'not planned' with a comment explaining that no changes were applicable.

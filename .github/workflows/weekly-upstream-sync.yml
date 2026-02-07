@@ -122,6 +122,9 @@ jobs:
           BODY="${BODY//UPSTREAM_HEAD_PLACEHOLDER/$UPSTREAM_HEAD}"
           BODY="${BODY//SUMMARY_PLACEHOLDER/$SUMMARY}"
 
+          # Read custom instructions from external file
+          CUSTOM_INSTRUCTIONS=$(cat .github/prompts/coding-agent-merge-instructions.md)
+
           # Create issue and assign to Copilot coding agent
           gh api \
             --method POST \
@@ -137,7 +140,7 @@ jobs:
             "agent_assignment": {
               "target_repo": "${{ github.repository }}",
               "base_branch": "main",
-              "custom_instructions": "Follow the agentic-merge-upstream prompt at .github/prompts/agentic-merge-upstream.prompt.md to port upstream changes to the Java SDK. Use the utility scripts in .github/scripts/ for initialization, diffing, formatting, and testing. Commit changes incrementally. Update .lastmerge when done."
+              "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
             }
           }
           EOF

@@ -35,7 +35,7 @@ All scripts write/read a `.merge-env` file (git-ignored) to share state (branch 
 5. Run `./.github/scripts/format-and-test.sh` frequently while porting
 6. Update documentation
 7. Run `./.github/scripts/merge-upstream-finish.sh` (final test + push)
-8. Create Pull Request
+8. Finalize Pull Request (see note below about coding agent vs. manual workflow)
 
 ---
 
@@ -316,7 +316,7 @@ Ensure consistency across all documentation files:
 - Code examples should use the same patterns and be tested
 - Links to Javadoc should use correct paths (`apidocs/...`)
 
-## Steps 11-12: Finish, Push, and Create Pull Request
+## Steps 11-12: Finish, Push, and Finalize Pull Request
 
 Run the finish script which updates `.lastmerge`, runs a final build, and pushes the branch:
 
@@ -325,11 +325,17 @@ Run the finish script which updates `.lastmerge`, runs a final build, and pushes
 ./.github/scripts/merge-upstream-finish.sh --skip-tests  # if tests already passed
 ```
 
-**After pushing, create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`).**
+### PR Handling: Coding Agent vs. Manual Workflow
 
-Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`.
+**If running as a Copilot coding agent** (triggered via GitHub issue assignment by the weekly sync workflow), a pull request has **already been created automatically** for you. Do NOT create a new one. Just push your commits to the current branch — the existing PR will be updated. Add the `upstream-sync` label to the existing PR:
 
-**After creating the PR, add the `upstream-sync` label** using the `gh` CLI:
+```bash
+gh pr edit <PR_NUMBER> --add-label "upstream-sync"
+```
+
+> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, close the auto-created pull request, then close the triggering issue as "not planned" with a comment explaining that no changes were applicable.
+
+**If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using the GitHub MCP tool (`mcp_github_create_pull_request`). Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`. Then add the label:
 
 ```bash
 gh pr edit <PR_NUMBER> --add-label "upstream-sync"
@@ -380,7 +386,7 @@ Before finishing:
 3. Ensure no unintended changes were made
 4. Verify code follows project conventions
 5. Confirm the branch was pushed to remote
-6. Confirm the Pull Request was created and provide the PR URL to the user
+6. Confirm the Pull Request is ready (created or updated) and provide the PR URL to the user
 
 ---
 
@@ -407,7 +413,7 @@ Before finishing:
 - [ ] `src/site/site.xml` updated if new documentation pages were added
 - [ ] `.lastmerge` file updated with new commit hash
 - [ ] Branch pushed to remote
-- [ ] **Pull Request created** via GitHub MCP tool (`mcp_github_create_pull_request`)
+- [ ] **Pull Request finalized** (coding agent: push to existing PR; manual: create via `mcp_github_create_pull_request`)
 - [ ] **`upstream-sync` label added** to the PR via `gh pr edit --add-label "upstream-sync"`
 - [ ] PR URL provided to user
 
