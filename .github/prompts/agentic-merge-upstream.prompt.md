@@ -365,6 +365,12 @@ git push -u origin "$BRANCH_NAME"
 
 Use `owner: copilot-community-sdk`, `repo: copilot-sdk-java`, `head: $BRANCH_NAME`, `base: main`.
 
+**After creating the PR, add the `upstream-sync` label** using the `gh` CLI:
+
+```bash
+gh pr edit <PR_NUMBER> --add-label "upstream-sync"
+```
+
 The PR body should include:
 1. **Title**: `Merge upstream SDK changes (YYYY-MM-DD)`
 2. **Body** with:
@@ -438,6 +444,7 @@ Before finishing:
 - [ ] `.lastmerge` file updated with new commit hash
 - [ ] Branch pushed to remote
 - [ ] **Pull Request created** via GitHub MCP tool (`mcp_github_create_pull_request`)
+- [ ] **`upstream-sync` label added** to the PR via `gh pr edit --add-label "upstream-sync"`
 - [ ] PR URL provided to user
 
 ---
