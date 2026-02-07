@@ -333,12 +333,7 @@ Run the finish script which updates `.lastmerge`, runs a final build, and pushes
 gh pr edit --add-label "upstream-sync"
 ```
 
-> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, you **MUST** close the auto-created pull request and the triggering issue by running these commands in a terminal:
->
-> 1. Close the PR: `gh pr close $(gh pr view --json number --jq .number) --comment "No relevant upstream changes to port to the Java SDK."`
-> 2. Close the issue: `gh issue close ISSUE_NUMBER --reason "not planned" --comment "No relevant upstream changes to port to the Java SDK. Closing as not planned."` (replace ISSUE_NUMBER with the actual issue number)
->
-> **CRITICAL: You MUST run these `gh` CLI commands in a terminal. Do NOT skip these steps.** Both commands are required when there are no changes to port.
+> **No-changes scenario (coding agent only):** If after analyzing the upstream diff there are no relevant changes to port to the Java SDK, push an empty commit with a message explaining why no changes were needed, so the PR reflects the analysis outcome. The repository maintainer will close the PR and issue manually.
 
 **If running manually** (e.g., from VS Code via the reusable prompt), create the Pull Request using `gh` CLI or the GitHub MCP tool. Then add the label:
 
