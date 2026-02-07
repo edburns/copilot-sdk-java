@@ -143,3 +143,39 @@ jobs:
           EOF
 
           echo "✅ Issue created and assigned to Copilot coding agent."
+
+      - name: Summary
+        if: always()
+        run: |
+          HAS_CHANGES="${{ steps.check.outputs.has_changes }}"
+          COMMIT_COUNT="${{ steps.check.outputs.commit_count }}"
+          LAST_MERGE="${{ steps.check.outputs.last_merge }}"
+          UPSTREAM_HEAD="${{ steps.check.outputs.upstream_head }}"
+
+          {
+            echo "## Weekly Upstream Sync"
+            echo ""
+            if [ "$HAS_CHANGES" = "true" ]; then
+              echo "### ✅ New upstream changes detected"
+              echo ""
+              echo "| | |"
+              echo "|---|---|"
+              echo "| **New commits** | ${COMMIT_COUNT} |"
+              echo "| **Last merged** | \`${LAST_MERGE:0:12}\` |"
+              echo "| **Upstream HEAD** | \`${UPSTREAM_HEAD:0:12}\` |"
+              echo ""
+              echo "An issue has been created and assigned to the Copilot coding agent."
+              echo ""
+              echo "### Recent upstream commits"
+              echo ""
+              echo '```'
+              echo "${{ steps.check.outputs.summary }}"
+              echo '```'
+            else
+              echo "### ⏭️ No changes"
+              echo ""
+              echo "The Java SDK is already up to date with the upstream Copilot SDK."
+              echo ""
+              echo "**Last merged commit:** \`${LAST_MERGE:0:12}\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
