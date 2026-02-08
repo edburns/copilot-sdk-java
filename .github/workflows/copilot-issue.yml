@@ -5,8 +5,13 @@ on:
     inputs:
       title:
         description: 'Issue title'
-        required: true
+        required: false
+        default: 'Investigation needed from Copilot Coding Agent'
         type: string
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/copilot-issue.yml'
 
 jobs:
   create-issue:
