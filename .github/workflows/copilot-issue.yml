@@ -34,7 +34,6 @@ jobs:
               --arg repo "${{ github.repository }}" \
               '{
                 title: $title,
-                assignees: ["copilot-swe-agent[bot]"],
                 agent_assignment: {
                   target_repo: $repo,
                   base_branch: "main",
