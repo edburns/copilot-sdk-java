@@ -44,6 +44,9 @@ export async function createIssueWithCopilot(description: string): Promise<strin
     `, {
       owner: GITHUB_REPO_OWNER,
       name: GITHUB_REPO_NAME,
+      headers: {
+        'GraphQL-Features': GRAPHQL_FEATURES_HEADER,
+      },
     });
 
     const repoId = repoInfo?.repository?.id;
