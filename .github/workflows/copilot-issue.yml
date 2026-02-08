@@ -20,17 +20,29 @@ jobs:
       issues: write
     steps:
       - name: Create issue and assign to Copilot
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const title = '${{ inputs.title || 'Investigation needed from Copilot Coding Agent' }}';
-            const issue = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title,
-              assignees: ['Copilot']
-            });
-            core.notice(`Created issue #${issue.data.number}: ${issue.data.html_url}`);
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="${{ inputs.title || 'Investigation needed from Copilot Coding Agent' }}"
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/issues \
+            --input - <<< "$(jq -n \
+              --arg title "$TITLE" \
+              --arg repo "${{ github.repository }}" \
+              '{
+                title: $title,
+                assignees: ["copilot-swe-agent[bot]"],
+                agent_assignment: {
+                  target_repo: $repo,
+                  base_branch: "main",
+                  custom_instructions: "",
+                  custom_agent: "",
+                  model: ""
+                }
+              }')"
 
   create-issue-graphql:
     runs-on: ubuntu-latest

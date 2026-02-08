@@ -4,13 +4,14 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
 const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 
-// Known Copilot Coding Agent bot identity
-const COPILOT_BOT_LOGIN = 'Copilot';
-const COPILOT_BOT_NODE_ID = 'BOT_kgDOC9w8XQ';
+const GRAPHQL_FEATURES_HEADER = 'issues_copilot_assignment_api_support,coding_agent_model_selection';
 
 /**
- * Creates a GitHub issue and assigns it to the Copilot Coding Agent (@Copilot).
- * Uses GraphQL to create the issue with the bot's known node ID as assignee.
+ * Creates a GitHub issue and assigns it to the Copilot Coding Agent.
+ * Follows the official GitHub API docs:
+ * 1. Query suggestedActors to find copilot-swe-agent and get its node ID
+ * 2. Get the repository node ID
+ * 3. Create issue with assigneeIds + agentAssignment, including required GraphQL-Features header
  * Returns the issue URL on success, null on failure.
  */
 export async function createIssueWithCopilot(description: string): Promise<string | null> {
@@ -25,10 +26,20 @@ export async function createIssueWithCopilot(description: string): Promise<strin
   const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
   try {
-    // Fetch repo node ID
+    // Step 1: Fetch repo ID and find copilot-swe-agent in suggestedActors
     const repoInfo: any = await octokit.graphql(`
       query($owner: String!, $name: String!) {
-        repository(owner: $owner, name: $name) { id }
+        repository(owner: $owner, name: $name) {
+          id
+          suggestedActors(capabilities: [CAN_BE_ASSIGNED], first: 100) {
+            nodes {
+              login
+              __typename
+              ... on Bot { id }
+              ... on User { id }
+            }
+          }
+        }
       }
     `, {
       owner: GITHUB_REPO_OWNER,
@@ -37,15 +48,39 @@ export async function createIssueWithCopilot(description: string): Promise<strin
 
     const repoId = repoInfo?.repository?.id;
     if (!repoId) {
+      console.error('Could not fetch repository ID');
       return null;
     }
 
+    const copilotBot = repoInfo.repository.suggestedActors.nodes.find(
+      (node: any) => node.login === 'copilot-swe-agent'
+    );
+
+    if (!copilotBot) {
+      console.error('copilot-swe-agent not found in suggestedActors. Is Copilot coding agent enabled for this repo?');
+      return null;
+    }
+
+    console.log(`Found Copilot bot: login=${copilotBot.login}, id=${copilotBot.id}, type=${copilotBot.__typename}`);
+
     const title = description.split('\n')[0].slice(0, 100);
 
-    // Create issue with Copilot bot assigned via known node ID
+    // Step 2: Create issue with agentAssignment and required GraphQL-Features header
     const response: any = await octokit.graphql(`
       mutation($repoId: ID!, $title: String!, $body: String!, $assigneeIds: [ID!]) {
-        createIssue(input: { repositoryId: $repoId, title: $title, body: $body, assigneeIds: $assigneeIds }) {
+        createIssue(input: {
+          repositoryId: $repoId,
+          title: $title,
+          body: $body,
+          assigneeIds: $assigneeIds,
+          agentAssignment: {
+            targetRepositoryId: $repoId,
+            baseRef: "main",
+            customInstructions: "",
+            customAgent: "",
+            model: ""
+          }
+        }) {
           issue {
             number
             title
@@ -58,7 +93,10 @@ export async function createIssueWithCopilot(description: string): Promise<strin
       repoId,
       title,
       body: description,
-      assigneeIds: [COPILOT_BOT_NODE_ID],
+      assigneeIds: [copilotBot.id],
+      headers: {
+        'GraphQL-Features': GRAPHQL_FEATURES_HEADER,
+      },
     });
 
     const issue = response?.createIssue?.issue;
