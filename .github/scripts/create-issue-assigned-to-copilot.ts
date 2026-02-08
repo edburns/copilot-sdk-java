@@ -29,7 +29,8 @@ export async function createIssueWithCopilot(description: string): Promise<strin
           suggestedActors(capabilities: [CAN_BE_ASSIGNED], first: 100) {
             nodes {
               login
-              id
+              ... on User { id }
+              ... on Bot { id }
             }
           }
         }
