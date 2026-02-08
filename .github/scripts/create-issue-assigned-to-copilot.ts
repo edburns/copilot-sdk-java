@@ -59,12 +59,16 @@ export async function createIssueWithCopilot(description: string): Promise<strin
       (node: any) => node.login === 'copilot-swe-agent'
     );
 
-    if (!copilotBot) {
-      console.error('copilot-swe-agent not found in suggestedActors. Is Copilot coding agent enabled for this repo?');
-      return null;
+    let botId: string;
+    if (copilotBot) {
+      botId = copilotBot.id;
+      console.log(`Found Copilot bot: login=${copilotBot.login}, id=${botId}, type=${copilotBot.__typename}`);
+    } else {
+      // Fallback: the GITHUB_TOKEN in Actions may lack permission to see suggestedActors.
+      // Use the known node ID for copilot-swe-agent.
+      botId = 'BOT_kgDOC9w8XQ';
+      console.log(`copilot-swe-agent not found in suggestedActors, using known bot ID: ${botId}`);
     }
-
-    console.log(`Found Copilot bot: login=${copilotBot.login}, id=${copilotBot.id}, type=${copilotBot.__typename}`);
 
     const title = description.split('\n')[0].slice(0, 100);
 
@@ -96,7 +100,7 @@ export async function createIssueWithCopilot(description: string): Promise<strin
       repoId,
       title,
       body: description,
-      assigneeIds: [copilotBot.id],
+      assigneeIds: [botId],
       headers: {
         'GraphQL-Features': GRAPHQL_FEATURES_HEADER,
       },
