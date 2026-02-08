@@ -108,31 +108,38 @@ jobs:
           # Read custom instructions from external file
           CUSTOM_INSTRUCTIONS=$(cat .github/prompts/coding-agent-merge-instructions.md)
 
-          # Create the issue (without assignee to avoid permission issues)
-          jq -n \
+          # Build the issue JSON payload
+          ISSUE_PAYLOAD=$(jq -n \
             --arg title "Upstream sync: ${COMMIT_COUNT} new commits (${DATE})" \
             --arg body "$BODY" \
             '{
               title: $title,
               body: $body,
               labels: ["upstream-sync"]
-            }' | gh api \
+            }')
+
+          # Create the issue
+          ISSUE_NUMBER=$(echo "$ISSUE_PAYLOAD" | \
+            gh api \
               --method POST \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               "/repos/${REPO}/issues" \
               --input - \
-              --jq '.number' > /tmp/issue_number.txt
+              --jq '.number')
 
-          ISSUE_NUMBER=$(cat /tmp/issue_number.txt)
           echo "Created issue #${ISSUE_NUMBER}"
 
-          # Trigger Copilot by @mentioning it with custom instructions
-          jq -n \
+          # Build the comment JSON payload to trigger Copilot
+          COMMENT_PAYLOAD=$(jq -n \
             --arg instructions "$CUSTOM_INSTRUCTIONS" \
             '{
               body: ("@copilot\n\n" + $instructions)
-            }' | gh api \
+            }')
+
+          # Post the comment to assign Copilot
+          echo "$COMMENT_PAYLOAD" | \
+            gh api \
               --method POST \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
