@@ -48,5 +48,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO_NAME: ${{ github.event.repository.name }}
-        run: npx tsx create-issue-assigned-to-copilot.py "${{ inputs.title }}"
+        run: npx tsx create-issue-assigned-to-copilot.ts "${{ inputs.title }}"
         working-directory: .github/scripts
