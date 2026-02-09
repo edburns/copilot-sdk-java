@@ -9,8 +9,8 @@
 #### Latest release
 [![GitHub Release](https://img.shields.io/github/v/release/copilot-community-sdk/copilot-sdk-java)](https://github.com/copilot-community-sdk/copilot-sdk-java/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.copilot-community-sdk/copilot-sdk)](https://central.sonatype.com/artifact/io.github.copilot-community-sdk/copilot-sdk)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen)](https://copilot-community-sdk.github.io/copilot-sdk-java/1.0.8/)
-[![Javadoc](https://javadoc.io/badge2/io.github.copilot-community-sdk/copilot-sdk/javadoc.svg)](https://javadoc.io/doc/io.github.copilot-community-sdk/copilot-sdk/latest/index.html)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen)](https://copilot-community-sdk.github.io/copilot-sdk-java/latest/)
+[![Javadoc](https://javadoc.io/badge2/io.github.copilot-community-sdk/copilot-sdk/javadoc.svg?q=1)](https://javadoc.io/doc/io.github.copilot-community-sdk/copilot-sdk/latest/index.html)
 
 ## Overview
 
