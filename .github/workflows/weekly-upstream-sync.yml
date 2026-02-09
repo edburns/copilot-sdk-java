@@ -99,6 +99,7 @@ jobs:
           done
 
       - name: Create issue and assign to Copilot
+        id: create-issue
         if: steps.check.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.COPILOT_ISSUE_PR_AGENTIC_WORKFLOW }}
@@ -128,14 +129,15 @@ jobs:
           Follow the [agentic-merge-upstream](.github/prompts/agentic-merge-upstream.prompt.md) prompt to port these changes to the Java SDK."
 
           # Create the issue and assign to Copilot coding agent
-          gh issue create \
+          ISSUE_URL=$(gh issue create \
             --repo "$REPO" \
             --title "Upstream sync: ${COMMIT_COUNT} new commits (${DATE})" \
             --body "$BODY" \
             --label "upstream-sync" \
-            --assignee "copilot-swe-agent"
+            --assignee "copilot-swe-agent")
 
-          echo "✅ Issue created and assigned to Copilot coding agent."
+          echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+          echo "✅ Issue created and assigned to Copilot coding agent: $ISSUE_URL"
 
       - name: Summary
         if: always()
@@ -144,6 +146,7 @@ jobs:
           COMMIT_COUNT="${{ steps.check.outputs.commit_count }}"
           LAST_MERGE="${{ steps.check.outputs.last_merge }}"
           UPSTREAM_HEAD="${{ steps.check.outputs.upstream_head }}"
+          ISSUE_URL="${{ steps.create-issue.outputs.issue_url }}"
 
           {
             echo "## Weekly Upstream Sync"
@@ -157,7 +160,8 @@ jobs:
               echo "| **Last merged** | \`${LAST_MERGE:0:12}\` |"
               echo "| **Upstream HEAD** | \`${UPSTREAM_HEAD:0:12}\` |"
               echo ""
-              echo "An issue has been created and assigned to the Copilot coding agent."
+              echo "An issue has been created and assigned to the Copilot coding agent: "
+              echo "  -> ${ISSUE_URL}"
               echo ""
               echo "### Recent upstream commits"
               echo ""
