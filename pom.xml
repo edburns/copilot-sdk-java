@@ -97,7 +97,7 @@
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <version>4.9.8.2</version>
                     <configuration>
-                        <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                        <excludeFilterFile>config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                     </configuration>
                 </plugin>
             </plugins>
@@ -289,7 +289,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.6.0</version>
                 <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
+                    <configLocation>config/checkstyle/checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <includeTestSourceDirectory>false</includeTestSourceDirectory>
@@ -442,7 +442,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.8.2</version>
                 <configuration>
-                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
             <!-- TODO/FIXME tag tracker -->
