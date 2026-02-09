@@ -134,7 +134,8 @@ jobs:
             '{
               title: $title,
               body: $body,
-              labels: ["upstream-sync"]
+              labels: ["upstream-sync"],
+              assignees: ["copilot-swe-agent"]
             }')
 
           # Create the issue
