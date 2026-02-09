@@ -100,8 +100,14 @@ jobs:
               run: |
                   VERSION="${{ steps.versions.outputs.release_version }}"
                   
-                  # Update CHANGELOG.md with release version
-                  ./.github/scripts/update-changelog.sh "${VERSION}"
+                  # Read the upstream SDK commit hash that this release is synced to
+                  UPSTREAM_HASH=$(cat .lastmerge)
+                  UPSTREAM_SHORT="${UPSTREAM_HASH:0:7}"
+                  UPSTREAM_URL="https://github.com/github/copilot-sdk/commit/${UPSTREAM_HASH}"
+                  echo "Upstream SDK sync: ${UPSTREAM_SHORT} (${UPSTREAM_URL})"
+                  
+                  # Update CHANGELOG.md with release version and upstream sync hash
+                  ./.github/scripts/update-changelog.sh "${VERSION}" "${UPSTREAM_HASH}"
                   
                   # Update version in README.md
                   sed -i "s|<version>[0-9]*\.[0-9]*\.[0-9]*</version>|<version>${VERSION}</version>|g" README.md

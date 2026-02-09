@@ -258,14 +258,20 @@ The release process is automated via the `publish-maven.yml` GitHub Actions work
    - Converts the `## [Unreleased]` section to `## [version] - date`
    - Creates a new empty `## [Unreleased]` section at the top
    - Updates version comparison links at the bottom of CHANGELOG.md
+   - Injects the upstream SDK commit hash (from `.lastmerge`) as a `> **Upstream sync:**` blockquote in both the new `[Unreleased]` section and the released version section
 
-2. **Documentation Updates**: README.md and jbang-example.java are updated with the new version
+2. **Upstream Sync Tracking**: Each release records which commit from the official `github/copilot-sdk` it is synced to:
+   - The `.lastmerge` file is read during the release workflow
+   - The commit hash is injected into `CHANGELOG.md` under the release heading
+   - Format: `> **Upstream sync:** [\`github/copilot-sdk@SHORT_HASH\`](link-to-commit)`
 
-3. **Maven Release**: Uses `maven-release-plugin` to:
+3. **Documentation Updates**: README.md and jbang-example.java are updated with the new version.
+
+4. **Maven Release**: Uses `maven-release-plugin` to:
    - Update pom.xml version
    - Create a git tag
    - Deploy to Maven Central
 
-4. **Rollback**: If the release fails, the documentation commit is automatically reverted
+5. **Rollback**: If the release fails, the documentation commit is automatically reverted
 
 The workflow is triggered manually via workflow_dispatch with optional version parameters.
