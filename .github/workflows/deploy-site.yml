@@ -1,6 +1,12 @@
 # Workflow for deploying versioned documentation to GitHub Pages
 name: Deploy Documentation
 
+env:
+    # Disable Husky Git hooks in CI to prevent local development hooks
+    # (e.g., pre-commit formatting checks) from running during automated
+    # workflows that perform git commits and pushes.
+    HUSKY: 0
+
 on:
   # Runs after Build & Test succeeds on main (publishes to /snapshot/)
   workflow_run:
