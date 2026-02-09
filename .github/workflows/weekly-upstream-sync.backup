@@ -56,7 +56,7 @@ jobs:
       - name: Close previous upstream-sync issues
         if: steps.check.outputs.has_changes == 'true'
         env:
-          GH_TOKEN: ${{ secrets.COPILOT_ISSUE_PR_AGENTIC_WORKFLOW }}
+          GH_TOKEN: ${{ secrets.GH_AW_AGENT_TOKEN }}
         run: |
           # Find all open issues with the upstream-sync label
           OPEN_ISSUES=$(gh issue list \
@@ -79,7 +79,7 @@ jobs:
       - name: Close stale upstream-sync issues (no changes)
         if: steps.check.outputs.has_changes == 'false'
         env:
-          GH_TOKEN: ${{ secrets.COPILOT_ISSUE_PR_AGENTIC_WORKFLOW }}
+          GH_TOKEN: ${{ secrets.GH_AW_AGENT_TOKEN }}
         run: |
           OPEN_ISSUES=$(gh issue list \
             --repo "${{ github.repository }}" \
@@ -102,7 +102,7 @@ jobs:
         id: create-issue
         if: steps.check.outputs.has_changes == 'true'
         env:
-          GH_TOKEN: ${{ secrets.COPILOT_ISSUE_PR_AGENTIC_WORKFLOW }}
+          GH_TOKEN: ${{ secrets.GH_AW_AGENT_TOKEN }}
         run: |
           COMMIT_COUNT="${{ steps.check.outputs.commit_count }}"
           LAST_MERGE="${{ steps.check.outputs.last_merge }}"

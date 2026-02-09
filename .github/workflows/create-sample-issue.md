@@ -16,14 +16,16 @@ tools:
 safe-outputs:
   create-issue:
     title-prefix: "[test] "
-    assignees: [copilot]
     labels: [test]
+  assign-to-agent:
+    name: "copilot"
+    target: "*"
 ---
 # Create Sample Issue
 
-Create a test issue in this repository assigned to Copilot. The issue should contain:
+Create a test issue in this repository and then assign Copilot to it. The issue should contain:
 
 - **Title:** `Sample test issue`
 - **Body:** `This is an automated test issue created by the create-sample-issue workflow. Feel free to close it.`
 
-| `.github/scripts/upstream-sync/` | Helper scripts used by the merge prompt |
+After creating the issue, assign the `copilot` agent to it.

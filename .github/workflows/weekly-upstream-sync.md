@@ -61,7 +61,7 @@ The workflow runs on a **weekly schedule** (every Monday at 10:00 UTC) and can a
 
 | Secret | Purpose |
 |---|---|
-| `COPILOT_ISSUE_PR_AGENTIC_WORKFLOW` | PAT used as `GH_TOKEN` for `gh` CLI operations (issue create/close/comment). Required because the default `GITHUB_TOKEN` cannot assign issues to `copilot-swe-agent`. |
+| `GH_AW_AGENT_TOKEN` | PAT used as `GH_TOKEN` for `gh` CLI operations (issue create/close/comment). Required because the default `GITHUB_TOKEN` cannot assign issues to `copilot-swe-agent`. |
 
 ## Workflow Steps
 
