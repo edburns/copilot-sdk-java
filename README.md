@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 #### Latest release
+[![GitHub Release Date](https://img.shields.io/github/release-date/copilot-community-sdk/copilot-sdk-java)](https://github.com/copilot-community-sdk/copilot-sdk-java/releases)
 [![GitHub Release](https://img.shields.io/github/v/release/copilot-community-sdk/copilot-sdk-java)](https://github.com/copilot-community-sdk/copilot-sdk-java/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.copilot-community-sdk/copilot-sdk)](https://central.sonatype.com/artifact/io.github.copilot-community-sdk/copilot-sdk)
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen)](https://copilot-community-sdk.github.io/copilot-sdk-java/latest/)
