@@ -87,7 +87,7 @@ jobs:
           retention-days: 1
 
       - name: Generate and commit JaCoCo badge
-        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: success() && github.ref == 'refs/heads/main'
         run: |
           .github/scripts/generate-coverage-badge.sh
 
