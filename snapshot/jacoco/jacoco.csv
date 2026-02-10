@@ -158,8 +158,8 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,SessionRequestBuilde
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,ConnectionState,0,27,0,0,0,5,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,SystemMessageMode,0,28,0,0,0,7,0,3,0,3
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotSession,159,640,12,44,38,169,17,56,6,37
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcClient,138,524,25,45,39,143,23,33,4,17
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcException,3,7,0,0,1,3,1,1,1,1
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcClient,27,635,4,66,10,172,4,52,0,21
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcException,0,10,0,0,0,4,0,2,0,2
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,RpcHandlerDispatcher,116,641,3,39,37,143,4,44,1,26
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CliServerManager,42,385,10,44,10,89,9,27,0,9
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CliServerManager,48,379,10,44,12,87,9,27,0,9
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotClient.Connection,0,9,0,0,0,1,0,1,0,1

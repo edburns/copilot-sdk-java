@@ -116,19 +116,19 @@ class JsonRpcClient implements AutoCloseable {
 
         try {
 <span class="fc" id="L118">            sendMessage(request);</span>
-<span class="nc" id="L119">        } catch (IOException e) {</span>
-<span class="nc" id="L120">            pendingRequests.remove(id);</span>
-<span class="nc" id="L121">            future.completeExceptionally(e);</span>
+<span class="fc" id="L119">        } catch (IOException e) {</span>
+<span class="fc" id="L120">            pendingRequests.remove(id);</span>
+<span class="fc" id="L121">            future.completeExceptionally(e);</span>
 <span class="fc" id="L122">        }</span>
 
 <span class="fc" id="L124">        return future.thenApply(result -&gt; {</span>
             try {
-<span class="pc bpc" id="L126" title="1 of 4 branches missed.">                if (responseType == Void.class || responseType == void.class) {</span>
+<span class="fc bfc" id="L126" title="All 4 branches covered.">                if (responseType == Void.class || responseType == void.class) {</span>
 <span class="fc" id="L127">                    return null;</span>
                 }
 <span class="fc" id="L129">                return MAPPER.treeToValue(result, responseType);</span>
-<span class="nc" id="L130">            } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L131">                throw new CompletionException(e);</span>
+<span class="fc" id="L130">            } catch (JsonProcessingException e) {</span>
+<span class="fc" id="L131">                throw new CompletionException(e);</span>
             }
         });
     }
@@ -137,12 +137,12 @@ class JsonRpcClient implements AutoCloseable {
      * Sends a JSON-RPC notification (no response expected).
      */
     public void notify(String method, Object params) throws IOException {
-<span class="nc" id="L140">        var notification = new JsonRpcRequest();</span>
-<span class="nc" id="L141">        notification.setJsonrpc(&quot;2.0&quot;);</span>
-<span class="nc" id="L142">        notification.setMethod(method);</span>
-<span class="nc" id="L143">        notification.setParams(params);</span>
-<span class="nc" id="L144">        sendMessage(notification);</span>
-<span class="nc" id="L145">    }</span>
+<span class="fc" id="L140">        var notification = new JsonRpcRequest();</span>
+<span class="fc" id="L141">        notification.setJsonrpc(&quot;2.0&quot;);</span>
+<span class="fc" id="L142">        notification.setMethod(method);</span>
+<span class="fc" id="L143">        notification.setParams(params);</span>
+<span class="fc" id="L144">        sendMessage(notification);</span>
+<span class="fc" id="L145">    }</span>
 
     /**
      * Sends a JSON-RPC response to a server request.
@@ -211,7 +211,7 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc bfc" id="L211" title="All 2 branches covered.">                            if (line.isEmpty()) {</span>
                                 // End of headers (blank line)
 <span class="fc" id="L213">                                inHeaders = false;</span>
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                            } else if (line.toLowerCase().startsWith(&quot;content-length:&quot;)) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                            } else if (line.toLowerCase().startsWith(&quot;content-length:&quot;)) {</span>
 <span class="fc" id="L215">                                contentLength = Integer.parseInt(line.substring(15).trim());</span>
                             }
 <span class="fc" id="L217">                        } else {</span>
@@ -223,8 +223,8 @@ class JsonRpcClient implements AutoCloseable {
                         }
 <span class="fc" id="L224">                    }</span>
 
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">                    if (contentLength &lt;= 0) {</span>
-<span class="nc" id="L227">                        continue;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">                    if (contentLength &lt;= 0) {</span>
+<span class="fc" id="L227">                        continue;</span>
                     }
 
                     // Read content as bytes (Content-Length specifies bytes, not characters)
@@ -244,8 +244,8 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc" id="L244">                    handleMessage(content);</span>
 <span class="fc" id="L245">                }</span>
 <span class="fc" id="L246">            } catch (Exception e) {</span>
-<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                if (running) {</span>
-<span class="nc" id="L248">                    LOG.log(Level.SEVERE, &quot;Error in JSON-RPC reader&quot;, e);</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">                if (running) {</span>
+<span class="fc" id="L248">                    LOG.log(Level.SEVERE, &quot;Error in JSON-RPC reader&quot;, e);</span>
                 }
 <span class="fc" id="L250">            }</span>
 <span class="fc" id="L251">        });</span>
@@ -256,16 +256,16 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc" id="L256">            JsonNode node = MAPPER.readTree(content);</span>
 
             // Check if this is a response to our request
-<span class="pc bpc" id="L259" title="1 of 8 branches missed.">            if (node.has(&quot;id&quot;) &amp;&amp; !node.get(&quot;id&quot;).isNull() &amp;&amp; (node.has(&quot;result&quot;) || node.has(&quot;error&quot;))) {</span>
+<span class="fc bfc" id="L259" title="All 8 branches covered.">            if (node.has(&quot;id&quot;) &amp;&amp; !node.get(&quot;id&quot;).isNull() &amp;&amp; (node.has(&quot;result&quot;) || node.has(&quot;error&quot;))) {</span>
 <span class="fc" id="L260">                long id = node.get(&quot;id&quot;).asLong();</span>
 <span class="fc" id="L261">                CompletableFuture&lt;JsonNode&gt; future = pendingRequests.remove(id);</span>
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">                if (future != null) {</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">                if (future != null) {</span>
 <span class="fc bfc" id="L263" title="All 2 branches covered.">                    if (node.has(&quot;error&quot;)) {</span>
 <span class="fc" id="L264">                        JsonNode errorNode = node.get(&quot;error&quot;);</span>
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">                        String errorMessage = errorNode.has(&quot;message&quot;)</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">                        String errorMessage = errorNode.has(&quot;message&quot;)</span>
 <span class="fc" id="L266">                                ? errorNode.get(&quot;message&quot;).asText()</span>
-<span class="pc" id="L267">                                : &quot;Unknown error&quot;;</span>
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                        int errorCode = errorNode.has(&quot;code&quot;) ? errorNode.get(&quot;code&quot;).asInt() : -1;</span>
+<span class="fc" id="L267">                                : &quot;Unknown error&quot;;</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">                        int errorCode = errorNode.has(&quot;code&quot;) ? errorNode.get(&quot;code&quot;).asInt() : -1;</span>
 <span class="fc" id="L269">                        future.completeExceptionally(new JsonRpcException(errorCode, errorMessage));</span>
 <span class="fc" id="L270">                    } else {</span>
 <span class="fc" id="L271">                        future.complete(node.get(&quot;result&quot;));</span>
@@ -273,41 +273,41 @@ class JsonRpcClient implements AutoCloseable {
                 }
 <span class="fc" id="L274">            }</span>
             // Check if this is a request from server (has method and id)
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">            else if (node.has(&quot;method&quot;)) {</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">            else if (node.has(&quot;method&quot;)) {</span>
 <span class="fc" id="L277">                String method = node.get(&quot;method&quot;).asText();</span>
 <span class="fc" id="L278">                JsonNode params = node.get(&quot;params&quot;);</span>
-<span class="pc bpc" id="L279" title="1 of 4 branches missed.">                Object id = node.has(&quot;id&quot;) &amp;&amp; !node.get(&quot;id&quot;).isNull() ? node.get(&quot;id&quot;) : null;</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">                Object id = node.has(&quot;id&quot;) &amp;&amp; !node.get(&quot;id&quot;).isNull() ? node.get(&quot;id&quot;) : null;</span>
 
 <span class="fc" id="L281">                LOG.fine(&quot;Received method: &quot; + method);</span>
 
 <span class="fc" id="L283">                BiConsumer&lt;String, JsonNode&gt; handler = notificationHandlers.get(method);</span>
-<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                if (handler != null) {</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">                if (handler != null) {</span>
                     try {
                         // Create a context that includes the request ID for responses
 <span class="fc bfc" id="L287" title="All 2 branches covered.">                        handler.accept(id != null ? id.toString() : null, params);</span>
-<span class="nc" id="L288">                    } catch (Exception e) {</span>
-<span class="nc" id="L289">                        LOG.log(Level.SEVERE, &quot;Error handling method &quot; + method, e);</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">                        if (id != null) {</span>
+<span class="fc" id="L288">                    } catch (Exception e) {</span>
+<span class="fc" id="L289">                        LOG.log(Level.SEVERE, &quot;Error handling method &quot; + method, e);</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">                        if (id != null) {</span>
                             try {
-<span class="nc" id="L292">                                sendErrorResponse(id, -32603, e.getMessage());</span>
+<span class="fc" id="L292">                                sendErrorResponse(id, -32603, e.getMessage());</span>
 <span class="nc" id="L293">                            } catch (IOException ioe) {</span>
 <span class="nc" id="L294">                                LOG.log(Level.SEVERE, &quot;Failed to send error response&quot;, ioe);</span>
-<span class="nc" id="L295">                            }</span>
+<span class="fc" id="L295">                            }</span>
                         }
-<span class="pc" id="L297">                    }</span>
+<span class="fc" id="L297">                    }</span>
                 } else {
-<span class="nc" id="L299">                    LOG.fine(&quot;No handler for method: &quot; + method);</span>
-<span class="nc bnc" id="L300" title="All 2 branches missed.">                    if (id != null) {</span>
+<span class="fc" id="L299">                    LOG.fine(&quot;No handler for method: &quot; + method);</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                    if (id != null) {</span>
                         try {
-<span class="nc" id="L302">                            sendErrorResponse(id, -32601, &quot;Method not found: &quot; + method);</span>
+<span class="fc" id="L302">                            sendErrorResponse(id, -32601, &quot;Method not found: &quot; + method);</span>
 <span class="nc" id="L303">                        } catch (IOException ioe) {</span>
 <span class="nc" id="L304">                            LOG.log(Level.SEVERE, &quot;Failed to send error response&quot;, ioe);</span>
-<span class="nc" id="L305">                        }</span>
+<span class="fc" id="L305">                        }</span>
                     }
                 }
             }
-<span class="nc" id="L309">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L310">            LOG.log(Level.SEVERE, &quot;Error parsing JSON-RPC message&quot;, e);</span>
+<span class="fc" id="L309">        } catch (JsonProcessingException e) {</span>
+<span class="fc" id="L310">            LOG.log(Level.SEVERE, &quot;Error parsing JSON-RPC message&quot;, e);</span>
 <span class="fc" id="L311">        }</span>
 <span class="fc" id="L312">    }</span>
 
@@ -317,7 +317,7 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc" id="L317">        readerExecutor.shutdownNow();</span>
 
         // Cancel all pending requests
-<span class="pc" id="L320">        pendingRequests.forEach((id, future) -&gt; future.completeExceptionally(new IOException(&quot;Client closed&quot;)));</span>
+<span class="fc" id="L320">        pendingRequests.forEach((id, future) -&gt; future.completeExceptionally(new IOException(&quot;Client closed&quot;)));</span>
 <span class="fc" id="L321">        pendingRequests.clear();</span>
 
         try {
@@ -334,17 +334,17 @@ class JsonRpcClient implements AutoCloseable {
 <span class="fc" id="L334">    }</span>
 
     public boolean isConnected() {
-<span class="nc bnc" id="L337" title="All 2 branches missed.">        if (socket != null) {</span>
-<span class="nc bnc" id="L338" title="All 4 branches missed.">            return socket.isConnected() &amp;&amp; !socket.isClosed();</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">        if (socket != null) {</span>
+<span class="pc bpc" id="L338" title="1 of 4 branches missed.">            return socket.isConnected() &amp;&amp; !socket.isClosed();</span>
         }
-<span class="nc bnc" id="L340" title="All 2 branches missed.">        if (process != null) {</span>
-<span class="nc" id="L341">            return process.isAlive();</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">        if (process != null) {</span>
+<span class="fc" id="L341">            return process.isAlive();</span>
         }
 <span class="nc" id="L343">        return false;</span>
     }
 
     public Process getProcess() {
-<span class="nc" id="L347">        return process;</span>
+<span class="fc" id="L347">        return process;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
