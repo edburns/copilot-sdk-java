@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.1
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L18">public final class ToolExecutionProgressEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L18">public final class ToolExecutionProgressEvent extends AbstractSessionEvent {</span>
 
     public static final String TYPE = &quot;tool.execution_progress&quot;;
 
@@ -24,44 +24,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
     @Override
     public String getType() {
-<span class="fc" id="L27">        return TYPE;</span>
+<span class="nc" id="L27">        return TYPE;</span>
     }
 
     public ToolExecutionProgressData getData() {
-<span class="fc" id="L31">        return data;</span>
+<span class="nc" id="L31">        return data;</span>
     }
 
     public ToolExecutionProgressEvent setData(ToolExecutionProgressData data) {
-<span class="fc" id="L35">        this.data = data;</span>
-<span class="fc" id="L36">        return this;</span>
+<span class="nc" id="L35">        this.data = data;</span>
+<span class="nc" id="L36">        return this;</span>
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L40">    public static class ToolExecutionProgressData {</span>
-
-        @JsonProperty(&quot;toolCallId&quot;)
-        private String toolCallId;
-
-        @JsonProperty(&quot;progressMessage&quot;)
-        private String progressMessage;
-
-        public String getToolCallId() {
-<span class="fc" id="L49">            return toolCallId;</span>
-        }
-
-        public ToolExecutionProgressData setToolCallId(String toolCallId) {
-<span class="fc" id="L53">            this.toolCallId = toolCallId;</span>
-<span class="fc" id="L54">            return this;</span>
-        }
-
-        public String getProgressMessage() {
-<span class="fc" id="L58">            return progressMessage;</span>
-        }
-
-        public ToolExecutionProgressData setProgressMessage(String progressMessage) {
-<span class="fc" id="L62">            this.progressMessage = progressMessage;</span>
-<span class="fc" id="L63">            return this;</span>
-        }
+<span class="nc" id="L40">    public record ToolExecutionProgressData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
+            @JsonProperty(&quot;progressMessage&quot;) String progressMessage) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

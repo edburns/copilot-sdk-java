@@ -13,114 +13,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class SessionTruncationEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class SessionTruncationEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionTruncationData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;session.truncation&quot;;</span>
+<span class="nc" id="L23">        return &quot;session.truncation&quot;;</span>
     }
 
     public SessionTruncationData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(SessionTruncationData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class SessionTruncationData {</span>
-
-        @JsonProperty(&quot;tokenLimit&quot;)
-        private double tokenLimit;
-
-        @JsonProperty(&quot;preTruncationTokensInMessages&quot;)
-        private double preTruncationTokensInMessages;
-
-        @JsonProperty(&quot;preTruncationMessagesLength&quot;)
-        private double preTruncationMessagesLength;
-
-        @JsonProperty(&quot;postTruncationTokensInMessages&quot;)
-        private double postTruncationTokensInMessages;
-
-        @JsonProperty(&quot;postTruncationMessagesLength&quot;)
-        private double postTruncationMessagesLength;
-
-        @JsonProperty(&quot;tokensRemovedDuringTruncation&quot;)
-        private double tokensRemovedDuringTruncation;
-
-        @JsonProperty(&quot;messagesRemovedDuringTruncation&quot;)
-        private double messagesRemovedDuringTruncation;
-
-        @JsonProperty(&quot;performedBy&quot;)
-        private String performedBy;
-
-        public double getTokenLimit() {
-<span class="fc" id="L62">            return tokenLimit;</span>
-        }
-
-        public void setTokenLimit(double tokenLimit) {
-<span class="fc" id="L66">            this.tokenLimit = tokenLimit;</span>
-<span class="fc" id="L67">        }</span>
-
-        public double getPreTruncationTokensInMessages() {
-<span class="fc" id="L70">            return preTruncationTokensInMessages;</span>
-        }
-
-        public void setPreTruncationTokensInMessages(double preTruncationTokensInMessages) {
-<span class="fc" id="L74">            this.preTruncationTokensInMessages = preTruncationTokensInMessages;</span>
-<span class="fc" id="L75">        }</span>
-
-        public double getPreTruncationMessagesLength() {
-<span class="fc" id="L78">            return preTruncationMessagesLength;</span>
-        }
-
-        public void setPreTruncationMessagesLength(double preTruncationMessagesLength) {
-<span class="fc" id="L82">            this.preTruncationMessagesLength = preTruncationMessagesLength;</span>
-<span class="fc" id="L83">        }</span>
-
-        public double getPostTruncationTokensInMessages() {
-<span class="fc" id="L86">            return postTruncationTokensInMessages;</span>
-        }
-
-        public void setPostTruncationTokensInMessages(double postTruncationTokensInMessages) {
-<span class="fc" id="L90">            this.postTruncationTokensInMessages = postTruncationTokensInMessages;</span>
-<span class="fc" id="L91">        }</span>
-
-        public double getPostTruncationMessagesLength() {
-<span class="fc" id="L94">            return postTruncationMessagesLength;</span>
-        }
-
-        public void setPostTruncationMessagesLength(double postTruncationMessagesLength) {
-<span class="fc" id="L98">            this.postTruncationMessagesLength = postTruncationMessagesLength;</span>
-<span class="fc" id="L99">        }</span>
-
-        public double getTokensRemovedDuringTruncation() {
-<span class="fc" id="L102">            return tokensRemovedDuringTruncation;</span>
-        }
-
-        public void setTokensRemovedDuringTruncation(double tokensRemovedDuringTruncation) {
-<span class="fc" id="L106">            this.tokensRemovedDuringTruncation = tokensRemovedDuringTruncation;</span>
-<span class="fc" id="L107">        }</span>
-
-        public double getMessagesRemovedDuringTruncation() {
-<span class="fc" id="L110">            return messagesRemovedDuringTruncation;</span>
-        }
-
-        public void setMessagesRemovedDuringTruncation(double messagesRemovedDuringTruncation) {
-<span class="fc" id="L114">            this.messagesRemovedDuringTruncation = messagesRemovedDuringTruncation;</span>
-<span class="fc" id="L115">        }</span>
-
-        public String getPerformedBy() {
-<span class="fc" id="L118">            return performedBy;</span>
-        }
-
-        public void setPerformedBy(String performedBy) {
-<span class="fc" id="L122">            this.performedBy = performedBy;</span>
-<span class="fc" id="L123">        }</span>
+<span class="nc" id="L35">    public record SessionTruncationData(@JsonProperty(&quot;tokenLimit&quot;) double tokenLimit,</span>
+            @JsonProperty(&quot;preTruncationTokensInMessages&quot;) double preTruncationTokensInMessages,
+            @JsonProperty(&quot;preTruncationMessagesLength&quot;) double preTruncationMessagesLength,
+            @JsonProperty(&quot;postTruncationTokensInMessages&quot;) double postTruncationTokensInMessages,
+            @JsonProperty(&quot;postTruncationMessagesLength&quot;) double postTruncationMessagesLength,
+            @JsonProperty(&quot;tokensRemovedDuringTruncation&quot;) double tokensRemovedDuringTruncation,
+            @JsonProperty(&quot;messagesRemovedDuringTruncation&quot;) double messagesRemovedDuringTruncation,
+            @JsonProperty(&quot;performedBy&quot;) String performedBy) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

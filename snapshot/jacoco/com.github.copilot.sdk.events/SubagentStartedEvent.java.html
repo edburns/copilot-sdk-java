@@ -13,70 +13,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class SubagentStartedEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class SubagentStartedEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SubagentStartedData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;subagent.started&quot;;</span>
+<span class="nc" id="L23">        return &quot;subagent.started&quot;;</span>
     }
 
     public SubagentStartedData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(SubagentStartedData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class SubagentStartedData {</span>
-
-        @JsonProperty(&quot;toolCallId&quot;)
-        private String toolCallId;
-
-        @JsonProperty(&quot;agentName&quot;)
-        private String agentName;
-
-        @JsonProperty(&quot;agentDisplayName&quot;)
-        private String agentDisplayName;
-
-        @JsonProperty(&quot;agentDescription&quot;)
-        private String agentDescription;
-
-        public String getToolCallId() {
-<span class="fc" id="L50">            return toolCallId;</span>
-        }
-
-        public void setToolCallId(String toolCallId) {
-<span class="fc" id="L54">            this.toolCallId = toolCallId;</span>
-<span class="fc" id="L55">        }</span>
-
-        public String getAgentName() {
-<span class="fc" id="L58">            return agentName;</span>
-        }
-
-        public void setAgentName(String agentName) {
-<span class="fc" id="L62">            this.agentName = agentName;</span>
-<span class="fc" id="L63">        }</span>
-
-        public String getAgentDisplayName() {
-<span class="fc" id="L66">            return agentDisplayName;</span>
-        }
-
-        public void setAgentDisplayName(String agentDisplayName) {
-<span class="fc" id="L70">            this.agentDisplayName = agentDisplayName;</span>
-<span class="fc" id="L71">        }</span>
-
-        public String getAgentDescription() {
-<span class="fc" id="L74">            return agentDescription;</span>
-        }
-
-        public void setAgentDescription(String agentDescription) {
-<span class="fc" id="L78">            this.agentDescription = agentDescription;</span>
-<span class="fc" id="L79">        }</span>
+<span class="nc" id="L35">    public record SubagentStartedData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
+            @JsonProperty(&quot;agentName&quot;) String agentName, @JsonProperty(&quot;agentDisplayName&quot;) String agentDisplayName,
+            @JsonProperty(&quot;agentDescription&quot;) String agentDescription) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

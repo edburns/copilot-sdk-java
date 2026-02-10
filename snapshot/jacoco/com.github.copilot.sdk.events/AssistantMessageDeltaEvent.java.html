@@ -13,70 +13,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class AssistantMessageDeltaEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class AssistantMessageDeltaEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantMessageDeltaData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;assistant.message_delta&quot;;</span>
+<span class="nc" id="L23">        return &quot;assistant.message_delta&quot;;</span>
     }
 
     public AssistantMessageDeltaData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(AssistantMessageDeltaData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class AssistantMessageDeltaData {</span>
-
-        @JsonProperty(&quot;messageId&quot;)
-        private String messageId;
-
-        @JsonProperty(&quot;deltaContent&quot;)
-        private String deltaContent;
-
-        @JsonProperty(&quot;totalResponseSizeBytes&quot;)
-        private Double totalResponseSizeBytes;
-
-        @JsonProperty(&quot;parentToolCallId&quot;)
-        private String parentToolCallId;
-
-        public String getMessageId() {
-<span class="fc" id="L50">            return messageId;</span>
-        }
-
-        public void setMessageId(String messageId) {
-<span class="fc" id="L54">            this.messageId = messageId;</span>
-<span class="fc" id="L55">        }</span>
-
-        public String getDeltaContent() {
-<span class="fc" id="L58">            return deltaContent;</span>
-        }
-
-        public void setDeltaContent(String deltaContent) {
-<span class="fc" id="L62">            this.deltaContent = deltaContent;</span>
-<span class="fc" id="L63">        }</span>
-
-        public Double getTotalResponseSizeBytes() {
-<span class="fc" id="L66">            return totalResponseSizeBytes;</span>
-        }
-
-        public void setTotalResponseSizeBytes(Double totalResponseSizeBytes) {
-<span class="fc" id="L70">            this.totalResponseSizeBytes = totalResponseSizeBytes;</span>
-<span class="fc" id="L71">        }</span>
-
-        public String getParentToolCallId() {
-<span class="fc" id="L74">            return parentToolCallId;</span>
-        }
-
-        public void setParentToolCallId(String parentToolCallId) {
-<span class="fc" id="L78">            this.parentToolCallId = parentToolCallId;</span>
-<span class="fc" id="L79">        }</span>
+<span class="nc" id="L35">    public record AssistantMessageDeltaData(@JsonProperty(&quot;messageId&quot;) String messageId,</span>
+            @JsonProperty(&quot;deltaContent&quot;) String deltaContent,
+            @JsonProperty(&quot;totalResponseSizeBytes&quot;) Double totalResponseSizeBytes,
+            @JsonProperty(&quot;parentToolCallId&quot;) String parentToolCallId) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

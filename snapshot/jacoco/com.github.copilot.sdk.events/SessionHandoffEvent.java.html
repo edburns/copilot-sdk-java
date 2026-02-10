@@ -15,128 +15,33 @@ import java.time.OffsetDateTime;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L18">public final class SessionHandoffEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L18">public final class SessionHandoffEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionHandoffData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L25">        return &quot;session.handoff&quot;;</span>
+<span class="nc" id="L25">        return &quot;session.handoff&quot;;</span>
     }
 
     public SessionHandoffData getData() {
-<span class="fc" id="L29">        return data;</span>
+<span class="nc" id="L29">        return data;</span>
     }
 
     public void setData(SessionHandoffData data) {
-<span class="fc" id="L33">        this.data = data;</span>
-<span class="fc" id="L34">    }</span>
+<span class="nc" id="L33">        this.data = data;</span>
+<span class="nc" id="L34">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L37">    public static class SessionHandoffData {</span>
-
-        @JsonProperty(&quot;handoffTime&quot;)
-        private OffsetDateTime handoffTime;
-
-        @JsonProperty(&quot;sourceType&quot;)
-        private String sourceType;
-
-        @JsonProperty(&quot;repository&quot;)
-        private Repository repository;
-
-        @JsonProperty(&quot;context&quot;)
-        private String context;
-
-        @JsonProperty(&quot;summary&quot;)
-        private String summary;
-
-        @JsonProperty(&quot;remoteSessionId&quot;)
-        private String remoteSessionId;
-
-        public OffsetDateTime getHandoffTime() {
-<span class="fc" id="L58">            return handoffTime;</span>
-        }
-
-        public void setHandoffTime(OffsetDateTime handoffTime) {
-<span class="fc" id="L62">            this.handoffTime = handoffTime;</span>
-<span class="fc" id="L63">        }</span>
-
-        public String getSourceType() {
-<span class="fc" id="L66">            return sourceType;</span>
-        }
-
-        public void setSourceType(String sourceType) {
-<span class="fc" id="L70">            this.sourceType = sourceType;</span>
-<span class="fc" id="L71">        }</span>
-
-        public Repository getRepository() {
-<span class="fc" id="L74">            return repository;</span>
-        }
-
-        public void setRepository(Repository repository) {
-<span class="fc" id="L78">            this.repository = repository;</span>
-<span class="fc" id="L79">        }</span>
-
-        public String getContext() {
-<span class="fc" id="L82">            return context;</span>
-        }
-
-        public void setContext(String context) {
-<span class="fc" id="L86">            this.context = context;</span>
-<span class="fc" id="L87">        }</span>
-
-        public String getSummary() {
-<span class="fc" id="L90">            return summary;</span>
-        }
-
-        public void setSummary(String summary) {
-<span class="fc" id="L94">            this.summary = summary;</span>
-<span class="fc" id="L95">        }</span>
-
-        public String getRemoteSessionId() {
-<span class="fc" id="L98">            return remoteSessionId;</span>
-        }
-
-        public void setRemoteSessionId(String remoteSessionId) {
-<span class="fc" id="L102">            this.remoteSessionId = remoteSessionId;</span>
-<span class="fc" id="L103">        }</span>
+<span class="nc" id="L37">    public record SessionHandoffData(@JsonProperty(&quot;handoffTime&quot;) OffsetDateTime handoffTime,</span>
+            @JsonProperty(&quot;sourceType&quot;) String sourceType, @JsonProperty(&quot;repository&quot;) Repository repository,
+            @JsonProperty(&quot;context&quot;) String context, @JsonProperty(&quot;summary&quot;) String summary,
+            @JsonProperty(&quot;remoteSessionId&quot;) String remoteSessionId) {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L106">        public static class Repository {</span>
-
-            @JsonProperty(&quot;owner&quot;)
-            private String owner;
-
-            @JsonProperty(&quot;name&quot;)
-            private String name;
-
-            @JsonProperty(&quot;branch&quot;)
-            private String branch;
-
-            public String getOwner() {
-<span class="fc" id="L118">                return owner;</span>
-            }
-
-            public void setOwner(String owner) {
-<span class="fc" id="L122">                this.owner = owner;</span>
-<span class="fc" id="L123">            }</span>
-
-            public String getName() {
-<span class="fc" id="L126">                return name;</span>
-            }
-
-            public void setName(String name) {
-<span class="fc" id="L130">                this.name = name;</span>
-<span class="fc" id="L131">            }</span>
-
-            public String getBranch() {
-<span class="fc" id="L134">                return branch;</span>
-            }
-
-            public void setBranch(String branch) {
-<span class="fc" id="L138">                this.branch = branch;</span>
-<span class="fc" id="L139">            }</span>
+<span class="nc" id="L43">        public record Repository(@JsonProperty(&quot;owner&quot;) String owner, @JsonProperty(&quot;name&quot;) String name,</span>
+                @JsonProperty(&quot;branch&quot;) String branch) {
         }
     }
 }

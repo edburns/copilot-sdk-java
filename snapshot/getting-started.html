@@ -264,7 +264,7 @@ public class StreamingExample {
 
             // Listen for response chunks
             session.on(AssistantMessageDeltaEvent.class, delta -&gt; {
-                System.out.print(delta.getData().getDeltaContent());
+                System.out.print(delta.getData().deltaContent());
             });
             session.on(SessionIdleEvent.class, idle -&gt; {
                 System.out.println(); // New line when done
@@ -336,7 +336,7 @@ public class ToolExample {
             var done = new CompletableFuture&lt;Void&gt;();
 
             session.on(AssistantMessageDeltaEvent.class, delta -&gt; {
-                System.out.print(delta.getData().getDeltaContent());
+                System.out.print(delta.getData().deltaContent());
             });
             session.on(SessionIdleEvent.class, idle -&gt; {
                 System.out.println();
@@ -411,7 +411,7 @@ public class WeatherAssistant {
 
             // Register listener once, outside the loop
             session.on(AssistantMessageDeltaEvent.class, delta -&gt; {
-                System.out.print(delta.getData().getDeltaContent());
+                System.out.print(delta.getData().deltaContent());
             });
             session.on(SessionIdleEvent.class, idle -&gt; {
                 System.out.println();

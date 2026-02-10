@@ -13,48 +13,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class SubagentCompletedEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class SubagentCompletedEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SubagentCompletedData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;subagent.completed&quot;;</span>
+<span class="nc" id="L23">        return &quot;subagent.completed&quot;;</span>
     }
 
     public SubagentCompletedData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(SubagentCompletedData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class SubagentCompletedData {</span>
-
-        @JsonProperty(&quot;toolCallId&quot;)
-        private String toolCallId;
-
-        @JsonProperty(&quot;agentName&quot;)
-        private String agentName;
-
-        public String getToolCallId() {
-<span class="fc" id="L44">            return toolCallId;</span>
-        }
-
-        public void setToolCallId(String toolCallId) {
-<span class="fc" id="L48">            this.toolCallId = toolCallId;</span>
-<span class="fc" id="L49">        }</span>
-
-        public String getAgentName() {
-<span class="fc" id="L52">            return agentName;</span>
-        }
-
-        public void setAgentName(String agentName) {
-<span class="fc" id="L56">            this.agentName = agentName;</span>
-<span class="fc" id="L57">        }</span>
+<span class="nc" id="L35">    public record SubagentCompletedData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
+            @JsonProperty(&quot;agentName&quot;) String agentName) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

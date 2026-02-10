@@ -13,59 +13,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class SessionUsageInfoEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class SessionUsageInfoEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionUsageInfoData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;session.usage_info&quot;;</span>
+<span class="nc" id="L23">        return &quot;session.usage_info&quot;;</span>
     }
 
     public SessionUsageInfoData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(SessionUsageInfoData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class SessionUsageInfoData {</span>
-
-        @JsonProperty(&quot;tokenLimit&quot;)
-        private double tokenLimit;
-
-        @JsonProperty(&quot;currentTokens&quot;)
-        private double currentTokens;
-
-        @JsonProperty(&quot;messagesLength&quot;)
-        private double messagesLength;
-
-        public double getTokenLimit() {
-<span class="fc" id="L47">            return tokenLimit;</span>
-        }
-
-        public void setTokenLimit(double tokenLimit) {
-<span class="fc" id="L51">            this.tokenLimit = tokenLimit;</span>
-<span class="fc" id="L52">        }</span>
-
-        public double getCurrentTokens() {
-<span class="fc" id="L55">            return currentTokens;</span>
-        }
-
-        public void setCurrentTokens(double currentTokens) {
-<span class="fc" id="L59">            this.currentTokens = currentTokens;</span>
-<span class="fc" id="L60">        }</span>
-
-        public double getMessagesLength() {
-<span class="fc" id="L63">            return messagesLength;</span>
-        }
-
-        public void setMessagesLength(double messagesLength) {
-<span class="fc" id="L67">            this.messagesLength = messagesLength;</span>
-<span class="fc" id="L68">        }</span>
+<span class="nc" id="L35">    public record SessionUsageInfoData(@JsonProperty(&quot;tokenLimit&quot;) double tokenLimit,</span>
+            @JsonProperty(&quot;currentTokens&quot;) double currentTokens,
+            @JsonProperty(&quot;messagesLength&quot;) double messagesLength) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

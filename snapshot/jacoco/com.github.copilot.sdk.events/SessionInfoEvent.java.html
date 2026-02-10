@@ -13,48 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class SessionInfoEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class SessionInfoEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionInfoData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;session.info&quot;;</span>
+<span class="nc" id="L23">        return &quot;session.info&quot;;</span>
     }
 
     public SessionInfoData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(SessionInfoData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class SessionInfoData {</span>
-
-        @JsonProperty(&quot;infoType&quot;)
-        private String infoType;
-
-        @JsonProperty(&quot;message&quot;)
-        private String message;
-
-        public String getInfoType() {
-<span class="fc" id="L44">            return infoType;</span>
-        }
-
-        public void setInfoType(String infoType) {
-<span class="fc" id="L48">            this.infoType = infoType;</span>
-<span class="fc" id="L49">        }</span>
-
-        public String getMessage() {
-<span class="fc" id="L52">            return message;</span>
-        }
-
-        public void setMessage(String message) {
-<span class="fc" id="L56">            this.message = message;</span>
-<span class="fc" id="L57">        }</span>
+<span class="nc" id="L35">    public record SessionInfoData(@JsonProperty(&quot;infoType&quot;) String infoType, @JsonProperty(&quot;message&quot;) String message) {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

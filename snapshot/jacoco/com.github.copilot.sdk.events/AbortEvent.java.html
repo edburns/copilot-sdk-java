@@ -13,37 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class AbortEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class AbortEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AbortData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;abort&quot;;</span>
+<span class="nc" id="L23">        return &quot;abort&quot;;</span>
     }
 
     public AbortData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(AbortData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class AbortData {</span>
-
-        @JsonProperty(&quot;reason&quot;)
-        private String reason;
-
-        public String getReason() {
-<span class="fc" id="L41">            return reason;</span>
-        }
-
-        public void setReason(String reason) {
-<span class="fc" id="L45">            this.reason = reason;</span>
-<span class="fc" id="L46">        }</span>
+<span class="nc" id="L35">    public record AbortData(@JsonProperty(&quot;reason&quot;) String reason) {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

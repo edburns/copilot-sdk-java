@@ -13,37 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class AssistantIntentEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class AssistantIntentEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantIntentData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;assistant.intent&quot;;</span>
+<span class="nc" id="L23">        return &quot;assistant.intent&quot;;</span>
     }
 
     public AssistantIntentData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(AssistantIntentData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class AssistantIntentData {</span>
-
-        @JsonProperty(&quot;intent&quot;)
-        private String intent;
-
-        public String getIntent() {
-<span class="fc" id="L41">            return intent;</span>
-        }
-
-        public void setIntent(String intent) {
-<span class="fc" id="L45">            this.intent = intent;</span>
-<span class="fc" id="L46">        }</span>
+<span class="nc" id="L35">    public record AssistantIntentData(@JsonProperty(&quot;intent&quot;) String intent) {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

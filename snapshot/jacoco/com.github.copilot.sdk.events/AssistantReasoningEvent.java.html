@@ -13,48 +13,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L16">public final class AssistantReasoningEvent extends AbstractSessionEvent {</span>
+<span class="nc" id="L16">public final class AssistantReasoningEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantReasoningData data;
 
     @Override
     public String getType() {
-<span class="fc" id="L23">        return &quot;assistant.reasoning&quot;;</span>
+<span class="nc" id="L23">        return &quot;assistant.reasoning&quot;;</span>
     }
 
     public AssistantReasoningData getData() {
-<span class="fc" id="L27">        return data;</span>
+<span class="nc" id="L27">        return data;</span>
     }
 
     public void setData(AssistantReasoningData data) {
-<span class="fc" id="L31">        this.data = data;</span>
-<span class="fc" id="L32">    }</span>
+<span class="nc" id="L31">        this.data = data;</span>
+<span class="nc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L35">    public static class AssistantReasoningData {</span>
-
-        @JsonProperty(&quot;reasoningId&quot;)
-        private String reasoningId;
-
-        @JsonProperty(&quot;content&quot;)
-        private String content;
-
-        public String getReasoningId() {
-<span class="fc" id="L44">            return reasoningId;</span>
-        }
-
-        public void setReasoningId(String reasoningId) {
-<span class="fc" id="L48">            this.reasoningId = reasoningId;</span>
-<span class="fc" id="L49">        }</span>
-
-        public String getContent() {
-<span class="fc" id="L52">            return content;</span>
-        }
-
-        public void setContent(String content) {
-<span class="fc" id="L56">            this.content = content;</span>
-<span class="fc" id="L57">        }</span>
+<span class="nc" id="L35">    public record AssistantReasoningData(@JsonProperty(&quot;reasoningId&quot;) String reasoningId,</span>
+            @JsonProperty(&quot;content&quot;) String content) {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
