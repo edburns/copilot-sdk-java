@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
     }
 
     public SessionHandoffData getData() {
-<span class="nc" id="L29">        return data;</span>
+<span class="fc" id="L29">        return data;</span>
     }
 
     public void setData(SessionHandoffData data) {
@@ -55,55 +55,55 @@ import java.time.OffsetDateTime;
         private String remoteSessionId;
 
         public OffsetDateTime getHandoffTime() {
-<span class="nc" id="L58">            return handoffTime;</span>
+<span class="fc" id="L58">            return handoffTime;</span>
         }
 
         public void setHandoffTime(OffsetDateTime handoffTime) {
-<span class="nc" id="L62">            this.handoffTime = handoffTime;</span>
-<span class="nc" id="L63">        }</span>
+<span class="fc" id="L62">            this.handoffTime = handoffTime;</span>
+<span class="fc" id="L63">        }</span>
 
         public String getSourceType() {
-<span class="nc" id="L66">            return sourceType;</span>
+<span class="fc" id="L66">            return sourceType;</span>
         }
 
         public void setSourceType(String sourceType) {
-<span class="nc" id="L70">            this.sourceType = sourceType;</span>
-<span class="nc" id="L71">        }</span>
+<span class="fc" id="L70">            this.sourceType = sourceType;</span>
+<span class="fc" id="L71">        }</span>
 
         public Repository getRepository() {
-<span class="nc" id="L74">            return repository;</span>
+<span class="fc" id="L74">            return repository;</span>
         }
 
         public void setRepository(Repository repository) {
-<span class="nc" id="L78">            this.repository = repository;</span>
-<span class="nc" id="L79">        }</span>
+<span class="fc" id="L78">            this.repository = repository;</span>
+<span class="fc" id="L79">        }</span>
 
         public String getContext() {
-<span class="nc" id="L82">            return context;</span>
+<span class="fc" id="L82">            return context;</span>
         }
 
         public void setContext(String context) {
-<span class="nc" id="L86">            this.context = context;</span>
-<span class="nc" id="L87">        }</span>
+<span class="fc" id="L86">            this.context = context;</span>
+<span class="fc" id="L87">        }</span>
 
         public String getSummary() {
-<span class="nc" id="L90">            return summary;</span>
+<span class="fc" id="L90">            return summary;</span>
         }
 
         public void setSummary(String summary) {
-<span class="nc" id="L94">            this.summary = summary;</span>
-<span class="nc" id="L95">        }</span>
+<span class="fc" id="L94">            this.summary = summary;</span>
+<span class="fc" id="L95">        }</span>
 
         public String getRemoteSessionId() {
-<span class="nc" id="L98">            return remoteSessionId;</span>
+<span class="fc" id="L98">            return remoteSessionId;</span>
         }
 
         public void setRemoteSessionId(String remoteSessionId) {
-<span class="nc" id="L102">            this.remoteSessionId = remoteSessionId;</span>
-<span class="nc" id="L103">        }</span>
+<span class="fc" id="L102">            this.remoteSessionId = remoteSessionId;</span>
+<span class="fc" id="L103">        }</span>
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L106">        public static class Repository {</span>
+<span class="fc" id="L106">        public static class Repository {</span>
 
             @JsonProperty(&quot;owner&quot;)
             private String owner;
@@ -115,28 +115,28 @@ import java.time.OffsetDateTime;
             private String branch;
 
             public String getOwner() {
-<span class="nc" id="L118">                return owner;</span>
+<span class="fc" id="L118">                return owner;</span>
             }
 
             public void setOwner(String owner) {
-<span class="nc" id="L122">                this.owner = owner;</span>
-<span class="nc" id="L123">            }</span>
+<span class="fc" id="L122">                this.owner = owner;</span>
+<span class="fc" id="L123">            }</span>
 
             public String getName() {
-<span class="nc" id="L126">                return name;</span>
+<span class="fc" id="L126">                return name;</span>
             }
 
             public void setName(String name) {
-<span class="nc" id="L130">                this.name = name;</span>
-<span class="nc" id="L131">            }</span>
+<span class="fc" id="L130">                this.name = name;</span>
+<span class="fc" id="L131">            }</span>
 
             public String getBranch() {
-<span class="nc" id="L134">                return branch;</span>
+<span class="fc" id="L134">                return branch;</span>
             }
 
             public void setBranch(String branch) {
-<span class="nc" id="L138">                this.branch = branch;</span>
-<span class="nc" id="L139">            }</span>
+<span class="fc" id="L138">                this.branch = branch;</span>
+<span class="fc" id="L139">            }</span>
         }
     }
 }

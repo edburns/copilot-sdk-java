@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     }
 
     public SubagentSelectedData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(SubagentSelectedData data) {
@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
         private String[] tools;
 
         public String getAgentName() {
-<span class="nc" id="L47">            return agentName;</span>
+<span class="fc" id="L47">            return agentName;</span>
         }
 
         public void setAgentName(String agentName) {
@@ -52,20 +52,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 <span class="fc" id="L52">        }</span>
 
         public String getAgentDisplayName() {
-<span class="nc" id="L55">            return agentDisplayName;</span>
+<span class="fc" id="L55">            return agentDisplayName;</span>
         }
 
         public void setAgentDisplayName(String agentDisplayName) {
-<span class="nc" id="L59">            this.agentDisplayName = agentDisplayName;</span>
-<span class="nc" id="L60">        }</span>
+<span class="fc" id="L59">            this.agentDisplayName = agentDisplayName;</span>
+<span class="fc" id="L60">        }</span>
 
         public String[] getTools() {
-<span class="nc bnc" id="L63" title="All 2 branches missed.">            return tools == null ? null : tools.clone();</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">            return tools == null ? null : tools.clone();</span>
         }
 
         public void setTools(String[] tools) {
-<span class="nc" id="L67">            this.tools = tools;</span>
-<span class="nc" id="L68">        }</span>
+<span class="fc" id="L67">            this.tools = tools;</span>
+<span class="fc" id="L68">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

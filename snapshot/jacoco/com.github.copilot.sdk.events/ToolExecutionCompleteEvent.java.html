@@ -59,7 +59,7 @@ import java.util.Map;
         private String parentToolCallId;
 
         public String getToolCallId() {
-<span class="nc" id="L62">            return toolCallId;</span>
+<span class="fc" id="L62">            return toolCallId;</span>
         }
 
         public void setToolCallId(String toolCallId) {
@@ -75,15 +75,15 @@ import java.util.Map;
 <span class="fc" id="L75">        }</span>
 
         public Boolean getIsUserRequested() {
-<span class="nc" id="L78">            return isUserRequested;</span>
+<span class="fc" id="L78">            return isUserRequested;</span>
         }
 
         public void setIsUserRequested(Boolean isUserRequested) {
-<span class="nc" id="L82">            this.isUserRequested = isUserRequested;</span>
-<span class="nc" id="L83">        }</span>
+<span class="fc" id="L82">            this.isUserRequested = isUserRequested;</span>
+<span class="fc" id="L83">        }</span>
 
         public Result getResult() {
-<span class="nc" id="L86">            return result;</span>
+<span class="fc" id="L86">            return result;</span>
         }
 
         public void setResult(Result result) {
@@ -91,7 +91,7 @@ import java.util.Map;
 <span class="fc" id="L91">        }</span>
 
         public Error getError() {
-<span class="nc" id="L94">            return error;</span>
+<span class="fc" id="L94">            return error;</span>
         }
 
         public void setError(Error error) {
@@ -99,7 +99,7 @@ import java.util.Map;
 <span class="fc" id="L99">        }</span>
 
         public Map&lt;String, Object&gt; getToolTelemetry() {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            return toolTelemetry == null ? null : Collections.unmodifiableMap(toolTelemetry);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            return toolTelemetry == null ? null : Collections.unmodifiableMap(toolTelemetry);</span>
         }
 
         public void setToolTelemetry(Map&lt;String, Object&gt; toolTelemetry) {
@@ -107,12 +107,12 @@ import java.util.Map;
 <span class="fc" id="L107">        }</span>
 
         public String getParentToolCallId() {
-<span class="nc" id="L110">            return parentToolCallId;</span>
+<span class="fc" id="L110">            return parentToolCallId;</span>
         }
 
         public void setParentToolCallId(String parentToolCallId) {
-<span class="nc" id="L114">            this.parentToolCallId = parentToolCallId;</span>
-<span class="nc" id="L115">        }</span>
+<span class="fc" id="L114">            this.parentToolCallId = parentToolCallId;</span>
+<span class="fc" id="L115">        }</span>
 
         @JsonIgnoreProperties(ignoreUnknown = true)
 <span class="fc" id="L118">        public static class Result {</span>
@@ -124,7 +124,7 @@ import java.util.Map;
             private String detailedContent;
 
             public String getContent() {
-<span class="nc" id="L127">                return content;</span>
+<span class="fc" id="L127">                return content;</span>
             }
 
             public void setContent(String content) {
@@ -132,7 +132,7 @@ import java.util.Map;
 <span class="fc" id="L132">            }</span>
 
             public String getDetailedContent() {
-<span class="nc" id="L135">                return detailedContent;</span>
+<span class="fc" id="L135">                return detailedContent;</span>
             }
 
             public void setDetailedContent(String detailedContent) {
@@ -150,7 +150,7 @@ import java.util.Map;
             private String code;
 
             public String getMessage() {
-<span class="nc" id="L153">                return message;</span>
+<span class="fc" id="L153">                return message;</span>
             }
 
             public void setMessage(String message) {
@@ -158,7 +158,7 @@ import java.util.Map;
 <span class="fc" id="L158">            }</span>
 
             public String getCode() {
-<span class="nc" id="L161">                return code;</span>
+<span class="fc" id="L161">                return code;</span>
             }
 
             public void setCode(String code) {

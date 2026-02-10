@@ -89,36 +89,6 @@ import java.util.Map;
 <span class="fc" id="L89">    }</span>
 
     /**
-     * Parses a JSON string into the appropriate SessionEvent subclass.
-     *
-     * @param json
-     *            the JSON string representing an event
-     * @return the parsed event, or {@code null} if parsing fails or type is unknown
-     */
-    public static AbstractSessionEvent parse(String json) {
-        try {
-<span class="fc" id="L100">            JsonNode node = MAPPER.readTree(json);</span>
-<span class="fc bfc" id="L101" title="All 2 branches covered.">            String type = node.has(&quot;type&quot;) ? node.get(&quot;type&quot;).asText() : null;</span>
-
-<span class="fc bfc" id="L103" title="All 2 branches covered.">            if (type == null) {</span>
-<span class="fc" id="L104">                LOG.warning(&quot;Missing 'type' field in event: &quot; + json);</span>
-<span class="fc" id="L105">                return null;</span>
-            }
-
-<span class="fc" id="L108">            Class&lt;? extends AbstractSessionEvent&gt; eventClass = TYPE_MAP.get(type);</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (eventClass == null) {</span>
-<span class="fc" id="L110">                LOG.fine(&quot;Unknown event type: &quot; + type);</span>
-<span class="fc" id="L111">                return null;</span>
-            }
-
-<span class="fc" id="L114">            return MAPPER.treeToValue(node, eventClass);</span>
-<span class="fc" id="L115">        } catch (Exception e) {</span>
-<span class="fc" id="L116">            LOG.log(Level.SEVERE, &quot;Failed to parse session event&quot;, e);</span>
-<span class="fc" id="L117">            return null;</span>
-        }
-    }
-
-    /**
      * Parses a JsonNode into the appropriate SessionEvent subclass.
      *
      * @param node
@@ -127,23 +97,23 @@ import java.util.Map;
      */
     public static AbstractSessionEvent parse(JsonNode node) {
         try {
-<span class="nc bnc" id="L130" title="All 2 branches missed.">            String type = node.has(&quot;type&quot;) ? node.get(&quot;type&quot;).asText() : null;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            String type = node.has(&quot;type&quot;) ? node.get(&quot;type&quot;).asText() : null;</span>
 
-<span class="nc bnc" id="L132" title="All 2 branches missed.">            if (type == null) {</span>
-<span class="nc" id="L133">                LOG.warning(&quot;Missing 'type' field in event&quot;);</span>
-<span class="nc" id="L134">                return null;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (type == null) {</span>
+<span class="fc" id="L103">                LOG.warning(&quot;Missing 'type' field in event&quot;);</span>
+<span class="fc" id="L104">                return null;</span>
             }
 
-<span class="nc" id="L137">            Class&lt;? extends AbstractSessionEvent&gt; eventClass = TYPE_MAP.get(type);</span>
-<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (eventClass == null) {</span>
-<span class="nc" id="L139">                LOG.fine(&quot;Unknown event type: &quot; + type);</span>
-<span class="nc" id="L140">                return null;</span>
+<span class="fc" id="L107">            Class&lt;? extends AbstractSessionEvent&gt; eventClass = TYPE_MAP.get(type);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (eventClass == null) {</span>
+<span class="fc" id="L109">                LOG.fine(&quot;Unknown event type: &quot; + type);</span>
+<span class="fc" id="L110">                return null;</span>
             }
 
-<span class="nc" id="L143">            return MAPPER.treeToValue(node, eventClass);</span>
-<span class="nc" id="L144">        } catch (Exception e) {</span>
-<span class="nc" id="L145">            LOG.log(Level.SEVERE, &quot;Failed to parse session event&quot;, e);</span>
-<span class="nc" id="L146">            return null;</span>
+<span class="fc" id="L113">            return MAPPER.treeToValue(node, eventClass);</span>
+<span class="fc" id="L114">        } catch (Exception e) {</span>
+<span class="fc" id="L115">            LOG.log(Level.SEVERE, &quot;Failed to parse session event&quot;, e);</span>
+<span class="fc" id="L116">            return null;</span>
         }
     }
 }

@@ -99,7 +99,7 @@ import java.util.List;
          * @return the message ID
          */
         public String getMessageId() {
-<span class="nc" id="L102">            return messageId;</span>
+<span class="fc" id="L102">            return messageId;</span>
         }
 
         /**
@@ -137,7 +137,7 @@ import java.util.List;
          * @return the tool requests, or {@code null} if none
          */
         public List&lt;ToolRequest&gt; getToolRequests() {
-<span class="nc bnc" id="L140" title="All 2 branches missed.">            return toolRequests == null ? null : Collections.unmodifiableList(toolRequests);</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            return toolRequests == null ? null : Collections.unmodifiableList(toolRequests);</span>
         }
 
         /**
@@ -156,7 +156,7 @@ import java.util.List;
          * @return the parent tool call ID, or {@code null}
          */
         public String getParentToolCallId() {
-<span class="nc" id="L159">            return parentToolCallId;</span>
+<span class="fc" id="L159">            return parentToolCallId;</span>
         }
 
         /**
@@ -166,8 +166,8 @@ import java.util.List;
          *            the parent tool call ID
          */
         public void setParentToolCallId(String parentToolCallId) {
-<span class="nc" id="L169">            this.parentToolCallId = parentToolCallId;</span>
-<span class="nc" id="L170">        }</span>
+<span class="fc" id="L169">            this.parentToolCallId = parentToolCallId;</span>
+<span class="fc" id="L170">        }</span>
 
         /**
          * Gets the opaque reasoning content (encrypted/encoded).
@@ -175,7 +175,7 @@ import java.util.List;
          * @return the opaque reasoning content, or {@code null}
          */
         public String getReasoningOpaque() {
-<span class="nc" id="L178">            return reasoningOpaque;</span>
+<span class="fc" id="L178">            return reasoningOpaque;</span>
         }
 
         /**
@@ -185,8 +185,8 @@ import java.util.List;
          *            the opaque reasoning content
          */
         public void setReasoningOpaque(String reasoningOpaque) {
-<span class="nc" id="L188">            this.reasoningOpaque = reasoningOpaque;</span>
-<span class="nc" id="L189">        }</span>
+<span class="fc" id="L188">            this.reasoningOpaque = reasoningOpaque;</span>
+<span class="fc" id="L189">        }</span>
 
         /**
          * Gets the human-readable reasoning text.
@@ -194,7 +194,7 @@ import java.util.List;
          * @return the reasoning text, or {@code null}
          */
         public String getReasoningText() {
-<span class="nc" id="L197">            return reasoningText;</span>
+<span class="fc" id="L197">            return reasoningText;</span>
         }
 
         /**
@@ -204,8 +204,8 @@ import java.util.List;
          *            the reasoning text
          */
         public void setReasoningText(String reasoningText) {
-<span class="nc" id="L207">            this.reasoningText = reasoningText;</span>
-<span class="nc" id="L208">        }</span>
+<span class="fc" id="L207">            this.reasoningText = reasoningText;</span>
+<span class="fc" id="L208">        }</span>
 
         /**
          * Gets the encrypted content.
@@ -213,7 +213,7 @@ import java.util.List;
          * @return the encrypted content, or {@code null}
          */
         public String getEncryptedContent() {
-<span class="nc" id="L216">            return encryptedContent;</span>
+<span class="fc" id="L216">            return encryptedContent;</span>
         }
 
         /**
@@ -223,8 +223,8 @@ import java.util.List;
          *            the encrypted content
          */
         public void setEncryptedContent(String encryptedContent) {
-<span class="nc" id="L226">            this.encryptedContent = encryptedContent;</span>
-<span class="nc" id="L227">        }</span>
+<span class="fc" id="L226">            this.encryptedContent = encryptedContent;</span>
+<span class="fc" id="L227">        }</span>
 
         /**
          * Represents a request from the assistant to invoke a tool.
@@ -247,7 +247,7 @@ import java.util.List;
              * @return the tool call ID
              */
             public String getToolCallId() {
-<span class="nc" id="L250">                return toolCallId;</span>
+<span class="fc" id="L250">                return toolCallId;</span>
             }
 
             /**
@@ -266,7 +266,7 @@ import java.util.List;
              * @return the tool name
              */
             public String getName() {
-<span class="nc" id="L269">                return name;</span>
+<span class="fc" id="L269">                return name;</span>
             }
 
             /**
@@ -285,7 +285,7 @@ import java.util.List;
              * @return the tool arguments (typically a Map or JsonNode)
              */
             public Object getArguments() {
-<span class="nc" id="L288">                return arguments;</span>
+<span class="fc" id="L288">                return arguments;</span>
             }
 
             /**
