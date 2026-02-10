@@ -5,6 +5,12 @@
 #   git config core.hooksPath .githooks
 #
 
+# Only run Spotless if staged changes include files under src/
+if ! git diff --cached --name-only | grep -q '^src/'; then
+    echo "No changes in src/, skipping Spotless check."
+    exit 0
+fi
+
 echo "Running Spotless check..."
 
 # Run spotless check
