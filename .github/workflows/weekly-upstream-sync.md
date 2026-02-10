@@ -25,6 +25,7 @@ safe-outputs:
   create-issue:
     title-prefix: "[upstream-sync] "
     labels: [upstream-sync]
+    expires: 6
   close-issue:
     required-labels: [upstream-sync]
     target: "*"
@@ -35,6 +36,8 @@ safe-outputs:
   assign-to-agent:
     name: "copilot"
     target: "*"
+  noop:
+    report-as-issue: false
 ---
 # Weekly Upstream Sync Agentic Workflow
 This document describes the `weekly-upstream-sync.yml` GitHub Actions workflow, which automates the detection of new changes in the official [Copilot SDK](https://github.com/github/copilot-sdk) and delegates the merge work to the Copilot coding agent.

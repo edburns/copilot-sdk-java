@@ -22,7 +22,7 @@
 # Weekly upstream sync workflow. Checks for new commits in the official
 # Copilot SDK (github/copilot-sdk) and assigns to Copilot to port changes.
 #
-# frontmatter-hash: d5db7ac8fa73ef34ff095a70b8f0340f6d339711fe9c0c414bdf3245eadc41c7
+# frontmatter-hash: d578661b88d0b1225af55ed3d5ad443003b08248f078bbe0fc306f89af2ad801
 
 name: "Weekly Upstream Sync Agentic Workflow"
 "on":
@@ -154,7 +154,7 @@ jobs:
           mkdir -p /tmp/gh-aw/safeoutputs
           mkdir -p /tmp/gh-aw/mcp-logs/safeoutputs
           cat > /opt/gh-aw/safeoutputs/config.json << 'EOF'
-          {"add_comment":{"max":10,"target":"*"},"assign_to_agent":{"default_agent":"copilot","target":"*"},"close_issue":{"max":10,"required_labels":["upstream-sync"]},"create_issue":{"max":1},"missing_data":{},"missing_tool":{},"noop":{"max":1}}
+          {"add_comment":{"max":10,"target":"*"},"assign_to_agent":{"default_agent":"copilot","target":"*"},"close_issue":{"max":10,"required_labels":["upstream-sync"]},"create_issue":{"expires":144,"max":1},"missing_data":{},"missing_tool":{},"noop":{"max":1}}
           EOF
           cat > /opt/gh-aw/safeoutputs/tools.json << 'EOF'
           [
@@ -963,7 +963,7 @@ jobs:
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_NOOP_MESSAGE: ${{ steps.noop.outputs.noop_message }}
-          GH_AW_NOOP_REPORT_AS_ISSUE: "true"
+          GH_AW_NOOP_REPORT_AS_ISSUE: "false"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -1136,7 +1136,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: "{\"add_comment\":{\"max\":10,\"target\":\"*\"},\"close_issue\":{\"max\":10,\"required_labels\":[\"upstream-sync\"],\"target\":\"*\"},\"create_issue\":{\"labels\":[\"upstream-sync\"],\"max\":1,\"title_prefix\":\"[upstream-sync] \"},\"missing_data\":{},\"missing_tool\":{}}"
+          GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: "{\"add_comment\":{\"max\":10,\"target\":\"*\"},\"close_issue\":{\"max\":10,\"required_labels\":[\"upstream-sync\"],\"target\":\"*\"},\"create_issue\":{\"expires\":144,\"labels\":[\"upstream-sync\"],\"max\":1,\"title_prefix\":\"[upstream-sync] \"},\"missing_data\":{},\"missing_tool\":{}}"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
