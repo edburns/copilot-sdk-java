@@ -40,7 +40,7 @@ This document describes the `weekly-upstream-sync.yml` GitHub Actions workflow, 
 
 ## Overview
 
-The workflow runs on a **weekly schedule** (every Monday at 10:00 UTC) and can also be triggered manually. It does **not** perform the actual merge — instead, it detects upstream changes and creates a GitHub issue assigned to `copilot`, which then follows the [agentic-merge-upstream](../prompts/agentic-merge-upstream.prompt.md) prompt to port the changes.
+The workflow runs on a **weekly schedule** (every Monday at 10:00 UTC) and can also be triggered manually. It does **not** perform the actual merge — instead, it detects upstream changes and creates a GitHub issue assigned to `copilot`, instructing the agent to follow the [agentic-merge-upstream](../prompts/agentic-merge-upstream.prompt.md) prompt to port the changes.
 
 ## Trigger
 
@@ -48,20 +48,6 @@ The workflow runs on a **weekly schedule** (every Monday at 10:00 UTC) and can a
 |---|---|
 | `schedule` | Every Monday at 10:00 UTC (`0 10 * * 1`) |
 | `workflow_dispatch` | Manual trigger from the Actions tab |
-
-## Permissions
-
-| Permission | Level | Purpose |
-|---|---|---|
-| `contents` | `write` | Read `.lastmerge` file |
-| `issues` | `write` | Create/close upstream-sync issues |
-| `pull-requests` | `write` | Allow Copilot agent to create PRs |
-
-## Secrets
-
-| Secret | Purpose |
-|---|---|
-| `GH_AW_AGENT_TOKEN` | PAT used as `GH_TOKEN` for `gh` CLI operations (issue create/close/comment). Required because the default `GITHUB_TOKEN` cannot assign issues to `copilot-swe-agent`. |
 
 ## Workflow Steps
 
@@ -97,7 +83,7 @@ Creates a new GitHub issue with:
 
 - **Title:** `Upstream sync: N new commits (YYYY-MM-DD)`
 - **Label:** `upstream-sync`
-- **Assignee:** `copilot-swe-agent`
+- **Assignee:** `copilot`
 - **Body:** Contains commit count, commit range links, a summary of recent commits, and a link to the merge prompt
 
 The Copilot coding agent picks up the issue, creates a branch and PR, then follows the merge prompt to port the changes.
@@ -115,21 +101,21 @@ Writes a GitHub Actions step summary with:
 
 ```
 ┌─────────────────────┐
-│  Schedule / Manual   │
+│  Schedule / Manual  │
 └──────────┬──────────┘
            │
            ▼
 ┌─────────────────────┐
-│ Read .lastmerge      │
-│ Clone upstream SDK   │
-│ Compare commits      │
+│ Read .lastmerge     │
+│ Clone upstream SDK  │
+│ Compare commits     │
 └──────────┬──────────┘
            │
      ┌─────┴─────┐
-     │            │
+     │           │
   changes?     no changes
-     │            │
-     ▼            ▼
+     │           │
+     ▼           ▼
 ┌──────────┐  ┌──────────────────┐
 │ Close old│  │ Close stale      │
 │ issues   │  │ issues           │
@@ -138,7 +124,7 @@ Writes a GitHub Actions step summary with:
      ▼
 ┌──────────────────────────┐
 │ Create issue assigned to │
-│ copilot-swe-agent        │
+│ copilot                  │
 └──────────────────────────┘
      │
      ▼
@@ -154,5 +140,4 @@ Writes a GitHub Actions step summary with:
 |---|---|
 | `.lastmerge` | Stores the SHA of the last merged upstream commit |
 | [agentic-merge-upstream.prompt.md](../prompts/agentic-merge-upstream.prompt.md) | Detailed instructions the Copilot agent follows to port changes |
-| [upstream-sync.md](upstream-sync.md) | gh-aw agentic workflow (alternative approach that runs the agent directly in CI) |
 | `.github/scripts/upstream-sync/` | Helper scripts used by the merge prompt |
