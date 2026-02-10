@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class SessionTruncationEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class SessionTruncationEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionTruncationData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;session.truncation&quot;;</span>
+<span class="fc" id="L23">        return &quot;session.truncation&quot;;</span>
     }
 
     public SessionTruncationData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(SessionTruncationData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record SessionTruncationData(@JsonProperty(&quot;tokenLimit&quot;) double tokenLimit,</span>
+<span class="fc" id="L35">    public record SessionTruncationData(@JsonProperty(&quot;tokenLimit&quot;) double tokenLimit,</span>
             @JsonProperty(&quot;preTruncationTokensInMessages&quot;) double preTruncationTokensInMessages,
             @JsonProperty(&quot;preTruncationMessagesLength&quot;) double preTruncationMessagesLength,
             @JsonProperty(&quot;postTruncationTokensInMessages&quot;) double postTruncationTokensInMessages,

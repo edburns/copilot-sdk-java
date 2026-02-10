@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class ToolExecutionPartialResultEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class ToolExecutionPartialResultEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private ToolExecutionPartialResultData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;tool.execution_partial_result&quot;;</span>
+<span class="fc" id="L23">        return &quot;tool.execution_partial_result&quot;;</span>
     }
 
     public ToolExecutionPartialResultData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(ToolExecutionPartialResultData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record ToolExecutionPartialResultData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
+<span class="fc" id="L35">    public record ToolExecutionPartialResultData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
             @JsonProperty(&quot;partialOutput&quot;) String partialOutput) {
     }
 }

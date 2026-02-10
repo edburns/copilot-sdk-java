@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class SessionCompactionCompleteEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class SessionCompactionCompleteEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionCompactionCompleteData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;session.compaction_complete&quot;;</span>
+<span class="fc" id="L23">        return &quot;session.compaction_complete&quot;;</span>
     }
 
     public SessionCompactionCompleteData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(SessionCompactionCompleteData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record SessionCompactionCompleteData(@JsonProperty(&quot;success&quot;) boolean success,</span>
+<span class="fc" id="L35">    public record SessionCompactionCompleteData(@JsonProperty(&quot;success&quot;) boolean success,</span>
             @JsonProperty(&quot;error&quot;) String error, @JsonProperty(&quot;preCompactionTokens&quot;) Double preCompactionTokens,
             @JsonProperty(&quot;postCompactionTokens&quot;) Double postCompactionTokens,
             @JsonProperty(&quot;preCompactionMessagesLength&quot;) Double preCompactionMessagesLength,
@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * Token usage information for the compaction operation.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L51">    public record CompactionTokensUsed(@JsonProperty(&quot;input&quot;) double input, @JsonProperty(&quot;output&quot;) double output,</span>
+<span class="fc" id="L51">    public record CompactionTokensUsed(@JsonProperty(&quot;input&quot;) double input, @JsonProperty(&quot;output&quot;) double output,</span>
             @JsonProperty(&quot;cachedInput&quot;) double cachedInput) {
     }
 }

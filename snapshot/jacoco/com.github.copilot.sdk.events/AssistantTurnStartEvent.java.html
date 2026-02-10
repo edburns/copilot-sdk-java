@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class AssistantTurnStartEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class AssistantTurnStartEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantTurnStartData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;assistant.turn_start&quot;;</span>
+<span class="fc" id="L23">        return &quot;assistant.turn_start&quot;;</span>
     }
 
     public AssistantTurnStartData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(AssistantTurnStartData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record AssistantTurnStartData(@JsonProperty(&quot;turnId&quot;) String turnId) {</span>
+<span class="fc" id="L35">    public record AssistantTurnStartData(@JsonProperty(&quot;turnId&quot;) String turnId) {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

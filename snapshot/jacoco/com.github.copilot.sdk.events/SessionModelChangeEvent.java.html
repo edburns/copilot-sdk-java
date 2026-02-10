@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class SessionModelChangeEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class SessionModelChangeEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionModelChangeData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;session.model_change&quot;;</span>
+<span class="fc" id="L23">        return &quot;session.model_change&quot;;</span>
     }
 
     public SessionModelChangeData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(SessionModelChangeData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record SessionModelChangeData(@JsonProperty(&quot;previousModel&quot;) String previousModel,</span>
+<span class="fc" id="L35">    public record SessionModelChangeData(@JsonProperty(&quot;previousModel&quot;) String previousModel,</span>
             @JsonProperty(&quot;newModel&quot;) String newModel) {
     }
 }

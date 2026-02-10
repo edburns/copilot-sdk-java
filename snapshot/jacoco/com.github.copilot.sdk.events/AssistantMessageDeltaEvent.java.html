@@ -13,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class AssistantMessageDeltaEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class AssistantMessageDeltaEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private AssistantMessageDeltaData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;assistant.message_delta&quot;;</span>
+<span class="fc" id="L23">        return &quot;assistant.message_delta&quot;;</span>
     }
 
     public AssistantMessageDeltaData getData() {
-<span class="nc" id="L27">        return data;</span>
+<span class="fc" id="L27">        return data;</span>
     }
 
     public void setData(AssistantMessageDeltaData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record AssistantMessageDeltaData(@JsonProperty(&quot;messageId&quot;) String messageId,</span>
+<span class="fc" id="L35">    public record AssistantMessageDeltaData(@JsonProperty(&quot;messageId&quot;) String messageId,</span>
             @JsonProperty(&quot;deltaContent&quot;) String deltaContent,
             @JsonProperty(&quot;totalResponseSizeBytes&quot;) Double totalResponseSizeBytes,
             @JsonProperty(&quot;parentToolCallId&quot;) String parentToolCallId) {

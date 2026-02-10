@@ -13,14 +13,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.0
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L16">public final class SessionIdleEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L16">public final class SessionIdleEvent extends AbstractSessionEvent {</span>
 
     @JsonProperty(&quot;data&quot;)
     private SessionIdleData data;
 
     @Override
     public String getType() {
-<span class="nc" id="L23">        return &quot;session.idle&quot;;</span>
+<span class="fc" id="L23">        return &quot;session.idle&quot;;</span>
     }
 
     public SessionIdleData getData() {
@@ -28,11 +28,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     }
 
     public void setData(SessionIdleData data) {
-<span class="nc" id="L31">        this.data = data;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        this.data = data;</span>
+<span class="fc" id="L32">    }</span>
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L35">    public record SessionIdleData() {</span>
+<span class="fc" id="L35">    public record SessionIdleData() {</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

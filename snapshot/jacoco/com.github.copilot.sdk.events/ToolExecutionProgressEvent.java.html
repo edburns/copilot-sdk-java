@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0.1
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L18">public final class ToolExecutionProgressEvent extends AbstractSessionEvent {</span>
+<span class="fc" id="L18">public final class ToolExecutionProgressEvent extends AbstractSessionEvent {</span>
 
     public static final String TYPE = &quot;tool.execution_progress&quot;;
 
@@ -24,20 +24,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
     @Override
     public String getType() {
-<span class="nc" id="L27">        return TYPE;</span>
+<span class="fc" id="L27">        return TYPE;</span>
     }
 
     public ToolExecutionProgressData getData() {
-<span class="nc" id="L31">        return data;</span>
+<span class="fc" id="L31">        return data;</span>
     }
 
     public ToolExecutionProgressEvent setData(ToolExecutionProgressData data) {
-<span class="nc" id="L35">        this.data = data;</span>
-<span class="nc" id="L36">        return this;</span>
+<span class="fc" id="L35">        this.data = data;</span>
+<span class="fc" id="L36">        return this;</span>
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="nc" id="L40">    public record ToolExecutionProgressData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
+<span class="fc" id="L40">    public record ToolExecutionProgressData(@JsonProperty(&quot;toolCallId&quot;) String toolCallId,</span>
             @JsonProperty(&quot;progressMessage&quot;) String progressMessage) {
     }
 }
