@@ -9,27 +9,12 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-      - '.github/prompts/**'
-      - '.github/skills/**'
-      - '.github/scripts/**'
-      - '.github/templates/**'
-      - '.github/dependabot.yml'
-      - '.github/release.yml'
-      - '.github/workflows/publish-maven.yml'
-      - '.github/workflows/weekly-upstream-sync.yml'
-      - '.github/workflows/copilot-issue.yml'
+      - '.github/**'
   pull_request:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-      - '.github/prompts/**'
-      - '.github/skills/**'
-      - '.github/scripts/**'
-      - '.github/templates/**'
-      - '.github/dependabot.yml'
-      - '.github/release.yml'
-      - '.github/workflows/publish-maven.yml'
-      - '.github/workflows/weekly-upstream-sync.yml'
+      - '.github/**'
   workflow_dispatch:
   merge_group:
 
