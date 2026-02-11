@@ -110,13 +110,31 @@ var session = client.createSession(
 
 ## File Attachments
 
-Include files as context for the AI to analyze.
+Include files as context for the AI to analyze. The `Attachment` record takes three parameters:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `type` | String | The attachment type — use `"file"` for filesystem files |
+| `path` | String | The absolute path to the file on disk |
+| `displayName` | String | A human-readable label shown to the AI (e.g., the filename or a description) |
 
 ```java
 session.send(new MessageOptions()
     .setPrompt("Review this file for bugs")
     .setAttachments(List.of(
         new Attachment("file", "/path/to/file.java", "MyService.java")
+    ))
+).get();
+```
+
+You can attach multiple files in a single message:
+
+```java
+session.send(new MessageOptions()
+    .setPrompt("Compare these two implementations")
+    .setAttachments(List.of(
+        new Attachment("file", "/src/main/OldImpl.java", "Old Implementation"),
+        new Attachment("file", "/src/main/NewImpl.java", "New Implementation")
     ))
 ).get();
 ```
@@ -453,6 +471,31 @@ client.start().get();   // Start manually
 // ... use client ...
 client.stop().get();    // Stop manually
 ```
+
+### Graceful Stop vs Force Stop
+
+The SDK provides two shutdown methods:
+
+| Method | Behavior |
+|--------|----------|
+| `stop()` | Gracefully closes all open sessions, then shuts down the connection |
+| `forceStop()` | Immediately clears sessions and shuts down — no graceful session cleanup |
+
+Use `stop()` for normal shutdown — it ensures each session is properly closed (flushing pending operations) before terminating the connection:
+
+```java
+// Graceful: closes all sessions, then disconnects
+client.stop().get();
+```
+
+Use `forceStop()` when you need to terminate immediately, such as during error recovery or when the server is unresponsive:
+
+```java
+// Immediate: skips session cleanup, kills connection
+client.forceStop().get();
+```
+
+> **Tip:** In `try-with-resources` blocks, `close()` delegates to `stop()`, so graceful cleanup happens automatically.
 
 ---
 

@@ -350,6 +350,39 @@ Complete list of `CopilotClientOptions` settings:
 | `environment` | Map | Environment variables | inherited |
 | `cwd` | String | Working directory | current dir |
 
+### Extra CLI Arguments
+
+Pass additional command-line arguments to the CLI process:
+
+```java
+var options = new CopilotClientOptions()
+    .setCliArgs(new String[]{"--verbose", "--no-telemetry"});
+
+try (var client = new CopilotClient(options)) {
+    client.start().get();
+    // CLI process receives the extra flags
+}
+```
+
+### Custom Environment Variables
+
+Set environment variables for the CLI process (merged with the inherited system environment):
+
+```java
+var options = new CopilotClientOptions()
+    .setEnvironment(Map.of(
+        "HTTPS_PROXY", "http://proxy.example.com:8080",
+        "NO_PROXY", "localhost,127.0.0.1"
+    ));
+
+try (var client = new CopilotClient(options)) {
+    client.start().get();
+    // CLI process uses the proxy settings
+}
+```
+
+This is useful for configuring proxy servers, custom CA certificates, or any environment-specific settings the CLI needs.
+
 ## Best Practices
 
 ### Development

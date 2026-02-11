@@ -425,6 +425,33 @@ The four states are:
 | `CONNECTED` | Client is connected and ready |
 | `ERROR` | Connection failed (check logs for details) |
 
+### State Transitions
+
+```
+                 start()
+  DISCONNECTED ──────────► CONNECTING
+                               │
+                    ┌──────────┼──────────┐
+                    │ success  │          │ failure
+                    ▼          │          ▼
+              CONNECTED        │        ERROR
+                    │          │
+        stop() /    │          │
+        forceStop() │          │
+                    ▼          │
+              DISCONNECTED ◄───┘
+                    │
+                    │ start()  (retry)
+                    ▼
+               CONNECTING
+```
+
+- **DISCONNECTED → CONNECTING:** `start()` was called
+- **CONNECTING → CONNECTED:** Server connection and protocol handshake succeeded
+- **CONNECTING → ERROR:** Connection or protocol verification failed
+- **CONNECTED → DISCONNECTED:** `stop()` or `forceStop()` was called, or `close()` via try-with-resources
+- **DISCONNECTED → CONNECTING:** `start()` can be called again to retry
+
 ### Server Status
 
 Get CLI version and protocol information:
