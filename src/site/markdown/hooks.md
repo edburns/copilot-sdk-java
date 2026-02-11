@@ -27,7 +27,7 @@ var hooks = new SessionHooks()
     .setOnPreToolUse((input, invocation) -> {
         System.out.println("Tool: " + input.getToolName());
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision("allow")
+            new PreToolUseHookOutput("allow", null, null, null, null)
         );
     })
     .setOnPostToolUse((input, invocation) -> {
@@ -83,23 +83,20 @@ var hooks = new SessionHooks()
         // Block file deletion
         if (tool.equals("delete_file")) {
             return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision("deny")
-                    .setPermissionDecisionReason("File deletion is not allowed")
+                new PreToolUseHookOutput("deny", "File deletion is not allowed", null, null, null)
             );
         }
         
         // Require confirmation for shell commands
         if (tool.equals("run_terminal_cmd")) {
             return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision("ask")
+                new PreToolUseHookOutput("ask", null, null, null, null)
             );
         }
         
         // Allow everything else
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision("allow")
+            new PreToolUseHookOutput("allow", null, null, null, null)
         );
     });
 ```
@@ -119,13 +116,11 @@ var hooks = new SessionHooks()
             modifiedArgs.set("query", input.getToolArgs().get("query"));
             
             return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision("allow")
-                    .setModifiedArgs(modifiedArgs)
+                new PreToolUseHookOutput("allow", null, modifiedArgs, null, null)
             );
         }
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision("allow")
+            new PreToolUseHookOutput("allow", null, null, null, null)
         );
     });
 ```
@@ -315,14 +310,12 @@ public class HooksExample {
                     // Deny dangerous operations
                     if (input.getToolName().contains("delete")) {
                         return CompletableFuture.completedFuture(
-                            new PreToolUseHookOutput()
-                                .setPermissionDecision("deny")
-                                .setPermissionDecisionReason("Deletion not allowed")
+                            new PreToolUseHookOutput("deny", "Deletion not allowed", null, null, null)
                         );
                     }
                     
                     return CompletableFuture.completedFuture(
-                        new PreToolUseHookOutput().setPermissionDecision("allow")
+                        new PreToolUseHookOutput("allow", null, null, null, null)
                     );
                 })
                 
@@ -391,15 +384,13 @@ To handle errors gracefully in your hooks:
     try {
         // Your logic here
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision("allow")
+            new PreToolUseHookOutput("allow", null, null, null, null)
         );
     } catch (Exception e) {
         logger.error("Hook error", e);
         // Fail-safe: deny if something goes wrong
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput()
-                .setPermissionDecision("deny")
-                .setPermissionDecisionReason("Internal error")
+            new PreToolUseHookOutput("deny", "Internal error", null, null, null)
         );
     }
 })

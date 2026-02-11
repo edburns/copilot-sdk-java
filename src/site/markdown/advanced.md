@@ -365,7 +365,7 @@ var hooks = new SessionHooks()
     .setOnPreToolUse((input, invocation) -> {
         System.out.println("Tool: " + input.getToolName());
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision("allow")
+            new PreToolUseHookOutput("allow", null, null, null, null)
         );
     })
     .setOnPostToolUse((input, invocation) -> {
