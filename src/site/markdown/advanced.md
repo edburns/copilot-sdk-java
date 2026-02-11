@@ -115,10 +115,7 @@ Include files as context for the AI to analyze.
 session.send(new MessageOptions()
     .setPrompt("Review this file for bugs")
     .setAttachments(List.of(
-        new Attachment()
-            .setType("file")
-            .setPath("/path/to/file.java")
-            .setDisplayName("MyService.java")
+        new Attachment("file", "/path/to/file.java", "MyService.java")
     ))
 ).get();
 ```

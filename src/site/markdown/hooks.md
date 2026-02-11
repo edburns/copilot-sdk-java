@@ -184,8 +184,7 @@ var hooks = new SessionHooks()
         if (input.getToolName().equals("read_file")) {
             String context = "Note: This file was last modified 2 hours ago.";
             return CompletableFuture.completedFuture(
-                new PostToolUseHookOutput()
-                    .setAdditionalContext(context)
+                new PostToolUseHookOutput(null, context, null)
             );
         }
         return CompletableFuture.completedFuture(null);
@@ -214,12 +213,12 @@ Return `null` - this hook is observation-only.
 ```java
 var hooks = new SessionHooks()
     .setOnUserPromptSubmitted((input, invocation) -> {
-        System.out.println("User asked: " + input.getPrompt());
+        System.out.println("User asked: " + input.prompt());
         
         // Track prompts for analytics
         analytics.track("user_prompt", Map.of(
             "sessionId", invocation.getSessionId(),
-            "promptLength", input.getPrompt().length()
+            "promptLength", input.prompt().length()
         ));
         
         return CompletableFuture.completedFuture(null);
@@ -249,7 +248,7 @@ Return `null` - this hook is observation-only.
 var hooks = new SessionHooks()
     .setOnSessionStart((input, invocation) -> {
         System.out.println("Session started: " + invocation.getSessionId());
-        System.out.println("Source: " + input.getSource());
+        System.out.println("Source: " + input.source());
         
         // Initialize session-specific resources
         sessionResources.put(invocation.getSessionId(), new ResourceManager());
@@ -280,7 +279,7 @@ Return `null` - this hook is observation-only.
 ```java
 var hooks = new SessionHooks()
     .setOnSessionEnd((input, invocation) -> {
-        System.out.println("Session ended: " + input.getReason());
+        System.out.println("Session ended: " + input.reason());
         
         // Clean up session resources
         var resources = sessionResources.remove(invocation.getSessionId());
@@ -335,17 +334,17 @@ public class HooksExample {
                 
                 // Analytics: track user prompts
                 .setOnUserPromptSubmitted((input, invocation) -> {
-                    System.out.println("User: " + input.getPrompt());
+                    System.out.println("User: " + input.prompt());
                     return CompletableFuture.completedFuture(null);
                 })
                 
                 // Lifecycle: initialization and cleanup
                 .setOnSessionStart((input, invocation) -> {
-                    System.out.println("Session started (" + input.getSource() + ")");
+                    System.out.println("Session started (" + input.source() + ")");
                     return CompletableFuture.completedFuture(null);
                 })
                 .setOnSessionEnd((input, invocation) -> {
-                    System.out.println("Session ended: " + input.getReason());
+                    System.out.println("Session ended: " + input.reason());
                     return CompletableFuture.completedFuture(null);
                 });
             
