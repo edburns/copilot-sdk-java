@@ -88,7 +88,7 @@ public final class CopilotClient implements AutoCloseable {
      *             if mutually exclusive options are provided
      */
 <span class="fc" id="L90">    public CopilotClient(CopilotClientOptions options) {</span>
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        this.options = options != null ? options : new CopilotClientOptions();</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        this.options = options != null ? options : new CopilotClientOptions();</span>
 
         // When cliUrl is set, auto-correct useStdio since we're connecting via TCP
 <span class="pc bpc" id="L94" title="1 of 4 branches missed.">        if (this.options.getCliUrl() != null &amp;&amp; !this.options.getCliUrl().isEmpty()) {</span>
@@ -167,8 +167,8 @@ public final class CopilotClient implements AutoCloseable {
 
 <span class="fc" id="L168">                LOG.info(&quot;Copilot client connected&quot;);</span>
 <span class="fc" id="L169">                return connection;</span>
-<span class="nc" id="L170">            } catch (Exception e) {</span>
-<span class="nc" id="L171">                throw new CompletionException(e);</span>
+<span class="fc" id="L170">            } catch (Exception e) {</span>
+<span class="fc" id="L171">                throw new CompletionException(e);</span>
             }
         });
     }
@@ -252,7 +252,7 @@ public final class CopilotClient implements AutoCloseable {
 <span class="nc" id="L252">                    LOG.log(Level.FINE, &quot;Error killing process&quot;, e);</span>
 <span class="fc" id="L253">                }</span>
             }
-<span class="pc" id="L255">        }).exceptionally(ex -&gt; null);</span>
+<span class="fc" id="L255">        }).exceptionally(ex -&gt; null);</span>
     }
 
     /**
@@ -339,10 +339,10 @@ public final class CopilotClient implements AutoCloseable {
     public ConnectionState getState() {
 <span class="fc bfc" id="L340" title="All 2 branches covered.">        if (connectionFuture == null)</span>
 <span class="fc" id="L341">            return ConnectionState.DISCONNECTED;</span>
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (connectionFuture.isCompletedExceptionally())</span>
-<span class="nc" id="L343">            return ConnectionState.ERROR;</span>
-<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        if (!connectionFuture.isDone())</span>
-<span class="nc" id="L345">            return ConnectionState.CONNECTING;</span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (connectionFuture.isCompletedExceptionally())</span>
+<span class="fc" id="L343">            return ConnectionState.ERROR;</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (!connectionFuture.isDone())</span>
+<span class="fc" id="L345">            return ConnectionState.CONNECTING;</span>
 <span class="fc" id="L346">        return ConnectionState.CONNECTED;</span>
     }
 
@@ -546,8 +546,8 @@ public final class CopilotClient implements AutoCloseable {
     }
 
     private CompletableFuture&lt;Connection&gt; ensureConnected() {
-<span class="pc bpc" id="L549" title="1 of 4 branches missed.">        if (connectionFuture == null &amp;&amp; !options.isAutoStart()) {</span>
-<span class="nc" id="L550">            throw new IllegalStateException(&quot;Client not connected. Call start() first.&quot;);</span>
+<span class="fc bfc" id="L549" title="All 4 branches covered.">        if (connectionFuture == null &amp;&amp; !options.isAutoStart()) {</span>
+<span class="fc" id="L550">            throw new IllegalStateException(&quot;Client not connected. Call start() first.&quot;);</span>
         }
 
 <span class="fc" id="L553">        start();</span>
@@ -556,8 +556,8 @@ public final class CopilotClient implements AutoCloseable {
 
     @Override
     public void close() {
-<span class="pc bpc" id="L559" title="1 of 2 branches missed.">        if (disposed)</span>
-<span class="nc" id="L560">            return;</span>
+<span class="fc bfc" id="L559" title="All 2 branches covered.">        if (disposed)</span>
+<span class="fc" id="L560">            return;</span>
 <span class="fc" id="L561">        disposed = true;</span>
         try {
 <span class="fc" id="L563">            forceStop().get(5, TimeUnit.SECONDS);</span>
