@@ -466,9 +466,7 @@ Your skill instructions go here...
 <pre class="prettyprint"><code class="language-java">var hooks = new SessionHooks()
     .setOnPreToolUse((input, invocation) -&gt; {
         System.out.println(&quot;Tool: &quot; + input.getToolName());
-        return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-        );
+        return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
     })
     .setOnPostToolUse((input, invocation) -&gt; {
         System.out.println(&quot;Result: &quot; + input.getToolResult());

@@ -4,7 +4,6 @@
 
 package com.github.copilot.sdk.json;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -14,163 +13,100 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Result object returned from a tool execution.
  * &lt;p&gt;
- * This class represents the structured result of a tool invocation, including
+ * This record represents the structured result of a tool invocation, including
  * text output, binary data, error information, and telemetry.
  *
  * &lt;h2&gt;Example: Success Result&lt;/h2&gt;
  *
  * &lt;pre&gt;{@code
- * return new ToolResultObject().setResultType(&quot;success&quot;).setTextResultForLlm(&quot;File contents: &quot; + content);
+ * return ToolResultObject.success(&quot;File contents: &quot; + content);
  * }&lt;/pre&gt;
  *
  * &lt;h2&gt;Example: Error Result&lt;/h2&gt;
  *
  * &lt;pre&gt;{@code
- * return new ToolResultObject().setResultType(&quot;error&quot;).setError(&quot;File not found: &quot; + path);
+ * return ToolResultObject.error(&quot;File not found: &quot; + path);
  * }&lt;/pre&gt;
  *
+ * &lt;h2&gt;Example: Custom Result&lt;/h2&gt;
+ *
+ * &lt;pre&gt;{@code
+ * return new ToolResultObject(&quot;success&quot;, &quot;Result text&quot;, null, null, null, null);
+ * }&lt;/pre&gt;
+ *
+ * @param resultType
+ *            the result type (&quot;success&quot; or &quot;error&quot;), defaults to &quot;success&quot;
+ * @param textResultForLlm
+ *            the text result to be sent to the LLM
+ * @param binaryResultsForLlm
+ *            the list of binary results to be sent to the LLM
+ * @param error
+ *            the error message, or {@code null} if successful
+ * @param sessionLog
+ *            the session log text
+ * @param toolTelemetry
+ *            the tool telemetry data
  * @see ToolHandler
  * @see ToolBinaryResult
  * @since 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="fc" id="L37">public final class ToolResultObject {</span>
-
-    @JsonProperty(&quot;textResultForLlm&quot;)
-    private String textResultForLlm;
-
-    @JsonProperty(&quot;binaryResultsForLlm&quot;)
-    private List&lt;ToolBinaryResult&gt; binaryResultsForLlm;
-
-<span class="fc" id="L45">    @JsonProperty(&quot;resultType&quot;)</span>
-    private String resultType = &quot;success&quot;;
-
-    @JsonProperty(&quot;error&quot;)
-    private String error;
-
-    @JsonProperty(&quot;sessionLog&quot;)
-    private String sessionLog;
-
-    @JsonProperty(&quot;toolTelemetry&quot;)
-    private Map&lt;String, Object&gt; toolTelemetry;
+<span class="fc" id="L54">public record ToolResultObject(@JsonProperty(&quot;resultType&quot;) String resultType,</span>
+        @JsonProperty(&quot;textResultForLlm&quot;) String textResultForLlm,
+        @JsonProperty(&quot;binaryResultsForLlm&quot;) List&lt;ToolBinaryResult&gt; binaryResultsForLlm,
+        @JsonProperty(&quot;error&quot;) String error, @JsonProperty(&quot;sessionLog&quot;) String sessionLog,
+        @JsonProperty(&quot;toolTelemetry&quot;) Map&lt;String, Object&gt; toolTelemetry) {
 
     /**
-     * Gets the text result to be sent to the LLM.
-     *
-     * @return the text result
-     */
-    public String getTextResultForLlm() {
-<span class="fc" id="L63">        return textResultForLlm;</span>
-    }
-
-    /**
-     * Sets the text result to be sent to the LLM.
+     * Creates a success result with the given text.
      *
      * @param textResultForLlm
-     *            the text result
-     * @return this result for method chaining
+     *            the text result to be sent to the LLM
+     * @return a success result
      */
-    public ToolResultObject setTextResultForLlm(String textResultForLlm) {
-<span class="fc" id="L74">        this.textResultForLlm = textResultForLlm;</span>
-<span class="fc" id="L75">        return this;</span>
+    public static ToolResultObject success(String textResultForLlm) {
+<span class="fc" id="L68">        return new ToolResultObject(&quot;success&quot;, textResultForLlm, null, null, null, null);</span>
     }
 
     /**
-     * Gets the binary results to be sent to the LLM.
-     *
-     * @return the list of binary results
-     */
-    public List&lt;ToolBinaryResult&gt; getBinaryResultsForLlm() {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return binaryResultsForLlm == null ? null : Collections.unmodifiableList(binaryResultsForLlm);</span>
-    }
-
-    /**
-     * Sets binary results (images, files) to be sent to the LLM.
-     *
-     * @param binaryResultsForLlm
-     *            the list of binary results
-     * @return this result for method chaining
-     */
-    public ToolResultObject setBinaryResultsForLlm(List&lt;ToolBinaryResult&gt; binaryResultsForLlm) {
-<span class="nc" id="L95">        this.binaryResultsForLlm = binaryResultsForLlm;</span>
-<span class="nc" id="L96">        return this;</span>
-    }
-
-    /**
-     * Gets the result type.
-     *
-     * @return the result type (&quot;success&quot; or &quot;error&quot;)
-     */
-    public String getResultType() {
-<span class="fc" id="L105">        return resultType;</span>
-    }
-
-    /**
-     * Sets the result type.
-     *
-     * @param resultType
-     *            &quot;success&quot; or &quot;error&quot;
-     * @return this result for method chaining
-     */
-    public ToolResultObject setResultType(String resultType) {
-<span class="fc" id="L116">        this.resultType = resultType;</span>
-<span class="fc" id="L117">        return this;</span>
-    }
-
-    /**
-     * Gets the error message.
-     *
-     * @return the error message, or {@code null} if successful
-     */
-    public String getError() {
-<span class="fc" id="L126">        return error;</span>
-    }
-
-    /**
-     * Sets an error message for failed tool execution.
+     * Creates an error result with the given error message.
      *
      * @param error
      *            the error message
-     * @return this result for method chaining
+     * @return an error result
      */
-    public ToolResultObject setError(String error) {
-<span class="fc" id="L137">        this.error = error;</span>
-<span class="fc" id="L138">        return this;</span>
+    public static ToolResultObject error(String error) {
+<span class="nc" id="L79">        return new ToolResultObject(&quot;error&quot;, null, null, error, null, null);</span>
     }
 
     /**
-     * Gets the session log entry.
+     * Creates an error result with both a text result and error message.
      *
-     * @return the session log text
+     * @param textResultForLlm
+     *            the text result to be sent to the LLM
+     * @param error
+     *            the error message
+     * @return an error result
      */
-    public String getSessionLog() {
-<span class="fc" id="L147">        return sessionLog;</span>
+    public static ToolResultObject error(String textResultForLlm, String error) {
+<span class="nc" id="L92">        return new ToolResultObject(&quot;error&quot;, textResultForLlm, null, error, null, null);</span>
     }
 
     /**
-     * Sets a log entry to be recorded in the session.
+     * Creates a failure result with the given text and error message.
+     * &lt;p&gt;
+     * The &quot;failure&quot; result type indicates that the tool execution itself failed
+     * (e.g., tool not found), while &quot;error&quot; indicates the tool executed but
+     * encountered an error during processing.
      *
-     * @param sessionLog
-     *            the log entry
-     * @return this result for method chaining
+     * @param textResultForLlm
+     *            the text result to be sent to the LLM
+     * @param error
+     *            the error message
+     * @return a failure result
      */
-    public ToolResultObject setSessionLog(String sessionLog) {
-<span class="nc" id="L158">        this.sessionLog = sessionLog;</span>
-<span class="nc" id="L159">        return this;</span>
-    }
-
-    /**
-     * Gets the tool telemetry data.
-     *
-     * @return the telemetry map
-     */
-    public Map&lt;String, Object&gt; getToolTelemetry() {
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        return toolTelemetry == null ? null : Collections.unmodifiableMap(toolTelemetry);</span>
-    }
-
-    public ToolResultObject setToolTelemetry(Map&lt;String, Object&gt; toolTelemetry) {
-<span class="nc" id="L172">        this.toolTelemetry = toolTelemetry;</span>
-<span class="nc" id="L173">        return this;</span>
+    public static ToolResultObject failure(String textResultForLlm, String error) {
+<span class="fc" id="L109">        return new ToolResultObject(&quot;failure&quot;, textResultForLlm, null, error, null, null);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

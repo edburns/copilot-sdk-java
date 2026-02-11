@@ -200,9 +200,7 @@
 <pre class="prettyprint"><code class="language-java">var hooks = new SessionHooks()
     .setOnPreToolUse((input, invocation) -&gt; {
         System.out.println(&quot;Tool: &quot; + input.getToolName());
-        return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-        );
+        return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
     })
     .setOnPostToolUse((input, invocation) -&gt; {
         System.out.println(&quot;Result: &quot; + input.getToolResult());
@@ -288,24 +286,17 @@ var session = client.createSession(
         // Block file deletion
         if (tool.equals(&quot;delete_file&quot;)) {
             return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision(&quot;deny&quot;)
-                    .setPermissionDecisionReason(&quot;File deletion is not allowed&quot;)
+                PreToolUseHookOutput.deny(&quot;File deletion is not allowed&quot;)
             );
         }
         
         // Require confirmation for shell commands
         if (tool.equals(&quot;run_terminal_cmd&quot;)) {
-            return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision(&quot;ask&quot;)
-            );
+            return CompletableFuture.completedFuture(PreToolUseHookOutput.ask());
         }
         
         // Allow everything else
-        return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-        );
+        return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
     });
 </code></pre></section><section><a id="Example.3A_Argument_Modification"></a>
 <h3>Example: Argument Modification</h3>
@@ -321,14 +312,10 @@ var session = client.createSession(
             modifiedArgs.set(&quot;query&quot;, input.getToolArgs().get(&quot;query&quot;));
             
             return CompletableFuture.completedFuture(
-                new PreToolUseHookOutput()
-                    .setPermissionDecision(&quot;allow&quot;)
-                    .setModifiedArgs(modifiedArgs)
+                PreToolUseHookOutput.withModifiedArgs(&quot;allow&quot;, modifiedArgs)
             );
         }
-        return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-        );
+        return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
     });
 </code></pre><hr /></section></section><section><a id="Post-Tool_Use_Hook"></a>
 <h2>Post-Tool Use Hook</h2>
@@ -543,15 +530,11 @@ public class HooksExample {
                     // Deny dangerous operations
                     if (input.getToolName().contains(&quot;delete&quot;)) {
                         return CompletableFuture.completedFuture(
-                            new PreToolUseHookOutput()
-                                .setPermissionDecision(&quot;deny&quot;)
-                                .setPermissionDecisionReason(&quot;Deletion not allowed&quot;)
+                            PreToolUseHookOutput.deny(&quot;Deletion not allowed&quot;)
                         );
                     }
                     
-                    return CompletableFuture.completedFuture(
-                        new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-                    );
+                    return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
                 })
                 
                 // Logging: track tool results
@@ -616,16 +599,12 @@ public class HooksExample {
 <pre class="prettyprint"><code class="language-java">.setOnPreToolUse((input, invocation) -&gt; {
     try {
         // Your logic here
-        return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput().setPermissionDecision(&quot;allow&quot;)
-        );
+        return CompletableFuture.completedFuture(PreToolUseHookOutput.allow());
     } catch (Exception e) {
         logger.error(&quot;Hook error&quot;, e);
         // Fail-safe: deny if something goes wrong
         return CompletableFuture.completedFuture(
-            new PreToolUseHookOutput()
-                .setPermissionDecision(&quot;deny&quot;)
-                .setPermissionDecisionReason(&quot;Internal error&quot;)
+            PreToolUseHookOutput.deny(&quot;Internal error&quot;)
         );
     }
 })

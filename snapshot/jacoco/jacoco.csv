@@ -3,7 +3,7 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolDefinition,
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionEndHookInput,0,18,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,JsonRpcRequest,0,31,0,0,0,13,0,9,0,9
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ResumeSessionResponse,0,9,0,0,0,1,0,1,0,1
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolResultObject,21,45,2,2,6,14,5,10,3,10
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolResultObject,20,41,0,0,2,3,2,3,2,3
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,UserInputInvocation,0,11,0,0,0,4,0,3,0,3
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionConfig,15,182,0,14,6,52,3,43,3,36
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionMetadata,16,22,0,0,6,10,5,6,5,6
@@ -52,7 +52,7 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PermissionReque
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ResumeSessionRequest,12,173,4,10,0,61,4,44,0,41
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolInvocation.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,UserPromptSubmittedHookInput,0,12,0,0,0,1,0,1,0,1
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PreToolUseHookOutput,20,23,0,0,8,8,4,7,4,7
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PreToolUseHookOutput,63,0,0,0,6,0,6,0,6,0
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PostToolUseHookInput,9,34,0,0,3,13,3,8,3,8
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionStartHookOutput,0,9,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PreToolUseHookInput,9,26,0,0,3,10,3,6,3,6
@@ -159,6 +159,6 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,SystemMessageMode,0,
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotSession,53,746,5,51,14,193,5,68,1,42
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcClient,27,635,4,66,10,172,4,52,0,21
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcException,0,10,0,0,0,4,0,2,0,2
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,RpcHandlerDispatcher,116,641,3,39,37,143,4,44,1,26
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,RpcHandlerDispatcher,116,624,3,39,37,140,4,44,1,26
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CliServerManager,42,385,10,44,10,89,9,27,0,9
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotClient.Connection,0,9,0,0,0,1,0,1,0,1
