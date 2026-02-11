@@ -104,8 +104,8 @@ package com.github.copilot.sdk.json;
      * @since 1.0.7
      */
     public SessionHooks setOnUserPromptSubmitted(UserPromptSubmittedHandler onUserPromptSubmitted) {
-<span class="nc" id="L107">        this.onUserPromptSubmitted = onUserPromptSubmitted;</span>
-<span class="nc" id="L108">        return this;</span>
+<span class="fc" id="L107">        this.onUserPromptSubmitted = onUserPromptSubmitted;</span>
+<span class="fc" id="L108">        return this;</span>
     }
 
     /**
@@ -127,8 +127,8 @@ package com.github.copilot.sdk.json;
      * @since 1.0.7
      */
     public SessionHooks setOnSessionStart(SessionStartHandler onSessionStart) {
-<span class="nc" id="L130">        this.onSessionStart = onSessionStart;</span>
-<span class="nc" id="L131">        return this;</span>
+<span class="fc" id="L130">        this.onSessionStart = onSessionStart;</span>
+<span class="fc" id="L131">        return this;</span>
     }
 
     /**
@@ -150,8 +150,8 @@ package com.github.copilot.sdk.json;
      * @since 1.0.7
      */
     public SessionHooks setOnSessionEnd(SessionEndHandler onSessionEnd) {
-<span class="nc" id="L153">        this.onSessionEnd = onSessionEnd;</span>
-<span class="nc" id="L154">        return this;</span>
+<span class="fc" id="L153">        this.onSessionEnd = onSessionEnd;</span>
+<span class="fc" id="L154">        return this;</span>
     }
 
     /**
@@ -160,7 +160,7 @@ package com.github.copilot.sdk.json;
      * @return {@code true} if at least one hook handler is set
      */
     public boolean hasHooks() {
-<span class="pc bpc" id="L163" title="7 of 10 branches missed.">        return onPreToolUse != null || onPostToolUse != null || onUserPromptSubmitted != null || onSessionStart != null</span>
+<span class="pc bpc" id="L163" title="2 of 10 branches missed.">        return onPreToolUse != null || onPostToolUse != null || onUserPromptSubmitted != null || onSessionStart != null</span>
                 || onSessionEnd != null;
     }
 }

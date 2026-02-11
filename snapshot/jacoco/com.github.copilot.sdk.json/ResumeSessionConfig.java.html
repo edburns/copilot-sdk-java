@@ -81,7 +81,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of tool definitions
      */
     public List&lt;ToolDefinition&gt; getTools() {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return tools == null ? null : Collections.unmodifiableList(tools);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        return tools == null ? null : Collections.unmodifiableList(tools);</span>
     }
 
     /**
@@ -93,8 +93,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see ToolDefinition
      */
     public ResumeSessionConfig setTools(List&lt;ToolDefinition&gt; tools) {
-<span class="nc" id="L96">        this.tools = tools;</span>
-<span class="nc" id="L97">        return this;</span>
+<span class="fc" id="L96">        this.tools = tools;</span>
+<span class="fc" id="L97">        return this;</span>
     }
 
     /**
@@ -254,8 +254,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see UserInputHandler
      */
     public ResumeSessionConfig setOnUserInputRequest(UserInputHandler onUserInputRequest) {
-<span class="nc" id="L257">        this.onUserInputRequest = onUserInputRequest;</span>
-<span class="nc" id="L258">        return this;</span>
+<span class="fc" id="L257">        this.onUserInputRequest = onUserInputRequest;</span>
+<span class="fc" id="L258">        return this;</span>
     }
 
     /**
@@ -276,8 +276,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see SessionHooks
      */
     public ResumeSessionConfig setHooks(SessionHooks hooks) {
-<span class="nc" id="L279">        this.hooks = hooks;</span>
-<span class="nc" id="L280">        return this;</span>
+<span class="fc" id="L279">        this.hooks = hooks;</span>
+<span class="fc" id="L280">        return this;</span>
     }
 
     /**
@@ -343,8 +343,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config for method chaining
      */
     public ResumeSessionConfig setDisableResume(boolean disableResume) {
-<span class="nc" id="L346">        this.disableResume = disableResume;</span>
-<span class="nc" id="L347">        return this;</span>
+<span class="fc" id="L346">        this.disableResume = disableResume;</span>
+<span class="fc" id="L347">        return this;</span>
     }
 
     /**
