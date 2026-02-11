@@ -24,6 +24,7 @@ tools:
 safe-outputs:
   create-issue:
     title-prefix: "[upstream-sync] "
+    assignees: [copilot]
     labels: [upstream-sync]
     expires: 6
   close-issue:
