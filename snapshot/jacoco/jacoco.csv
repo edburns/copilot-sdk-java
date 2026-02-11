@@ -35,7 +35,7 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,PermissionInvoc
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ModelSupports,3,16,0,0,1,6,1,4,1,4
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SendMessageRequest,3,34,1,1,0,13,1,9,0,9
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,GetAuthStatusResponse,5,38,0,0,2,14,1,10,1,10
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,CopilotClientOptions,16,103,0,0,6,38,4,23,4,23
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,CopilotClientOptions,8,103,0,0,3,38,2,23,2,23
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,UserPromptSubmittedHookOutput,0,12,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionEndHookOutput,0,12,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ResumeSessionConfig,62,135,4,10,20,38,14,32,10,29
