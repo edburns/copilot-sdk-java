@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  * @since 1.0.6
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L27">public record PreToolUseHookOutput(@JsonProperty(&quot;permissionDecision&quot;) String permissionDecision,</span>
+<span class="fc" id="L27">public record PreToolUseHookOutput(@JsonProperty(&quot;permissionDecision&quot;) String permissionDecision,</span>
         @JsonProperty(&quot;permissionDecisionReason&quot;) String permissionDecisionReason,
         @JsonProperty(&quot;modifiedArgs&quot;) JsonNode modifiedArgs,
         @JsonProperty(&quot;additionalContext&quot;) String additionalContext,
@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.JsonNode;
      * @return a new PreToolUseHookOutput with permission decision &quot;allow&quot;
      */
     public static PreToolUseHookOutput allow() {
-<span class="nc" id="L39">        return new PreToolUseHookOutput(&quot;allow&quot;, null, null, null, null);</span>
+<span class="fc" id="L39">        return new PreToolUseHookOutput(&quot;allow&quot;, null, null, null, null);</span>
     }
 
     /**
@@ -45,7 +45,7 @@ import com.fasterxml.jackson.databind.JsonNode;
      * @return a new PreToolUseHookOutput with permission decision &quot;deny&quot;
      */
     public static PreToolUseHookOutput deny() {
-<span class="nc" id="L48">        return new PreToolUseHookOutput(&quot;deny&quot;, null, null, null, null);</span>
+<span class="fc" id="L48">        return new PreToolUseHookOutput(&quot;deny&quot;, null, null, null, null);</span>
     }
 
     /**
