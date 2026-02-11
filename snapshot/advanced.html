@@ -183,6 +183,7 @@
 <li><a href="#Compaction_Events">Compaction Events</a></li>
 </ul></li>
 <li><a href="#MCP_Servers">MCP Servers</a></li>
+<li><a href="#Custom_Agents">Custom Agents</a></li>
 <li><a href="#Skills_Configuration">Skills Configuration</a>
 <ul>
 
@@ -364,7 +365,82 @@ var session = client.createSession(
         .setMcpServers(Map.of(&quot;filesystem&quot;, server))
 ).get();
 </code></pre>
-<p>&#x1f4d6; <strong><a href="mcp.html">Full MCP documentation &#x2192;</a></strong> for local/remote servers and all options.</p><hr /></section><section><a id="Skills_Configuration"></a>
+<p>&#x1f4d6; <strong><a href="mcp.html">Full MCP documentation &#x2192;</a></strong> for local/remote servers and all options.</p><hr /></section><section><a id="Custom_Agents"></a>
+<h2>Custom Agents</h2>
+<p>Extend the base Copilot assistant with specialized agents that have their own tools, prompts, and behavior. Users can invoke agents using the <code>@agent-name</code> mention syntax in messages.</p>
+
+<pre class="prettyprint"><code class="language-java">var reviewer = new CustomAgentConfig()
+    .setName(&quot;code-reviewer&quot;)
+    .setDisplayName(&quot;Code Reviewer&quot;)
+    .setDescription(&quot;Reviews code for best practices and security&quot;)
+    .setPrompt(&quot;You are a code review expert. Focus on security, performance, and maintainability.&quot;)
+    .setTools(List.of(&quot;read_file&quot;, &quot;search_code&quot;));
+
+var session = client.createSession(
+    new SessionConfig()
+        .setCustomAgents(List.of(reviewer))
+).get();
+
+// The user can now mention @code-reviewer in messages
+session.send(&quot;@code-reviewer Review src/Main.java&quot;).get();
+</code></pre><section><a id="Configuration_Options"></a>
+<h3>Configuration Options</h3>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Option</th>
+<th>Type</th>
+<th>Description</th></tr></thead><tbody>
+<tr class="b">
+<td><code>name</code></td>
+<td>String</td>
+<td>Unique identifier used for <code>@mentions</code> (alphanumeric and hyphens)</td></tr>
+<tr class="a">
+<td><code>displayName</code></td>
+<td>String</td>
+<td>Human-readable name shown to users</td></tr>
+<tr class="b">
+<td><code>description</code></td>
+<td>String</td>
+<td>Describes the agent's capabilities</td></tr>
+<tr class="a">
+<td><code>prompt</code></td>
+<td>String</td>
+<td>System prompt that defines the agent's behavior</td></tr>
+<tr class="b">
+<td><code>tools</code></td>
+<td>List&lt;String&gt;</td>
+<td>Tool names available to this agent</td></tr>
+<tr class="a">
+<td><code>mcpServers</code></td>
+<td>Map</td>
+<td>MCP servers available to this agent</td></tr>
+<tr class="b">
+<td><code>infer</code></td>
+<td>Boolean</td>
+<td>Whether the agent can be auto-selected based on context</td></tr></tbody>
+</table>
+</section><section><a id="Multiple_Agents"></a>
+<h3>Multiple Agents</h3>
+<p>Register multiple agents for different tasks:</p>
+
+<pre class="prettyprint"><code class="language-java">var agents = List.of(
+    new CustomAgentConfig()
+        .setName(&quot;reviewer&quot;)
+        .setDescription(&quot;Code review&quot;)
+        .setPrompt(&quot;You review code for issues.&quot;),
+    new CustomAgentConfig()
+        .setName(&quot;documenter&quot;)
+        .setDescription(&quot;Documentation writer&quot;)
+        .setPrompt(&quot;You write clear documentation.&quot;)
+        .setInfer(true)  // Auto-select when appropriate
+);
+
+var session = client.createSession(
+    new SessionConfig().setCustomAgents(agents)
+).get();
+</code></pre>
+<p>See <a href="apidocs/com/github/copilot/sdk/json/CustomAgentConfig.html">CustomAgentConfig</a> Javadoc for full details.</p><hr /></section></section><section><a id="Skills_Configuration"></a>
 <h2>Skills Configuration</h2>
 <p>Load custom skills from directories to extend the AI's capabilities with domain-specific knowledge.</p><section><a id="Loading_Skills"></a>
 <h3>Loading Skills</h3>

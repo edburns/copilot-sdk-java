@@ -174,6 +174,8 @@
 <li><a href="#Streaming_Responses">Streaming Responses</a></li>
 <li><a href="#Session_Operations">Session Operations</a></li>
 <li><a href="#Choosing_a_Model">Choosing a Model</a></li>
+<li><a href="#Connection_State__Diagnostics">Connection State &amp; Diagnostics</a></li>
+<li><a href="#Message_Delivery_Mode">Message Delivery Mode</a></li>
 <li><a href="#Session_Management">Session Management</a></li>
 </ul><hr /></section><section><a id="Basic_Usage"></a>
 <h2>Basic Usage</h2>
@@ -573,7 +575,92 @@ for (var model : models) {
 <pre class="prettyprint"><code class="language-java">var session = client.createSession(
     new SessionConfig().setModel(&quot;claude-sonnet-4&quot;)
 ).get();
-</code></pre><hr /></section></section><section><a id="Session_Management"></a>
+</code></pre><hr /></section></section><section><a id="Connection_State_.26_Diagnostics"></a>
+<h2>Connection State &amp; Diagnostics</h2><section><a id="Checking_Connection_State"></a>
+<h3>Checking Connection State</h3>
+<p>Query the client's connection state at any time without making a server call:</p>
+
+<pre class="prettyprint"><code class="language-java">ConnectionState state = client.getState();
+switch (state) {
+    case CONNECTED -&gt; System.out.println(&quot;Ready&quot;);
+    case CONNECTING -&gt; System.out.println(&quot;Starting up...&quot;);
+    case DISCONNECTED -&gt; System.out.println(&quot;Not connected&quot;);
+    case ERROR -&gt; System.out.println(&quot;Connection failed&quot;);
+}
+</code></pre>
+<p>The four states are:</p>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>State</th>
+<th>Description</th></tr></thead><tbody>
+<tr class="b">
+<td><code>DISCONNECTED</code></td>
+<td>Client has not been started yet</td></tr>
+<tr class="a">
+<td><code>CONNECTING</code></td>
+<td><code>start()</code> was called but hasn't completed</td></tr>
+<tr class="b">
+<td><code>CONNECTED</code></td>
+<td>Client is connected and ready</td></tr>
+<tr class="a">
+<td><code>ERROR</code></td>
+<td>Connection failed (check logs for details)</td></tr></tbody>
+</table>
+</section><section><a id="Server_Status"></a>
+<h3>Server Status</h3>
+<p>Get CLI version and protocol information:</p>
+
+<pre class="prettyprint"><code class="language-java">var status = client.getStatus().get();
+System.out.println(&quot;CLI version: &quot; + status.getVersion());
+System.out.println(&quot;Protocol version: &quot; + status.getProtocolVersion());
+</code></pre></section><section><a id="Authentication_Status"></a>
+<h3>Authentication Status</h3>
+<p>Check whether the current connection is authenticated and how:</p>
+
+<pre class="prettyprint"><code class="language-java">var auth = client.getAuthStatus().get();
+if (auth.isAuthenticated()) {
+    System.out.println(&quot;Logged in as: &quot; + auth.getLogin());
+    System.out.println(&quot;Auth type: &quot; + auth.getAuthType());
+    System.out.println(&quot;Host: &quot; + auth.getHost());
+} else {
+    System.out.println(&quot;Not authenticated: &quot; + auth.getStatusMessage());
+}
+</code></pre></section><section><a id="Ping"></a>
+<h3>Ping</h3>
+<p>Verify server connectivity:</p>
+
+<pre class="prettyprint"><code class="language-java">var pong = client.ping(&quot;hello&quot;).get();
+System.out.println(&quot;Server responded, protocol version: &quot; + pong.protocolVersion());
+</code></pre>
+<p>See <a href="apidocs/com/github/copilot/sdk/ConnectionState.html">ConnectionState</a>, <a href="apidocs/com/github/copilot/sdk/json/GetStatusResponse.html">GetStatusResponse</a>, and <a href="apidocs/com/github/copilot/sdk/json/GetAuthStatusResponse.html">GetAuthStatusResponse</a> Javadoc for details.</p><hr /></section></section><section><a id="Message_Delivery_Mode"></a>
+<h2>Message Delivery Mode</h2>
+<p>Control how messages are delivered to the session:</p>
+
+<pre class="prettyprint"><code class="language-java">// Default: message is enqueued for processing
+session.send(new MessageOptions()
+    .setPrompt(&quot;Analyze this codebase&quot;)
+).get();
+
+// Immediate: process the message right away
+session.send(new MessageOptions()
+    .setPrompt(&quot;Quick question&quot;)
+    .setMode(&quot;immediate&quot;)
+).get();
+</code></pre>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Mode</th>
+<th>Description</th></tr></thead><tbody>
+<tr class="b">
+<td><code>&quot;enqueue&quot;</code></td>
+<td>Queue the message for processing (default)</td></tr>
+<tr class="a">
+<td><code>&quot;immediate&quot;</code></td>
+<td>Process the message immediately</td></tr></tbody>
+</table>
+<hr /></section><section><a id="Session_Management"></a>
 <h2>Session Management</h2><section><a id="Multiple_Concurrent_Sessions"></a>
 <h3>Multiple Concurrent Sessions</h3>
 
