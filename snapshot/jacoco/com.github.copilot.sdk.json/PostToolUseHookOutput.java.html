@@ -11,81 +11,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Output for a post-tool-use hook.
  *
+ * @param modifiedResult
+ *            the modified tool result, or {@code null} to use original
+ * @param additionalContext
+ *            additional context to provide to the model
+ * @param suppressOutput
+ *            {@code true} to suppress output
  * @since 1.0.6
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L17">public class PostToolUseHookOutput {</span>
-
-    @JsonProperty(&quot;modifiedResult&quot;)
-    private JsonNode modifiedResult;
-
-    @JsonProperty(&quot;additionalContext&quot;)
-    private String additionalContext;
-
-    @JsonProperty(&quot;suppressOutput&quot;)
-    private Boolean suppressOutput;
-
-    /**
-     * Gets the modified tool result.
-     *
-     * @return the modified result, or {@code null} to use original
-     */
-    public JsonNode getModifiedResult() {
-<span class="nc" id="L34">        return modifiedResult;</span>
-    }
-
-    /**
-     * Sets the modified tool result.
-     *
-     * @param modifiedResult
-     *            the modified result
-     * @return this instance for method chaining
-     */
-    public PostToolUseHookOutput setModifiedResult(JsonNode modifiedResult) {
-<span class="nc" id="L45">        this.modifiedResult = modifiedResult;</span>
-<span class="nc" id="L46">        return this;</span>
-    }
-
-    /**
-     * Gets additional context to provide to the model.
-     *
-     * @return the additional context
-     */
-    public String getAdditionalContext() {
-<span class="nc" id="L55">        return additionalContext;</span>
-    }
-
-    /**
-     * Sets additional context to provide to the model.
-     *
-     * @param additionalContext
-     *            the additional context
-     * @return this instance for method chaining
-     */
-    public PostToolUseHookOutput setAdditionalContext(String additionalContext) {
-<span class="nc" id="L66">        this.additionalContext = additionalContext;</span>
-<span class="nc" id="L67">        return this;</span>
-    }
-
-    /**
-     * Returns whether to suppress output.
-     *
-     * @return {@code true} to suppress output
-     */
-    public Boolean getSuppressOutput() {
-<span class="nc" id="L76">        return suppressOutput;</span>
-    }
-
-    /**
-     * Sets whether to suppress output.
-     *
-     * @param suppressOutput
-     *            {@code true} to suppress output
-     * @return this instance for method chaining
-     */
-    public PostToolUseHookOutput setSuppressOutput(Boolean suppressOutput) {
-<span class="nc" id="L87">        this.suppressOutput = suppressOutput;</span>
-<span class="nc" id="L88">        return this;</span>
-    }
+<span class="nc" id="L23">public record PostToolUseHookOutput(@JsonProperty(&quot;modifiedResult&quot;) JsonNode modifiedResult,</span>
+        @JsonProperty(&quot;additionalContext&quot;) String additionalContext,
+        @JsonProperty(&quot;suppressOutput&quot;) Boolean suppressOutput) {
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

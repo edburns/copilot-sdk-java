@@ -12,81 +12,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * &lt;p&gt;
  * Allows modifying the user's prompt before processing.
  *
+ * @param modifiedPrompt
+ *            the modified prompt to use instead of the original, or
+ *            {@code null} to use the original
+ * @param additionalContext
+ *            additional context to be added to the prompt, or {@code null}
+ * @param suppressOutput
+ *            {@code true} to suppress output, or {@code null}
  * @since 1.0.7
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L18">public class UserPromptSubmittedHookOutput {</span>
-
-    @JsonProperty(&quot;modifiedPrompt&quot;)
-    private String modifiedPrompt;
-
-    @JsonProperty(&quot;additionalContext&quot;)
-    private String additionalContext;
-
-    @JsonProperty(&quot;suppressOutput&quot;)
-    private Boolean suppressOutput;
-
-    /**
-     * Gets the modified prompt.
-     *
-     * @return the modified prompt, or {@code null} to use the original
-     */
-    public String getModifiedPrompt() {
-<span class="nc" id="L35">        return modifiedPrompt;</span>
-    }
-
-    /**
-     * Sets a modified version of the user's prompt.
-     *
-     * @param modifiedPrompt
-     *            the modified prompt to use instead of the original
-     * @return this instance for method chaining
-     */
-    public UserPromptSubmittedHookOutput setModifiedPrompt(String modifiedPrompt) {
-<span class="nc" id="L46">        this.modifiedPrompt = modifiedPrompt;</span>
-<span class="nc" id="L47">        return this;</span>
-    }
-
-    /**
-     * Gets the additional context to add.
-     *
-     * @return the additional context, or {@code null}
-     */
-    public String getAdditionalContext() {
-<span class="nc" id="L56">        return additionalContext;</span>
-    }
-
-    /**
-     * Sets additional context to be added to the prompt.
-     *
-     * @param additionalContext
-     *            the additional context
-     * @return this instance for method chaining
-     */
-    public UserPromptSubmittedHookOutput setAdditionalContext(String additionalContext) {
-<span class="nc" id="L67">        this.additionalContext = additionalContext;</span>
-<span class="nc" id="L68">        return this;</span>
-    }
-
-    /**
-     * Gets whether output should be suppressed.
-     *
-     * @return {@code true} to suppress output, or {@code null}
-     */
-    public Boolean getSuppressOutput() {
-<span class="nc" id="L77">        return suppressOutput;</span>
-    }
-
-    /**
-     * Sets whether to suppress the output.
-     *
-     * @param suppressOutput
-     *            {@code true} to suppress output
-     * @return this instance for method chaining
-     */
-    public UserPromptSubmittedHookOutput setSuppressOutput(Boolean suppressOutput) {
-<span class="nc" id="L88">        this.suppressOutput = suppressOutput;</span>
-<span class="nc" id="L89">        return this;</span>
-    }
+<span class="nc" id="L25">public record UserPromptSubmittedHookOutput(@JsonProperty(&quot;modifiedPrompt&quot;) String modifiedPrompt,</span>
+        @JsonProperty(&quot;additionalContext&quot;) String additionalContext,
+        @JsonProperty(&quot;suppressOutput&quot;) Boolean suppressOutput) {
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

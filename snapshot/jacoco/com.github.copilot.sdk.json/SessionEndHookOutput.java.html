@@ -4,7 +4,6 @@
 
 package com.github.copilot.sdk.json;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,81 +14,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * &lt;p&gt;
  * Allows specifying cleanup actions and session summary.
  *
+ * @param suppressOutput
+ *            {@code true} to suppress output, or {@code null}
+ * @param cleanupActions
+ *            the cleanup actions to perform, or {@code null}
+ * @param sessionSummary
+ *            the session summary, or {@code null}
  * @since 1.0.7
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="nc" id="L21">public class SessionEndHookOutput {</span>
-
-    @JsonProperty(&quot;suppressOutput&quot;)
-    private Boolean suppressOutput;
-
-    @JsonProperty(&quot;cleanupActions&quot;)
-    private List&lt;String&gt; cleanupActions;
-
-    @JsonProperty(&quot;sessionSummary&quot;)
-    private String sessionSummary;
-
-    /**
-     * Gets whether output should be suppressed.
-     *
-     * @return {@code true} to suppress output, or {@code null}
-     */
-    public Boolean getSuppressOutput() {
-<span class="nc" id="L38">        return suppressOutput;</span>
-    }
-
-    /**
-     * Sets whether to suppress the output.
-     *
-     * @param suppressOutput
-     *            {@code true} to suppress output
-     * @return this instance for method chaining
-     */
-    public SessionEndHookOutput setSuppressOutput(Boolean suppressOutput) {
-<span class="nc" id="L49">        this.suppressOutput = suppressOutput;</span>
-<span class="nc" id="L50">        return this;</span>
-    }
-
-    /**
-     * Gets the list of cleanup actions.
-     *
-     * @return the cleanup actions, or {@code null}
-     */
-    public List&lt;String&gt; getCleanupActions() {
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        return cleanupActions == null ? null : Collections.unmodifiableList(cleanupActions);</span>
-    }
-
-    /**
-     * Sets the cleanup actions to perform.
-     *
-     * @param cleanupActions
-     *            the cleanup actions
-     * @return this instance for method chaining
-     */
-    public SessionEndHookOutput setCleanupActions(List&lt;String&gt; cleanupActions) {
-<span class="nc" id="L70">        this.cleanupActions = cleanupActions;</span>
-<span class="nc" id="L71">        return this;</span>
-    }
-
-    /**
-     * Gets the session summary.
-     *
-     * @return the session summary, or {@code null}
-     */
-    public String getSessionSummary() {
-<span class="nc" id="L80">        return sessionSummary;</span>
-    }
-
-    /**
-     * Sets a summary of the session.
-     *
-     * @param sessionSummary
-     *            the session summary
-     * @return this instance for method chaining
-     */
-    public SessionEndHookOutput setSessionSummary(String sessionSummary) {
-<span class="nc" id="L91">        this.sessionSummary = sessionSummary;</span>
-<span class="nc" id="L92">        return this;</span>
-    }
+<span class="nc" id="L26">public record SessionEndHookOutput(@JsonProperty(&quot;suppressOutput&quot;) Boolean suppressOutput,</span>
+        @JsonProperty(&quot;cleanupActions&quot;) List&lt;String&gt; cleanupActions,
+        @JsonProperty(&quot;sessionSummary&quot;) String sessionSummary) {
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
