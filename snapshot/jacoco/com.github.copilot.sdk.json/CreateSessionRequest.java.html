@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     private String reasoningEffort;
 
     @JsonProperty(&quot;tools&quot;)
-    private List&lt;ToolDef&gt; tools;
+    private List&lt;ToolDefinition&gt; tools;
 
     @JsonProperty(&quot;systemMessage&quot;)
     private SystemMessageConfig systemMessage;
@@ -115,12 +115,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 <span class="fc" id="L115">    }</span>
 
     /** Gets the tools. @return the tool definitions */
-    public List&lt;ToolDef&gt; getTools() {
+    public List&lt;ToolDefinition&gt; getTools() {
 <span class="fc bfc" id="L119" title="All 2 branches covered.">        return tools == null ? null : Collections.unmodifiableList(tools);</span>
     }
 
     /** Sets the tools. @param tools the tool definitions */
-    public void setTools(List&lt;ToolDef&gt; tools) {
+    public void setTools(List&lt;ToolDefinition&gt; tools) {
 <span class="fc" id="L124">        this.tools = tools;</span>
 <span class="fc" id="L125">    }</span>
 

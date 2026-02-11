@@ -546,7 +546,7 @@ public final class CopilotSession implements AutoCloseable {
 <span class="fc" id="L546">        toolHandlers.clear();</span>
 <span class="fc bfc" id="L547" title="All 2 branches covered.">        if (tools != null) {</span>
 <span class="fc bfc" id="L548" title="All 2 branches covered.">            for (ToolDefinition tool : tools) {</span>
-<span class="fc" id="L549">                toolHandlers.put(tool.getName(), tool);</span>
+<span class="fc" id="L549">                toolHandlers.put(tool.name(), tool);</span>
 <span class="fc" id="L550">            }</span>
         }
 <span class="fc" id="L552">    }</span>

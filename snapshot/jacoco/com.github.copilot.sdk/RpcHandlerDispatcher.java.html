@@ -129,7 +129,7 @@ final class RpcHandlerDispatcher {
                 }
 
 <span class="fc" id="L131">                ToolDefinition tool = session.getTool(toolName);</span>
-<span class="pc bpc" id="L132" title="1 of 4 branches missed.">                if (tool == null || tool.getHandler() == null) {</span>
+<span class="pc bpc" id="L132" title="1 of 4 branches missed.">                if (tool == null || tool.handler() == null) {</span>
 <span class="fc" id="L133">                    var result = new ToolResultObject().setTextResultForLlm(&quot;Tool '&quot; + toolName + &quot;' is not supported.&quot;)</span>
 <span class="fc" id="L134">                            .setResultType(&quot;failure&quot;).setError(&quot;tool '&quot; + toolName + &quot;' not supported&quot;);</span>
 <span class="fc" id="L135">                    rpc.sendResponse(Long.parseLong(requestId), Map.of(&quot;result&quot;, result));</span>
@@ -139,7 +139,7 @@ final class RpcHandlerDispatcher {
 <span class="fc" id="L139">                var invocation = new ToolInvocation().setSessionId(sessionId).setToolCallId(toolCallId)</span>
 <span class="fc" id="L140">                        .setToolName(toolName).setArguments(arguments);</span>
 
-<span class="fc" id="L142">                tool.getHandler().invoke(invocation).thenAccept(result -&gt; {</span>
+<span class="fc" id="L142">                tool.handler().invoke(invocation).thenAccept(result -&gt; {</span>
                     try {
                         ToolResultObject toolResult;
 <span class="fc bfc" id="L145" title="All 2 branches covered.">                        if (result instanceof ToolResultObject tr) {</span>
