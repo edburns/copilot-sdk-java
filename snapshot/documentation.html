@@ -174,9 +174,13 @@
 <li><a href="#Streaming_Responses">Streaming Responses</a></li>
 <li><a href="#Session_Operations">Session Operations</a></li>
 <li><a href="#Choosing_a_Model">Choosing a Model</a></li>
+<li><a href="#Reasoning_Effort">Reasoning Effort</a></li>
+<li><a href="#Tool_Filtering">Tool Filtering</a></li>
+<li><a href="#Working_Directory">Working Directory</a></li>
 <li><a href="#Connection_State__Diagnostics">Connection State &amp; Diagnostics</a></li>
 <li><a href="#Message_Delivery_Mode">Message Delivery Mode</a></li>
 <li><a href="#Session_Management">Session Management</a></li>
+<li><a href="#SessionConfig_Reference">SessionConfig Reference</a></li>
 </ul><hr /></section><section><a id="Basic_Usage"></a>
 <h2>Basic Usage</h2>
 <p>Create a client, start a session, and send a message:</p>
@@ -575,7 +579,79 @@ for (var model : models) {
 <pre class="prettyprint"><code class="language-java">var session = client.createSession(
     new SessionConfig().setModel(&quot;claude-sonnet-4&quot;)
 ).get();
-</code></pre><hr /></section></section><section><a id="Connection_State_.26_Diagnostics"></a>
+</code></pre><hr /></section></section><section><a id="Reasoning_Effort"></a>
+<h2>Reasoning Effort</h2>
+<p>For models that support it, control how much effort the model spends reasoning before responding:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setModel(&quot;o3-mini&quot;)
+        .setReasoningEffort(&quot;high&quot;)
+).get();
+</code></pre>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Level</th>
+<th>Description</th></tr></thead><tbody>
+<tr class="b">
+<td><code>&quot;low&quot;</code></td>
+<td>Fastest responses, less detailed reasoning</td></tr>
+<tr class="a">
+<td><code>&quot;medium&quot;</code></td>
+<td>Balanced speed and reasoning depth</td></tr>
+<tr class="b">
+<td><code>&quot;high&quot;</code></td>
+<td>Thorough reasoning, slower responses</td></tr>
+<tr class="a">
+<td><code>&quot;xhigh&quot;</code></td>
+<td>Maximum reasoning effort</td></tr></tbody>
+</table>
+
+<blockquote>
+
+<p><strong>Note:</strong> Only applies to reasoning models (e.g., <code>o3-mini</code>). Non-reasoning models ignore this setting.</p>
+</blockquote><hr /></section><section><a id="Tool_Filtering"></a>
+<h2>Tool Filtering</h2>
+<p>Control which built-in tools the assistant can use with allowlists and blocklists.</p><section><a id="Allowlist_.28Available_Tools.29"></a>
+<h3>Allowlist (Available Tools)</h3>
+<p>Restrict the session to only specific tools:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setAvailableTools(List.of(&quot;read_file&quot;, &quot;search_code&quot;, &quot;list_dir&quot;))
+).get();
+</code></pre>
+<p>When <code>availableTools</code> is set, the assistant can <strong>only</strong> use tools in this list.</p></section><section><a id="Blocklist_.28Excluded_Tools.29"></a>
+<h3>Blocklist (Excluded Tools)</h3>
+<p>Allow all tools except specific ones:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setExcludedTools(List.of(&quot;execute_command&quot;, &quot;write_file&quot;))
+).get();
+</code></pre>
+<p>Tools in the <code>excludedTools</code> list will not be available to the assistant.</p></section><section><a id="Combining_with_Custom_Tools"></a>
+<h3>Combining with Custom Tools</h3>
+<p>Tool filtering applies to built-in tools. Your custom tools (registered via <code>setTools()</code>) are always available:</p>
+
+<pre class="prettyprint"><code class="language-java">var lookupTool = ToolDefinition.create(&quot;lookup_issue&quot;, &quot;Fetch issue&quot;, schema, handler);
+
+var session = client.createSession(
+    new SessionConfig()
+        .setTools(List.of(lookupTool))           // Custom tool always available
+        .setAvailableTools(List.of(&quot;read_file&quot;)) // Only allow read_file from built-ins
+).get();
+</code></pre><hr /></section></section><section><a id="Working_Directory"></a>
+<h2>Working Directory</h2>
+<p>Set the working directory for file operations in the session:</p>
+
+<pre class="prettyprint"><code class="language-java">var session = client.createSession(
+    new SessionConfig()
+        .setWorkingDirectory(&quot;/path/to/project&quot;)
+).get();
+</code></pre>
+<p>This affects how the assistant resolves relative file paths when using tools like <code>read_file</code>, <code>write_file</code>, and <code>search_code</code>.</p><hr /></section><section><a id="Connection_State_.26_Diagnostics"></a>
 <h2>Connection State &amp; Diagnostics</h2><section><a id="Checking_Connection_State"></a>
 <h3>Checking Connection State</h3>
 <p>Query the client's connection state at any time without making a server call:</p>
@@ -755,7 +831,114 @@ var session = client.resumeSession(&quot;user-123-task-456&quot;, config).get();
 
 <pre class="prettyprint"><code class="language-java">// Delete a specific session
 client.deleteSession(sessionId).get();
-</code></pre><hr /></section></section><section><a id="Next_Steps"></a>
+</code></pre><hr /></section></section><section><a id="SessionConfig_Reference"></a>
+<h2>SessionConfig Reference</h2>
+<p>Complete list of all <code>SessionConfig</code> options for <code>createSession()</code>:</p>
+<table class="table table-striped">
+<thead>
+<tr class="a">
+<th>Option</th>
+<th>Type</th>
+<th>Description</th>
+<th>Guide</th></tr></thead><tbody>
+<tr class="b">
+<td><code>sessionId</code></td>
+<td>String</td>
+<td>Custom session ID (auto-generated if omitted)</td>
+<td>&#x2014;</td></tr>
+<tr class="a">
+<td><code>model</code></td>
+<td>String</td>
+<td>AI model to use</td>
+<td><a href="#Choosing_a_Model">Choosing a Model</a></td></tr>
+<tr class="b">
+<td><code>reasoningEffort</code></td>
+<td>String</td>
+<td>Reasoning depth: <code>&quot;low&quot;</code>, <code>&quot;medium&quot;</code>, <code>&quot;high&quot;</code>, <code>&quot;xhigh&quot;</code></td>
+<td><a href="#Reasoning_Effort">Reasoning Effort</a></td></tr>
+<tr class="a">
+<td><code>tools</code></td>
+<td>List&lt;ToolDefinition&gt;</td>
+<td>Custom tools the assistant can invoke</td>
+<td><a href="advanced.html#Custom_Tools">Custom Tools</a></td></tr>
+<tr class="b">
+<td><code>systemMessage</code></td>
+<td>SystemMessageConfig</td>
+<td>Customize assistant behavior</td>
+<td><a href="advanced.html#System_Messages">System Messages</a></td></tr>
+<tr class="a">
+<td><code>availableTools</code></td>
+<td>List&lt;String&gt;</td>
+<td>Allowlist of built-in tool names</td>
+<td><a href="#Tool_Filtering">Tool Filtering</a></td></tr>
+<tr class="b">
+<td><code>excludedTools</code></td>
+<td>List&lt;String&gt;</td>
+<td>Blocklist of built-in tool names</td>
+<td><a href="#Tool_Filtering">Tool Filtering</a></td></tr>
+<tr class="a">
+<td><code>provider</code></td>
+<td>ProviderConfig</td>
+<td>BYOK API provider configuration</td>
+<td><a href="advanced.html#Bring_Your_Own_Key_BYOK">BYOK</a></td></tr>
+<tr class="b">
+<td><code>onPermissionRequest</code></td>
+<td>PermissionHandler</td>
+<td>Handler for permission requests</td>
+<td><a href="advanced.html#Permission_Handling">Permission Handling</a></td></tr>
+<tr class="a">
+<td><code>onUserInputRequest</code></td>
+<td>UserInputHandler</td>
+<td>Handler for user input requests</td>
+<td><a href="advanced.html#User_Input_Handling">User Input Handling</a></td></tr>
+<tr class="b">
+<td><code>hooks</code></td>
+<td>SessionHooks</td>
+<td>Lifecycle and tool execution hooks</td>
+<td><a href="hooks.html">Session Hooks</a></td></tr>
+<tr class="a">
+<td><code>workingDirectory</code></td>
+<td>String</td>
+<td>Working directory for file operations</td>
+<td><a href="#Working_Directory">Working Directory</a></td></tr>
+<tr class="b">
+<td><code>streaming</code></td>
+<td>boolean</td>
+<td>Enable streaming response chunks</td>
+<td><a href="#Streaming_Responses">Streaming Responses</a></td></tr>
+<tr class="a">
+<td><code>mcpServers</code></td>
+<td>Map&lt;String, Object&gt;</td>
+<td>MCP server configurations</td>
+<td><a href="mcp.html">MCP Servers</a></td></tr>
+<tr class="b">
+<td><code>customAgents</code></td>
+<td>List&lt;CustomAgentConfig&gt;</td>
+<td>Custom agent definitions</td>
+<td><a href="advanced.html#Custom_Agents">Custom Agents</a></td></tr>
+<tr class="a">
+<td><code>infiniteSessions</code></td>
+<td>InfiniteSessionConfig</td>
+<td>Auto-compaction for long conversations</td>
+<td><a href="advanced.html#Infinite_Sessions">Infinite Sessions</a></td></tr>
+<tr class="b">
+<td><code>skillDirectories</code></td>
+<td>List&lt;String&gt;</td>
+<td>Directories to load skills from</td>
+<td><a href="advanced.html#Skills_Configuration">Skills</a></td></tr>
+<tr class="a">
+<td><code>disabledSkills</code></td>
+<td>List&lt;String&gt;</td>
+<td>Skills to disable by name</td>
+<td><a href="advanced.html#Skills_Configuration">Skills</a></td></tr>
+<tr class="b">
+<td><code>configDir</code></td>
+<td>String</td>
+<td>Custom configuration directory</td>
+<td><a href="advanced.html#Custom_Configuration_Directory">Config Dir</a></td></tr></tbody>
+</table>
+
+<p>See <a href="apidocs/com/github/copilot/sdk/json/SessionConfig.html">SessionConfig</a> Javadoc for full details.</p><hr /></section><section><a id="Next_Steps"></a>
 <h2>Next Steps</h2>
 <ul>
 
