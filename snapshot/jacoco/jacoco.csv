@@ -11,7 +11,7 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SendMessageResp
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,CreateSessionRequest,0,178,0,14,0,58,0,46,0,39
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolBinaryResult,15,0,0,0,1,0,1,0,1,0
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,JsonRpcResponse,0,31,0,0,0,13,0,9,0,9
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolInvocation,26,42,1,1,7,13,5,7,4,7
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,ToolInvocation,0,68,0,2,0,20,0,12,0,11
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,GetMessagesResponse,0,6,0,0,0,1,0,1,0,1
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SetForegroundSessionResponse,9,0,0,0,1,0,1,0,1,0
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk.json,SessionLifecycleEventMetadata,0,12,0,0,0,1,0,1,0,1
@@ -160,5 +160,5 @@ GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotSession,53,74
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcClient,27,635,4,66,10,172,4,52,0,21
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,JsonRpcException,0,10,0,0,0,4,0,2,0,2
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,RpcHandlerDispatcher,116,624,3,39,37,140,4,44,1,26
-GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CliServerManager,42,385,10,44,10,89,9,27,0,9
+GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CliServerManager,48,379,10,44,12,87,9,27,0,9
 GitHub Copilot Community SDK :: Java,com.github.copilot.sdk,CopilotClient.Connection,0,9,0,0,0,1,0,1,0,1
