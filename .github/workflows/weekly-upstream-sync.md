@@ -47,6 +47,8 @@ This document describes the `weekly-upstream-sync.yml` GitHub Actions workflow, 
 
 The workflow runs on a **weekly schedule** (every Monday at 10:00 UTC) and can also be triggered manually. It does **not** perform the actual merge — instead, it detects upstream changes and creates a GitHub issue assigned to `copilot`, instructing the agent to follow the [agentic-merge-upstream](../prompts/agentic-merge-upstream.prompt.md) prompt to port the changes.
 
+The agent must also create the Pull Request with the label `upstream-sync`. This allows the workflow to track the merge progress and avoid creating duplicate issues if the agent is still working on a previous sync.
+
 ## Trigger
 
 | Trigger | Schedule |
