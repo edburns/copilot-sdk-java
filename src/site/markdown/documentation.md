@@ -12,6 +12,8 @@ This guide covers common use cases for the Copilot SDK for Java. For complete AP
 - [Streaming Responses](#Streaming_Responses)
 - [Session Operations](#Session_Operations)
 - [Choosing a Model](#Choosing_a_Model)
+- [Connection State & Diagnostics](#Connection_State__Diagnostics)
+- [Message Delivery Mode](#Message_Delivery_Mode)
 - [Session Management](#Session_Management)
 
 ---
@@ -307,6 +309,93 @@ var session = client.createSession(
     new SessionConfig().setModel("claude-sonnet-4")
 ).get();
 ```
+
+---
+
+## Connection State & Diagnostics
+
+### Checking Connection State
+
+Query the client's connection state at any time without making a server call:
+
+```java
+ConnectionState state = client.getState();
+switch (state) {
+    case CONNECTED -> System.out.println("Ready");
+    case CONNECTING -> System.out.println("Starting up...");
+    case DISCONNECTED -> System.out.println("Not connected");
+    case ERROR -> System.out.println("Connection failed");
+}
+```
+
+The four states are:
+
+| State | Description |
+|-------|-------------|
+| `DISCONNECTED` | Client has not been started yet |
+| `CONNECTING` | `start()` was called but hasn't completed |
+| `CONNECTED` | Client is connected and ready |
+| `ERROR` | Connection failed (check logs for details) |
+
+### Server Status
+
+Get CLI version and protocol information:
+
+```java
+var status = client.getStatus().get();
+System.out.println("CLI version: " + status.getVersion());
+System.out.println("Protocol version: " + status.getProtocolVersion());
+```
+
+### Authentication Status
+
+Check whether the current connection is authenticated and how:
+
+```java
+var auth = client.getAuthStatus().get();
+if (auth.isAuthenticated()) {
+    System.out.println("Logged in as: " + auth.getLogin());
+    System.out.println("Auth type: " + auth.getAuthType());
+    System.out.println("Host: " + auth.getHost());
+} else {
+    System.out.println("Not authenticated: " + auth.getStatusMessage());
+}
+```
+
+### Ping
+
+Verify server connectivity:
+
+```java
+var pong = client.ping("hello").get();
+System.out.println("Server responded, protocol version: " + pong.protocolVersion());
+```
+
+See [ConnectionState](apidocs/com/github/copilot/sdk/ConnectionState.html), [GetStatusResponse](apidocs/com/github/copilot/sdk/json/GetStatusResponse.html), and [GetAuthStatusResponse](apidocs/com/github/copilot/sdk/json/GetAuthStatusResponse.html) Javadoc for details.
+
+---
+
+## Message Delivery Mode
+
+Control how messages are delivered to the session:
+
+```java
+// Default: message is enqueued for processing
+session.send(new MessageOptions()
+    .setPrompt("Analyze this codebase")
+).get();
+
+// Immediate: process the message right away
+session.send(new MessageOptions()
+    .setPrompt("Quick question")
+    .setMode("immediate")
+).get();
+```
+
+| Mode | Description |
+|------|-------------|
+| `"enqueue"` | Queue the message for processing (default) |
+| `"immediate"` | Process the message immediately |
 
 ---
 

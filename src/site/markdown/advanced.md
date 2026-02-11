@@ -15,6 +15,7 @@ This guide covers advanced scenarios for extending and customizing your Copilot 
 - [Infinite Sessions](#Infinite_Sessions)
   - [Compaction Events](#Compaction_Events)
 - [MCP Servers](#MCP_Servers)
+- [Custom Agents](#Custom_Agents)
 - [Skills Configuration](#Skills_Configuration)
   - [Loading Skills](#Loading_Skills)
   - [Disabling Skills](#Disabling_Skills)
@@ -233,6 +234,65 @@ var session = client.createSession(
 ```
 
 📖 **[Full MCP documentation →](mcp.html)** for local/remote servers and all options.
+
+---
+
+## Custom Agents
+
+Extend the base Copilot assistant with specialized agents that have their own tools, prompts, and behavior. Users can invoke agents using the `@agent-name` mention syntax in messages.
+
+```java
+var reviewer = new CustomAgentConfig()
+    .setName("code-reviewer")
+    .setDisplayName("Code Reviewer")
+    .setDescription("Reviews code for best practices and security")
+    .setPrompt("You are a code review expert. Focus on security, performance, and maintainability.")
+    .setTools(List.of("read_file", "search_code"));
+
+var session = client.createSession(
+    new SessionConfig()
+        .setCustomAgents(List.of(reviewer))
+).get();
+
+// The user can now mention @code-reviewer in messages
+session.send("@code-reviewer Review src/Main.java").get();
+```
+
+### Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `name` | String | Unique identifier used for `@mentions` (alphanumeric and hyphens) |
+| `displayName` | String | Human-readable name shown to users |
+| `description` | String | Describes the agent's capabilities |
+| `prompt` | String | System prompt that defines the agent's behavior |
+| `tools` | List&lt;String&gt; | Tool names available to this agent |
+| `mcpServers` | Map | MCP servers available to this agent |
+| `infer` | Boolean | Whether the agent can be auto-selected based on context |
+
+### Multiple Agents
+
+Register multiple agents for different tasks:
+
+```java
+var agents = List.of(
+    new CustomAgentConfig()
+        .setName("reviewer")
+        .setDescription("Code review")
+        .setPrompt("You review code for issues."),
+    new CustomAgentConfig()
+        .setName("documenter")
+        .setDescription("Documentation writer")
+        .setPrompt("You write clear documentation.")
+        .setInfer(true)  // Auto-select when appropriate
+);
+
+var session = client.createSession(
+    new SessionConfig().setCustomAgents(agents)
+).get();
+```
+
+See [CustomAgentConfig](apidocs/com/github/copilot/sdk/json/CustomAgentConfig.html) Javadoc for full details.
 
 ---
 
