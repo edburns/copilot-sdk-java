@@ -495,7 +495,8 @@ Use `forceStop()` when you need to terminate immediately, such as during error r
 client.forceStop().get();
 ```
 
-> **Tip:** In `try-with-resources` blocks, `close()` delegates to `stop()`, so graceful cleanup happens automatically.
+> **Tip:** In `try-with-resources` blocks, `close()` delegates to `stop()`, so graceful session cleanup happens automatically.
+> `close()` is blocking and waits up to `CopilotClient.AUTOCLOSEABLE_TIMEOUT_SECONDS` seconds for shutdown to complete.
 
 ---
 

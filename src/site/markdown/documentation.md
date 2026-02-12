@@ -8,6 +8,7 @@ This guide covers common use cases for the Copilot SDK for Java. For complete AP
 
 - [Basic Usage](#Basic_Usage)
 - [Handling Responses](#Handling_Responses)
+- [Troubleshooting Event Handling](#Troubleshooting_Event_Handling)
 - [Event Types Reference](#Event_Types_Reference)
 - [Streaming Responses](#Streaming_Responses)
 - [Session Operations](#Session_Operations)
@@ -64,10 +65,37 @@ System.out.println(response.getData().getContent());
 For more control, subscribe to events and use `send()`:
 
 > **Exception isolation:** If a handler throws an exception, the SDK logs the
-> error and continues dispatching to remaining handlers. One misbehaving handler
-> will never prevent others from executing. You can customize error handling with
-> `session.setEventErrorHandler()` — see the
+> error. By default, dispatch stops after the first handler error
+> (`PROPAGATE_AND_LOG_ERRORS`). To continue dispatching to remaining handlers,
+> set `EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS`. You can customize error
+> handling with `session.setEventErrorHandler()` — see the
 > [Advanced Usage](advanced.html#Custom_Event_Error_Handler) guide.
+
+## Troubleshooting Event Handling
+
+### Symptoms of policy misconfiguration
+
+- You registered multiple `session.on(...)` handlers, but only the first one runs
+- A handler throws once and later handlers stop receiving events
+- You expected "best effort" fan-out, but dispatch halts on errors
+
+### Fix
+
+Set the event error policy to suppress-and-continue:
+
+```java
+session.setEventErrorPolicy(EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS);
+```
+
+Optionally add a custom error handler for observability:
+
+```java
+session.setEventErrorHandler((event, exception) -> {
+    System.err.println("Handler failed for event " + event.getType() + ": " + exception.getMessage());
+});
+```
+
+Use `PROPAGATE_AND_LOG_ERRORS` when you want fail-fast behavior.
 
 ```java
 var done = new CompletableFuture<Void>();
