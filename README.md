@@ -118,7 +118,7 @@ jbang https://github.com/copilot-community-sdk/copilot-sdk-java/blob/latest/jban
 
 This project uses several GitHub Actions workflows for building, testing, releasing, and syncing with the upstream SDK. 
 
-See [WORKFLOWS.md](WORKFLOWS.md) for a full overview and details on each workflow.
+See [WORKFLOWS.md](docs/WORKFLOWS.md) for a full overview and details on each workflow.
 
 ## Contributing
 

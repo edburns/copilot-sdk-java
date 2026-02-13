@@ -235,7 +235,7 @@ jobs:
           
           # Add snapshot if exists (goes to current versions)
           if [ "$HAS_SNAPSHOT" = "true" ]; then
-            CURRENT_HTML+='<li><span class="version-name">Development (main branch)</span><span class="version-links"><a href="./snapshot/" class="doc-link">documentation ↗</a><a href="'"$REPO_URL"'/blob/main/CHANGELOG.md" class="release-link">release notes ↗</a><span class="badge snapshot">snapshot</span></span></li>'
+            CURRENT_HTML+='<li><span class="version-name">Development (main branch)</span><span class="version-links"><a href="./snapshot/" class="doc-link">documentation ↗</a><a href="'"$REPO_URL"'/blob/main/CHANGELOG.md" class="release-link">changelog ↗</a><span class="badge snapshot">snapshot</span></span></li>'
           fi
           
           # Add versioned releases from tags (first one is latest, rest go to older)
