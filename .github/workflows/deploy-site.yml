@@ -215,7 +215,7 @@ jobs:
 
       - name: Copy version index page
         run: |
-          cp .github/templates/versions.html site/index.html
+          cp .github/templates/index.html site/index.html
           cp .github/templates/styles.css site/styles.css
 
       - name: Update version list from git tags
