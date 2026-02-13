@@ -254,6 +254,16 @@ jobs:
           sed -i "s|<!-- CURRENT_VERSIONS_PLACEHOLDER -->|$CURRENT_HTML|" index.html
           sed -i "s|<!-- OLDER_VERSIONS_PLACEHOLDER -->|$OLDER_HTML|" index.html
 
+      - name: Overlay custom JaCoCo CSS
+        run: |
+          cd site
+          for dir in */jacoco-coverage/jacoco-resources; do
+            if [ -d "$dir" ]; then
+              cp ../src/site/jacoco-resources/report.css "$dir/report.css"
+              echo "Overlaid JaCoCo CSS in $dir"
+            fi
+          done
+
       - name: Deploy to GitHub Pages
         run: |
           cd site
