@@ -65,7 +65,12 @@ code, pre {
 
 /* ===== GitHub Ribbon ===== */
 .github-fork-ribbon:before {
-  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  background-color: #667eea !important;
+  background-image: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+.github-fork-ribbon:after {
+  content: 'View on GitHub' !important;
 }
 
 /* ===== Breadcrumbs ===== */
