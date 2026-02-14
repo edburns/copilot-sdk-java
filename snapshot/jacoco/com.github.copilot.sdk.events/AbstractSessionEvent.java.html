@@ -54,6 +54,7 @@ import java.util.UUID;
         SessionStartEvent, SessionResumeEvent, SessionErrorEvent, SessionIdleEvent, SessionInfoEvent,
         SessionModelChangeEvent, SessionHandoffEvent, SessionTruncationEvent, SessionSnapshotRewindEvent,
         SessionUsageInfoEvent, SessionCompactionStartEvent, SessionCompactionCompleteEvent, SessionShutdownEvent,
+        SessionContextChangedEvent,
         // Assistant events
         AssistantTurnStartEvent, AssistantIntentEvent, AssistantReasoningEvent, AssistantReasoningDeltaEvent,
         AssistantMessageEvent, AssistantMessageDeltaEvent, AssistantTurnEndEvent, AssistantUsageEvent, AbortEvent,
@@ -96,7 +97,7 @@ import java.util.UUID;
      * @return the event UUID
      */
     public UUID getId() {
-<span class="fc" id="L99">        return id;</span>
+<span class="fc" id="L100">        return id;</span>
     }
 
     /**
@@ -106,8 +107,8 @@ import java.util.UUID;
      *            the event UUID
      */
     public void setId(UUID id) {
-<span class="fc" id="L109">        this.id = id;</span>
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L110">        this.id = id;</span>
+<span class="fc" id="L111">    }</span>
 
     /**
      * Gets the timestamp when this event occurred.
@@ -115,7 +116,7 @@ import java.util.UUID;
      * @return the event timestamp
      */
     public OffsetDateTime getTimestamp() {
-<span class="fc" id="L118">        return timestamp;</span>
+<span class="fc" id="L119">        return timestamp;</span>
     }
 
     /**
@@ -125,8 +126,8 @@ import java.util.UUID;
      *            the event timestamp
      */
     public void setTimestamp(OffsetDateTime timestamp) {
-<span class="fc" id="L128">        this.timestamp = timestamp;</span>
-<span class="fc" id="L129">    }</span>
+<span class="fc" id="L129">        this.timestamp = timestamp;</span>
+<span class="fc" id="L130">    }</span>
 
     /**
      * Gets the parent event ID, if this event is a child of another.
@@ -134,7 +135,7 @@ import java.util.UUID;
      * @return the parent event UUID, or {@code null}
      */
     public UUID getParentId() {
-<span class="fc" id="L137">        return parentId;</span>
+<span class="fc" id="L138">        return parentId;</span>
     }
 
     /**
@@ -144,8 +145,8 @@ import java.util.UUID;
      *            the parent event UUID
      */
     public void setParentId(UUID parentId) {
-<span class="fc" id="L147">        this.parentId = parentId;</span>
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L148">        this.parentId = parentId;</span>
+<span class="fc" id="L149">    }</span>
 
     /**
      * Returns whether this is an ephemeral event.
@@ -155,7 +156,7 @@ import java.util.UUID;
      * @return {@code true} if ephemeral, {@code false} otherwise
      */
     public Boolean getEphemeral() {
-<span class="fc" id="L158">        return ephemeral;</span>
+<span class="fc" id="L159">        return ephemeral;</span>
     }
 
     /**
@@ -165,7 +166,7 @@ import java.util.UUID;
      *            {@code true} if ephemeral
      */
     public void setEphemeral(Boolean ephemeral) {
-<span class="fc" id="L168">        this.ephemeral = ephemeral;</span>
-<span class="fc" id="L169">    }</span>
+<span class="fc" id="L169">        this.ephemeral = ephemeral;</span>
+<span class="fc" id="L170">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
