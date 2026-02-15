@@ -198,10 +198,13 @@ public class PRVisualization {
     }
 
     private static String promptForRepo() throws IOException {
-        try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
-            System.out.print("Enter GitHub repo (owner/repo): ");
-            return reader.readLine().trim();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter GitHub repo (owner/repo): ");
+        String line = reader.readLine();
+        if (line == null) {
+            throw new EOFException("End of input while reading repository name");
         }
+        return line.trim();
     }
 }
 ```
