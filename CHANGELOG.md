@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 > **Upstream sync:** [`github/copilot-sdk@e40d57c`](https://github.com/github/copilot-sdk/commit/e40d57c86e18b495722adbf42045288c03924342)
 
+## [1.0.9] - 2026-02-16
+
+> **Upstream sync:** [`github/copilot-sdk@e40d57c`](https://github.com/github/copilot-sdk/commit/e40d57c86e18b495722adbf42045288c03924342)
 ### Added
 
 #### Cookbook with Practical Recipes
@@ -373,6 +376,8 @@ New types: `GetForegroundSessionResponse`, `SetForegroundSessionResponse`
 - Pre-commit hook for Spotless code formatting
 - Comprehensive API documentation
 
+[Unreleased]: https://github.com/copilot-community-sdk/copilot-sdk-java/compare/v1.0.9...HEAD
+[1.0.9]: https://github.com/copilot-community-sdk/copilot-sdk-java/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/copilot-community-sdk/copilot-sdk-java/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/copilot-community-sdk/copilot-sdk-java/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/copilot-community-sdk/copilot-sdk-java/compare/v1.0.5...v1.0.6
