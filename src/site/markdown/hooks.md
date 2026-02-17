@@ -15,6 +15,7 @@ Session hooks allow you to intercept and modify tool execution, user prompts, an
 | [User Prompt Submitted](#User_Prompt_Submitted_Hook) | When user sends a message | Nothing (observation only) |
 | [Session Start](#Session_Start_Hook) | When session begins | Nothing (observation only) |
 | [Session End](#Session_End_Hook) | When session ends | Nothing (observation only) |
+| [Checking Whether Hooks Are Registered](#Checking_Whether_Hooks_Are_Registered) | Before session creation | Whether any handlers are configured |
 
 ---
 
@@ -133,7 +134,7 @@ Called **after** a tool executes. Use this to:
 |-------|------|-------------|
 | `getToolName()` | `String` | Name of the tool that was called |
 | `getToolArgs()` | `JsonNode` | Arguments that were passed |
-| `getToolResult()` | `String` | Result from the tool |
+| `getToolResult()` | `JsonNode` | Result from the tool |
 | `getCwd()` | `String` | Current working directory |
 | `getTimestamp()` | `long` | Timestamp in milliseconds |
 
@@ -188,7 +189,7 @@ Called when the user submits a prompt, before the LLM processes it. This is an o
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `getPrompt()` | `String` | The user's prompt text |
+| `prompt()` | `String` | The user's prompt text |
 | `getTimestamp()` | `long` | Timestamp in milliseconds |
 
 ### Output
@@ -222,7 +223,7 @@ Called when a session starts (either new or resumed).
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `getSource()` | `String` | `"new"` or `"resumed"` |
+| `source()` | `String` | `"startup"`, `"resume"`, or `"new"` |
 | `getTimestamp()` | `long` | Timestamp in milliseconds |
 
 ### Output
@@ -254,7 +255,7 @@ Called when a session ends.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `getReason()` | `String` | Why the session ended |
+| `reason()` | `String` | Why the session ended |
 | `getTimestamp()` | `long` | Timestamp in milliseconds |
 
 ### Output
@@ -357,6 +358,22 @@ All hook handlers receive a `HookInvocation` object as the second parameter:
 | `getSessionId()` | The session ID where the hook was triggered |
 
 This allows you to correlate hooks with specific sessions when managing multiple concurrent sessions.
+
+## Checking Whether Hooks Are Registered
+
+Use `hasHooks()` to quickly verify that at least one hook handler is configured:
+
+```java
+var hooks = new SessionHooks()
+    .setOnPreToolUse((input, invocation) ->
+        CompletableFuture.completedFuture(PreToolUseHookOutput.allow()));
+
+if (hooks.hasHooks()) {
+    var session = client.createSession(
+        new SessionConfig().setHooks(hooks)
+    ).get();
+}
+```
 
 ---
 
