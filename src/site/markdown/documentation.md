@@ -20,6 +20,7 @@ This guide covers common use cases for the Copilot SDK for Java. For complete AP
 - [Message Delivery Mode](#Message_Delivery_Mode)
 - [Session Management](#Session_Management)
 - [SessionConfig Reference](#SessionConfig_Reference)
+    - [Cloning SessionConfig](#Cloning_SessionConfig)
 
 ---
 
@@ -167,6 +168,7 @@ The SDK supports event types organized by category. All events extend `AbstractS
 | `SessionUsageInfoEvent` | `session.usage_info` | Token usage information |
 | `SessionCompactionStartEvent` | `session.compaction_start` | Context compaction started (infinite sessions) |
 | `SessionCompactionCompleteEvent` | `session.compaction_complete` | Context compaction completed |
+| `SessionContextChangedEvent` | `session.context_changed` | Working directory context changed |
 
 ### Assistant Events
 
@@ -644,6 +646,21 @@ Complete list of all `SessionConfig` options for `createSession()`:
 | `skillDirectories` | List&lt;String&gt; | Directories to load skills from | [Skills](advanced.html#Skills_Configuration) |
 | `disabledSkills` | List&lt;String&gt; | Skills to disable by name | [Skills](advanced.html#Skills_Configuration) |
 | `configDir` | String | Custom configuration directory | [Config Dir](advanced.html#Custom_Configuration_Directory) |
+
+### Cloning SessionConfig
+
+Use `clone()` to copy a base configuration before making per-session changes:
+
+```java
+var base = new SessionConfig()
+    .setModel("gpt-4.1")
+    .setStreaming(true);
+
+var derived = base.clone()
+    .setWorkingDirectory("/repo-a");
+```
+
+`clone()` creates a shallow copy. Collection fields are copied into new collection instances, while nested objects/handlers are shared references.
 
 See [SessionConfig](apidocs/com/github/copilot/sdk/json/SessionConfig.html) Javadoc for full details.
 
