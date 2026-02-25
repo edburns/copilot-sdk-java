@@ -4,6 +4,7 @@
 
 package com.github.copilot.sdk.json;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +31,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @since 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="fc" id="L33">public class SessionConfig {</span>
+<span class="fc" id="L34">public class SessionConfig {</span>
 
     private String sessionId;
+    private String clientName;
     private String model;
     private String reasoningEffort;
     private List&lt;ToolDefinition&gt; tools;
@@ -58,7 +60,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the session ID, or {@code null} to generate automatically
      */
     public String getSessionId() {
-<span class="fc" id="L61">        return sessionId;</span>
+<span class="fc" id="L63">        return sessionId;</span>
     }
 
     /**
@@ -71,8 +73,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setSessionId(String sessionId) {
-<span class="nc" id="L74">        this.sessionId = sessionId;</span>
-<span class="nc" id="L75">        return this;</span>
+<span class="fc" id="L76">        this.sessionId = sessionId;</span>
+<span class="fc" id="L77">        return this;</span>
+    }
+
+    /**
+     * Gets the client name used to identify the application using the SDK.
+     *
+     * @return the client name, or {@code null} if not set
+     */
+    public String getClientName() {
+<span class="fc" id="L86">        return clientName;</span>
+    }
+
+    /**
+     * Sets the client name to identify the application using the SDK.
+     * &lt;p&gt;
+     * This value is included in the User-Agent header for API requests.
+     *
+     * @param clientName
+     *            the client name
+     * @return this config instance for method chaining
+     */
+    public SessionConfig setClientName(String clientName) {
+<span class="fc" id="L99">        this.clientName = clientName;</span>
+<span class="fc" id="L100">        return this;</span>
     }
 
     /**
@@ -81,7 +106,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the model name
      */
     public String getModel() {
-<span class="fc" id="L84">        return model;</span>
+<span class="fc" id="L109">        return model;</span>
     }
 
     /**
@@ -94,8 +119,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setModel(String model) {
-<span class="fc" id="L97">        this.model = model;</span>
-<span class="fc" id="L98">        return this;</span>
+<span class="fc" id="L122">        this.model = model;</span>
+<span class="fc" id="L123">        return this;</span>
     }
 
     /**
@@ -104,7 +129,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the reasoning effort level (&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, or &quot;xhigh&quot;)
      */
     public String getReasoningEffort() {
-<span class="fc" id="L107">        return reasoningEffort;</span>
+<span class="fc" id="L132">        return reasoningEffort;</span>
     }
 
     /**
@@ -118,8 +143,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setReasoningEffort(String reasoningEffort) {
-<span class="nc" id="L121">        this.reasoningEffort = reasoningEffort;</span>
-<span class="nc" id="L122">        return this;</span>
+<span class="nc" id="L146">        this.reasoningEffort = reasoningEffort;</span>
+<span class="nc" id="L147">        return this;</span>
     }
 
     /**
@@ -128,7 +153,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of tool definitions
      */
     public List&lt;ToolDefinition&gt; getTools() {
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        return tools == null ? null : Collections.unmodifiableList(tools);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        return tools == null ? null : Collections.unmodifiableList(tools);</span>
     }
 
     /**
@@ -143,8 +168,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see ToolDefinition
      */
     public SessionConfig setTools(List&lt;ToolDefinition&gt; tools) {
-<span class="fc" id="L146">        this.tools = tools;</span>
-<span class="fc" id="L147">        return this;</span>
+<span class="fc" id="L171">        this.tools = tools;</span>
+<span class="fc" id="L172">        return this;</span>
     }
 
     /**
@@ -153,7 +178,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the system message config
      */
     public SystemMessageConfig getSystemMessage() {
-<span class="fc" id="L156">        return systemMessage;</span>
+<span class="fc" id="L181">        return systemMessage;</span>
     }
 
     /**
@@ -170,8 +195,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see SystemMessageConfig
      */
     public SessionConfig setSystemMessage(SystemMessageConfig systemMessage) {
-<span class="fc" id="L173">        this.systemMessage = systemMessage;</span>
-<span class="fc" id="L174">        return this;</span>
+<span class="fc" id="L198">        this.systemMessage = systemMessage;</span>
+<span class="fc" id="L199">        return this;</span>
     }
 
     /**
@@ -180,7 +205,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of available tool names
      */
     public List&lt;String&gt; getAvailableTools() {
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        return availableTools == null ? null : Collections.unmodifiableList(availableTools);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        return availableTools == null ? null : Collections.unmodifiableList(availableTools);</span>
     }
 
     /**
@@ -193,8 +218,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setAvailableTools(List&lt;String&gt; availableTools) {
-<span class="fc" id="L196">        this.availableTools = availableTools;</span>
-<span class="fc" id="L197">        return this;</span>
+<span class="fc" id="L221">        this.availableTools = availableTools;</span>
+<span class="fc" id="L222">        return this;</span>
     }
 
     /**
@@ -203,7 +228,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of excluded tool names
      */
     public List&lt;String&gt; getExcludedTools() {
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        return excludedTools == null ? null : Collections.unmodifiableList(excludedTools);</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        return excludedTools == null ? null : Collections.unmodifiableList(excludedTools);</span>
     }
 
     /**
@@ -216,8 +241,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setExcludedTools(List&lt;String&gt; excludedTools) {
-<span class="fc" id="L219">        this.excludedTools = excludedTools;</span>
-<span class="fc" id="L220">        return this;</span>
+<span class="fc" id="L244">        this.excludedTools = excludedTools;</span>
+<span class="fc" id="L245">        return this;</span>
     }
 
     /**
@@ -226,7 +251,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the provider configuration
      */
     public ProviderConfig getProvider() {
-<span class="fc" id="L229">        return provider;</span>
+<span class="fc" id="L254">        return provider;</span>
     }
 
     /**
@@ -241,8 +266,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see ProviderConfig
      */
     public SessionConfig setProvider(ProviderConfig provider) {
-<span class="fc" id="L244">        this.provider = provider;</span>
-<span class="fc" id="L245">        return this;</span>
+<span class="fc" id="L269">        this.provider = provider;</span>
+<span class="fc" id="L270">        return this;</span>
     }
 
     /**
@@ -251,7 +276,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the permission handler
      */
     public PermissionHandler getOnPermissionRequest() {
-<span class="fc" id="L254">        return onPermissionRequest;</span>
+<span class="fc" id="L279">        return onPermissionRequest;</span>
     }
 
     /**
@@ -266,8 +291,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see PermissionHandler
      */
     public SessionConfig setOnPermissionRequest(PermissionHandler onPermissionRequest) {
-<span class="fc" id="L269">        this.onPermissionRequest = onPermissionRequest;</span>
-<span class="fc" id="L270">        return this;</span>
+<span class="fc" id="L294">        this.onPermissionRequest = onPermissionRequest;</span>
+<span class="fc" id="L295">        return this;</span>
     }
 
     /**
@@ -276,7 +301,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the user input handler
      */
     public UserInputHandler getOnUserInputRequest() {
-<span class="fc" id="L279">        return onUserInputRequest;</span>
+<span class="fc" id="L304">        return onUserInputRequest;</span>
     }
 
     /**
@@ -290,8 +315,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see UserInputHandler
      */
     public SessionConfig setOnUserInputRequest(UserInputHandler onUserInputRequest) {
-<span class="fc" id="L293">        this.onUserInputRequest = onUserInputRequest;</span>
-<span class="fc" id="L294">        return this;</span>
+<span class="fc" id="L318">        this.onUserInputRequest = onUserInputRequest;</span>
+<span class="fc" id="L319">        return this;</span>
     }
 
     /**
@@ -300,7 +325,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the session hooks
      */
     public SessionHooks getHooks() {
-<span class="fc" id="L303">        return hooks;</span>
+<span class="fc" id="L328">        return hooks;</span>
     }
 
     /**
@@ -314,8 +339,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see SessionHooks
      */
     public SessionConfig setHooks(SessionHooks hooks) {
-<span class="fc" id="L317">        this.hooks = hooks;</span>
-<span class="fc" id="L318">        return this;</span>
+<span class="fc" id="L342">        this.hooks = hooks;</span>
+<span class="fc" id="L343">        return this;</span>
     }
 
     /**
@@ -324,7 +349,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the working directory path
      */
     public String getWorkingDirectory() {
-<span class="fc" id="L327">        return workingDirectory;</span>
+<span class="fc" id="L352">        return workingDirectory;</span>
     }
 
     /**
@@ -335,8 +360,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setWorkingDirectory(String workingDirectory) {
-<span class="nc" id="L338">        this.workingDirectory = workingDirectory;</span>
-<span class="nc" id="L339">        return this;</span>
+<span class="nc" id="L363">        this.workingDirectory = workingDirectory;</span>
+<span class="nc" id="L364">        return this;</span>
     }
 
     /**
@@ -345,7 +370,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return {@code true} if streaming is enabled
      */
     public boolean isStreaming() {
-<span class="fc" id="L348">        return streaming;</span>
+<span class="fc" id="L373">        return streaming;</span>
     }
 
     /**
@@ -360,8 +385,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setStreaming(boolean streaming) {
-<span class="fc" id="L363">        this.streaming = streaming;</span>
-<span class="fc" id="L364">        return this;</span>
+<span class="fc" id="L388">        this.streaming = streaming;</span>
+<span class="fc" id="L389">        return this;</span>
     }
 
     /**
@@ -370,7 +395,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the MCP servers map
      */
     public Map&lt;String, Object&gt; getMcpServers() {
-<span class="fc bfc" id="L373" title="All 2 branches covered.">        return mcpServers == null ? null : Collections.unmodifiableMap(mcpServers);</span>
+<span class="fc bfc" id="L398" title="All 2 branches covered.">        return mcpServers == null ? null : Collections.unmodifiableMap(mcpServers);</span>
     }
 
     /**
@@ -384,8 +409,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setMcpServers(Map&lt;String, Object&gt; mcpServers) {
-<span class="fc" id="L387">        this.mcpServers = mcpServers;</span>
-<span class="fc" id="L388">        return this;</span>
+<span class="fc" id="L412">        this.mcpServers = mcpServers;</span>
+<span class="fc" id="L413">        return this;</span>
     }
 
     /**
@@ -394,7 +419,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of custom agent configurations
      */
     public List&lt;CustomAgentConfig&gt; getCustomAgents() {
-<span class="fc bfc" id="L397" title="All 2 branches covered.">        return customAgents == null ? null : Collections.unmodifiableList(customAgents);</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        return customAgents == null ? null : Collections.unmodifiableList(customAgents);</span>
     }
 
     /**
@@ -409,8 +434,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see CustomAgentConfig
      */
     public SessionConfig setCustomAgents(List&lt;CustomAgentConfig&gt; customAgents) {
-<span class="fc" id="L412">        this.customAgents = customAgents;</span>
-<span class="fc" id="L413">        return this;</span>
+<span class="fc" id="L437">        this.customAgents = customAgents;</span>
+<span class="fc" id="L438">        return this;</span>
     }
 
     /**
@@ -419,7 +444,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the infinite sessions config
      */
     public InfiniteSessionConfig getInfiniteSessions() {
-<span class="fc" id="L422">        return infiniteSessions;</span>
+<span class="fc" id="L447">        return infiniteSessions;</span>
     }
 
     /**
@@ -436,8 +461,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @see InfiniteSessionConfig
      */
     public SessionConfig setInfiniteSessions(InfiniteSessionConfig infiniteSessions) {
-<span class="fc" id="L439">        this.infiniteSessions = infiniteSessions;</span>
-<span class="fc" id="L440">        return this;</span>
+<span class="fc" id="L464">        this.infiniteSessions = infiniteSessions;</span>
+<span class="fc" id="L465">        return this;</span>
     }
 
     /**
@@ -446,7 +471,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of skill directory paths
      */
     public List&lt;String&gt; getSkillDirectories() {
-<span class="fc bfc" id="L449" title="All 2 branches covered.">        return skillDirectories == null ? null : Collections.unmodifiableList(skillDirectories);</span>
+<span class="fc bfc" id="L474" title="All 2 branches covered.">        return skillDirectories == null ? null : Collections.unmodifiableList(skillDirectories);</span>
     }
 
     /**
@@ -461,8 +486,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setSkillDirectories(List&lt;String&gt; skillDirectories) {
-<span class="fc" id="L464">        this.skillDirectories = skillDirectories;</span>
-<span class="fc" id="L465">        return this;</span>
+<span class="fc" id="L489">        this.skillDirectories = skillDirectories;</span>
+<span class="fc" id="L490">        return this;</span>
     }
 
     /**
@@ -471,7 +496,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the list of disabled skill names
      */
     public List&lt;String&gt; getDisabledSkills() {
-<span class="fc bfc" id="L474" title="All 2 branches covered.">        return disabledSkills == null ? null : Collections.unmodifiableList(disabledSkills);</span>
+<span class="fc bfc" id="L499" title="All 2 branches covered.">        return disabledSkills == null ? null : Collections.unmodifiableList(disabledSkills);</span>
     }
 
     /**
@@ -485,8 +510,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setDisabledSkills(List&lt;String&gt; disabledSkills) {
-<span class="fc" id="L488">        this.disabledSkills = disabledSkills;</span>
-<span class="fc" id="L489">        return this;</span>
+<span class="fc" id="L513">        this.disabledSkills = disabledSkills;</span>
+<span class="fc" id="L514">        return this;</span>
     }
 
     /**
@@ -495,7 +520,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return the config directory path
      */
     public String getConfigDir() {
-<span class="fc" id="L498">        return configDir;</span>
+<span class="fc" id="L523">        return configDir;</span>
     }
 
     /**
@@ -509,8 +534,45 @@ import com.fasterxml.jackson.annotation.JsonInclude;
      * @return this config instance for method chaining
      */
     public SessionConfig setConfigDir(String configDir) {
-<span class="fc" id="L512">        this.configDir = configDir;</span>
-<span class="fc" id="L513">        return this;</span>
+<span class="fc" id="L537">        this.configDir = configDir;</span>
+<span class="fc" id="L538">        return this;</span>
+    }
+
+    /**
+     * Creates a shallow clone of this {@code SessionConfig} instance.
+     * &lt;p&gt;
+     * Mutable collection properties are copied into new collection instances so
+     * that modifications to those collections on the clone do not affect the
+     * original. Other reference-type properties (like provider configuration,
+     * system messages, hooks, infinite session configuration, and handlers) are not
+     * deep-cloned; the original and the clone will share those objects.
+     *
+     * @return a clone of this config instance
+     */
+    @Override
+    public SessionConfig clone() {
+<span class="fc" id="L554">        SessionConfig copy = new SessionConfig();</span>
+<span class="fc" id="L555">        copy.sessionId = this.sessionId;</span>
+<span class="fc" id="L556">        copy.clientName = this.clientName;</span>
+<span class="fc" id="L557">        copy.model = this.model;</span>
+<span class="fc" id="L558">        copy.reasoningEffort = this.reasoningEffort;</span>
+<span class="pc bpc" id="L559" title="1 of 2 branches missed.">        copy.tools = this.tools != null ? new ArrayList&lt;&gt;(this.tools) : null;</span>
+<span class="fc" id="L560">        copy.systemMessage = this.systemMessage;</span>
+<span class="fc bfc" id="L561" title="All 2 branches covered.">        copy.availableTools = this.availableTools != null ? new ArrayList&lt;&gt;(this.availableTools) : null;</span>
+<span class="pc bpc" id="L562" title="1 of 2 branches missed.">        copy.excludedTools = this.excludedTools != null ? new ArrayList&lt;&gt;(this.excludedTools) : null;</span>
+<span class="fc" id="L563">        copy.provider = this.provider;</span>
+<span class="fc" id="L564">        copy.onPermissionRequest = this.onPermissionRequest;</span>
+<span class="fc" id="L565">        copy.onUserInputRequest = this.onUserInputRequest;</span>
+<span class="fc" id="L566">        copy.hooks = this.hooks;</span>
+<span class="fc" id="L567">        copy.workingDirectory = this.workingDirectory;</span>
+<span class="fc" id="L568">        copy.streaming = this.streaming;</span>
+<span class="pc bpc" id="L569" title="1 of 2 branches missed.">        copy.mcpServers = this.mcpServers != null ? new java.util.HashMap&lt;&gt;(this.mcpServers) : null;</span>
+<span class="pc bpc" id="L570" title="1 of 2 branches missed.">        copy.customAgents = this.customAgents != null ? new ArrayList&lt;&gt;(this.customAgents) : null;</span>
+<span class="fc" id="L571">        copy.infiniteSessions = this.infiniteSessions;</span>
+<span class="pc bpc" id="L572" title="1 of 2 branches missed.">        copy.skillDirectories = this.skillDirectories != null ? new ArrayList&lt;&gt;(this.skillDirectories) : null;</span>
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">        copy.disabledSkills = this.disabledSkills != null ? new ArrayList&lt;&gt;(this.disabledSkills) : null;</span>
+<span class="fc" id="L574">        copy.configDir = this.configDir;</span>
+<span class="fc" id="L575">        return copy;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
