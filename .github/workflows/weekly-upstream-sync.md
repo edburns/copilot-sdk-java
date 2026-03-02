@@ -36,6 +36,7 @@ safe-outputs:
     max: 10
   assign-to-agent:
     name: "copilot"
+    model: "claude-opus-4.6"
     target: "*"
   noop:
     report-as-issue: false
