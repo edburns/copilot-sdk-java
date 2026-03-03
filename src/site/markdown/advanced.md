@@ -7,6 +7,8 @@ This guide covers advanced scenarios for extending and customizing your Copilot 
 ## Table of Contents
 
 - [Custom Tools](#Custom_Tools)
+  - [Overriding Built-in Tools](#Overriding_Built-in_Tools)
+- [Switching Models Mid-Session](#Switching_Models_Mid-Session)
 - [System Messages](#System_Messages)
   - [Adding Rules](#Adding_Rules)
   - [Full Control](#Full_Control)
@@ -72,6 +74,62 @@ var session = client.createSession(
 ```
 
 See [ToolDefinition](apidocs/com/github/copilot/sdk/json/ToolDefinition.html) Javadoc for schema details.
+
+### Overriding Built-in Tools
+
+You can replace a built-in CLI tool (such as `grep` or `read_file`) with your own implementation
+by using `ToolDefinition.createOverride()`. This signals to the CLI that the name collision is
+intentional and your custom implementation should be used instead.
+
+```java
+var customGrep = ToolDefinition.createOverride(
+    "grep",
+    "Project-aware search with custom filtering",
+    Map.of(
+        "type", "object",
+        "properties", Map.of(
+            "query", Map.of("type", "string", "description", "Search query")
+        ),
+        "required", List.of("query")
+    ),
+    invocation -> {
+        String query = (String) invocation.getArguments().get("query");
+        // Your custom search logic here
+        return CompletableFuture.completedFuture("Results for: " + query);
+    }
+);
+
+var session = client.createSession(
+    new SessionConfig()
+        .setTools(List.of(customGrep))
+        .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+).get();
+```
+
+---
+
+## Switching Models Mid-Session
+
+You can change the model used by an existing session without losing conversation history.
+The new model takes effect starting with the next message sent.
+
+```java
+var session = client.createSession(
+    new SessionConfig()
+        .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+).get();
+
+// Switch to a different model mid-conversation
+session.setModel("gpt-4.1").get();
+
+// Next message will use the new model
+session.sendAndWait(new MessageOptions().setPrompt("Continue with the new model")).get();
+```
+
+The session emits a [`SessionModelChangeEvent`](apidocs/com/github/copilot/sdk/events/SessionModelChangeEvent.html)
+when the switch completes, which you can observe with `session.on(SessionModelChangeEvent.class, event -> ...)`.
+
+See [CopilotSession.setModel()](apidocs/com/github/copilot/sdk/CopilotSession.html#setModel(java.lang.String)) Javadoc for details.
 
 ---
 

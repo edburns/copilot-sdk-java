@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-> **Upstream sync:** [`github/copilot-sdk@b9f746a`](https://github.com/github/copilot-sdk/commit/b9f746ab1b9c5f31af03a6f8a6cf4e680b3fd6b8)
+> **Upstream sync:** [`github/copilot-sdk@dcd86c1`](https://github.com/github/copilot-sdk/commit/dcd86c189501ce1b46b787ca60d90f3f315f3079)
 
 ### Added
 
+- `CopilotSession.setModel(String)` — changes the model for an existing session mid-conversation; the new model takes effect for the next message, and conversation history is preserved (upstream: [`bd98e3a`](https://github.com/github/copilot-sdk/commit/bd98e3a))
+- `ToolDefinition.createOverride(String, String, Map, ToolHandler)` — creates a tool definition that overrides a built-in CLI tool with the same name (upstream: [`f843c80`](https://github.com/github/copilot-sdk/commit/f843c80))
+- `ToolDefinition` record now includes `overridesBuiltInTool` field; when `true`, signals to the CLI that the custom tool intentionally replaces a built-in (upstream: [`f843c80`](https://github.com/github/copilot-sdk/commit/f843c80))
 - `CopilotSession.listAgents()` — lists custom agents available for selection (upstream: [`9d998fb`](https://github.com/github/copilot-sdk/commit/9d998fb))
 - `CopilotSession.getCurrentAgent()` — gets the currently selected custom agent (upstream: [`9d998fb`](https://github.com/github/copilot-sdk/commit/9d998fb))
 - `CopilotSession.selectAgent(String)` — selects a custom agent for the session (upstream: [`9d998fb`](https://github.com/github/copilot-sdk/commit/9d998fb))
