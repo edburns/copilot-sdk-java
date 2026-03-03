@@ -139,7 +139,7 @@ This SDK tracks the official [Copilot SDK](https://github.com/github/copilot-sdk
 
 ```bash
 # Clone the repository
-git clone https://github.com/github/copilot-sdk-java.git
+git clone https://github.com/copilot-community-sdk/copilot-sdk-java.git
 cd copilot-sdk-java
 
 # Enable git hooks for code formatting
