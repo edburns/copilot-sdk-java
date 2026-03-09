@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github</groupId>
-    <artifactId>copilot-sdk</artifactId>
+    <artifactId>copilot-sdk-java</artifactId>
     <version>0.1.30-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -35,6 +35,13 @@
         <url>https://github.com/github/copilot-sdk-java</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/github/copilot-sdk-java</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
