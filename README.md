@@ -33,7 +33,7 @@ Java SDK for programmatic control of GitHub Copilot CLI, enabling you to build A
 <dependency>
     <groupId>com.github</groupId>
     <artifactId>copilot-sdk</artifactId>
-    <version>0.1.29</version>
+    <version>0.1.32</version>
 </dependency>
 ```
 
@@ -53,7 +53,7 @@ Snapshot builds of the next development version are published to GitHub Packages
 <dependency>
     <groupId>com.github</groupId>
     <artifactId>copilot-sdk</artifactId>
-    <version>0.1.30-SNAPSHOT</version>
+    <version>0.1.33-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -74,7 +74,7 @@ GitHub Packages requires authentication even for public packages. Add your crede
 ### Gradle
 
 ```groovy
-implementation 'com.github:copilot-sdk:0.1.29'
+implementation 'com.github:copilot-sdk:0.1.32'
 ```
 
 ## Quick Start
