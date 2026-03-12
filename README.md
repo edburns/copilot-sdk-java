@@ -10,9 +10,9 @@
 #### Latest release
 [![GitHub Release Date](https://img.shields.io/github/release-date/github/copilot-sdk-java)](https://github.com/github/copilot-sdk-java/releases)
 [![GitHub Release](https://img.shields.io/github/v/release/github/copilot-sdk-java)](https://github.com/github/copilot-sdk-java/releases)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github/copilot-sdk)](https://central.sonatype.com/artifact/com.github/copilot-sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github/copilot-sdk-java)](https://central.sonatype.com/artifact/com.github/copilot-sdk-java)
 [![Documentation](https://img.shields.io/badge/docs-latest-brightgreen)](https://github.github.io/copilot-sdk-java/latest/)
-[![Javadoc](https://javadoc.io/badge2/com.github/copilot-sdk/javadoc.svg?q=1)](https://javadoc.io/doc/com.github/copilot-sdk/latest/index.html)
+[![Javadoc](https://javadoc.io/badge2/com.github/copilot-sdk-java/javadoc.svg?q=1)](https://javadoc.io/doc/com.github/copilot-sdk-java/latest/index.html)
 
 ## Background
 
@@ -32,7 +32,7 @@ Java SDK for programmatic control of GitHub Copilot CLI, enabling you to build A
 ```xml
 <dependency>
     <groupId>com.github</groupId>
-    <artifactId>copilot-sdk</artifactId>
+    <artifactId>copilot-sdk-java</artifactId>
     <version>0.1.32</version>
 </dependency>
 ```
@@ -52,7 +52,7 @@ Snapshot builds of the next development version are published to Maven Central S
 
 <dependency>
     <groupId>com.github</groupId>
-    <artifactId>copilot-sdk</artifactId>
+    <artifactId>copilot-sdk-java</artifactId>
     <version>0.1.33-SNAPSHOT</version>
 </dependency>
 ```
@@ -60,7 +60,7 @@ Snapshot builds of the next development version are published to Maven Central S
 ### Gradle
 
 ```groovy
-implementation 'com.github:copilot-sdk:0.1.32'
+implementation 'com.github:copilot-sdk-java:0.1.32'
 ```
 
 ## Quick Start
