@@ -39,13 +39,13 @@ Java SDK for programmatic control of GitHub Copilot CLI, enabling you to build A
 
 #### Snapshot Builds
 
-Snapshot builds of the next development version are published to GitHub Packages. To use them, add the repository and update the dependency version in your `pom.xml`:
+Snapshot builds of the next development version are published to Maven Central Snapshots. To use them, add the repository and update the dependency version in your `pom.xml`:
 
 ```xml
 <repositories>
     <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/github/copilot-sdk-java</url>
+        <id>central-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         <snapshots><enabled>true</enabled></snapshots>
     </repository>
 </repositories>
@@ -55,20 +55,6 @@ Snapshot builds of the next development version are published to GitHub Packages
     <artifactId>copilot-sdk</artifactId>
     <version>0.1.33-SNAPSHOT</version>
 </dependency>
-```
-
-GitHub Packages requires authentication even for public packages. Add your credentials to `~/.m2/settings.xml`:
-
-```xml
-<settings>
-    <servers>
-        <server>
-            <id>github</id>
-            <username>YOUR_GITHUB_USERNAME</username>
-            <password>YOUR_GITHUB_TOKEN</password><!-- needs read:packages scope -->
-        </server>
-    </servers>
-</settings>
 ```
 
 ### Gradle
