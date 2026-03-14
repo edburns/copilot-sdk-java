@@ -32,8 +32,12 @@
 
   <main class="container">
 
-    <div class="alert alert-warning">
-      ⚠️ <strong>Disclaimer:</strong> This SDK tracks the pre-GA GitHub Copilot SDKs for .NET and nodejs. This SDK may change in breaking ways. Use at your own risk.
+      <div class="alert alert-warning">
+          ⚠️ <strong>Disclaimer:</strong>This is the official Java SDK for GitHub Copilot. This repository treats the official .NET and nodejs SDKs for GitHub Copilot as reference implementations. These SDKS are all officially supported as GitHub open source projects. The Java implementation follows the backward compatibility guarantees offered by the reference implementations. As such this implementation may introduce breaking changes, according to the policy declared by the reference implementations. Use at your own risk.
+    </div>
+
+      <div class="alert alert-warning">
+          ⚠️ <strong>Artifact versioning plan:</strong>Releases of this implementation track releases of the reference implementation. For each release of the reference implementation, there may follow a corresponding relase of this implementation with the same number as the reference implementation. Release identifiers of the reference implementation are in the form `vMaj.Min.Micro`. For example v0.1.32. The corresponding maven version for the release will be `Maj.Min.Micro-java.N`, where `Maj`, `Min` and `Micro` are the corresponding numbers for the reference impementation release, and `N` is a monotonically increasing sequence number starting with 0 for each release. See the corrseponding architectural decision record for more information in the `docs/adr` directory of the source code.
     </div>
 
     <div class="alert alert-info">
