@@ -1,7 +1,5 @@
 # Session Hooks
 
-> ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
-
 Session hooks allow you to intercept and modify tool execution, user prompts, and session lifecycle events. Use hooks to implement custom logic like logging, security controls, or context injection.
 
 ---

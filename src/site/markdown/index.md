@@ -1,6 +1,6 @@
 # Copilot SDK for Java
 
-> ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
+> ⚠️ **Disclaimer:** This is the official Java SDK for GitHub Copilot. This repository treats the official .NET and nodejs SDKs for GitHub Copilot as reference implementations. These SDKS are all officially supported as GitHub open source projects. The Java implementation follows the backward compatibility guarantees offered by the reference implementations. As such this implementation may introduce breaking changes, according to the policy declared by the reference implementations. Use at your own risk.
 
 Welcome to the documentation for the **Copilot SDK for Java** — a Java SDK for programmatic control of GitHub Copilot CLI, enabling you to build AI-powered applications and agentic workflows.
 
@@ -21,8 +21,8 @@ Add the dependency to your project:
 
 ```xml
 <dependency>
-    <groupId>io.github.copilot-community-sdk</groupId>
-    <artifactId>copilot-sdk</artifactId>
+    <groupId>com.github</groupId>
+    <artifactId>copilot-sdk-java</artifactId>
     <version>${project.version}</version>
 </dependency>
 ```
@@ -30,7 +30,7 @@ Add the dependency to your project:
 **Gradle:**
 
 ```groovy
-implementation 'io.github.copilot-community-sdk:copilot-sdk:${project.version}'
+implementation 'com.github:copilot-sdk-java:${project.version}'
 ```
 
 ### Quick Example
@@ -83,7 +83,7 @@ You can quickly try the SDK without setting up a full project using [JBang](http
 
 # Create a simple script
 cat > hello-copilot.java << 'EOF'
-//DEPS io.github.copilot-community-sdk:copilot-sdk:${project.version}
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -112,6 +112,6 @@ jbang hello-copilot.java
 
 ## Source Code
 
-- [GitHub Repository](https://github.com/copilot-community-sdk/copilot-sdk-java)
-- [Issue Tracker](https://github.com/copilot-community-sdk/copilot-sdk-java/issues)
-- [Contributing Guide](https://github.com/copilot-community-sdk/copilot-sdk-java/blob/main/CONTRIBUTING.md)
+- [GitHub Repository](https://github.com/github/copilot-sdk-java)
+- [Issue Tracker](https://github.com/github/copilot-sdk-java/issues)
+- [Contributing Guide](https://github.com/github/copilot-sdk-java/blob/main/CONTRIBUTING.md)

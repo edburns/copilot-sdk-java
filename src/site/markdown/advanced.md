@@ -1,7 +1,5 @@
 # Advanced Usage
 
-> ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
-
 This guide covers advanced scenarios for extending and customizing your Copilot integration.
 
 ## Table of Contents
