@@ -38,7 +38,7 @@ Add the dependency to your `pom.xml`:
 ```xml
 <dependency>
     <groupId>com.github</groupId>
-    <artifactId>copilot-sdk</artifactId>
+    <artifactId>copilot-sdk-java</artifactId>
     <version>${project.version}</version>
 </dependency>
 ```
@@ -48,7 +48,7 @@ Add the dependency to your `pom.xml`:
 Add the dependency to your `build.gradle`:
 
 ```groovy
-implementation 'com.github:copilot-sdk:${project.version}'
+implementation 'com.github:copilot-sdk-java:${project.version}'
 ```
 
 ### JBang (Quick Start)
