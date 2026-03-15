@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.github.copilot.sdk.json.CopilotClientOptions;
+import com.github.copilot.sdk.json.TelemetryConfig;
 
 /**
  * Manages the lifecycle of the Copilot CLI server process.
@@ -108,6 +109,28 @@ final class CliServerManager {
         // Set auth token in environment if provided
         if (options.getGitHubToken() != null && !options.getGitHubToken().isEmpty()) {
             pb.environment().put("COPILOT_SDK_AUTH_TOKEN", options.getGitHubToken());
+        }
+
+        // Set telemetry environment variables if configured
+        TelemetryConfig telemetry = options.getTelemetry();
+        if (telemetry != null) {
+            pb.environment().put("COPILOT_OTEL_ENABLED", "true");
+            if (telemetry.getOtlpEndpoint() != null) {
+                pb.environment().put("OTEL_EXPORTER_OTLP_ENDPOINT", telemetry.getOtlpEndpoint());
+            }
+            if (telemetry.getFilePath() != null) {
+                pb.environment().put("COPILOT_OTEL_FILE_EXPORTER_PATH", telemetry.getFilePath());
+            }
+            if (telemetry.getExporterType() != null) {
+                pb.environment().put("COPILOT_OTEL_EXPORTER_TYPE", telemetry.getExporterType());
+            }
+            if (telemetry.getSourceName() != null) {
+                pb.environment().put("COPILOT_OTEL_SOURCE_NAME", telemetry.getSourceName());
+            }
+            if (telemetry.getCaptureContent() != null) {
+                pb.environment().put("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT",
+                        telemetry.getCaptureContent() ? "true" : "false");
+            }
         }
 
         Process process = pb.start();

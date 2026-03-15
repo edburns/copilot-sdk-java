@@ -179,7 +179,7 @@ public class SessionEventHandlingTest {
         });
 
         SessionStartEvent startEvent = createSessionStartEvent();
-        startEvent.setData(new SessionStartEvent.SessionStartData("my-session-123", 0, null, null, null, null));
+        startEvent.setData(new SessionStartEvent.SessionStartData("my-session-123", 0, null, null, null, null, null));
         dispatchEvent(startEvent);
 
         AssistantMessageEvent msgEvent = createAssistantMessageEvent("Test content");
@@ -384,8 +384,8 @@ public class SessionEventHandlingTest {
     // ====================================================================
 
     @Test
-    void testDefaultPolicyPropagatesAndLogs() {
-        // Default policy is PROPAGATE_AND_LOG_ERRORS — stops dispatch on first error
+    void testDefaultPolicySuppressesAndLogs() {
+        // Default policy is SUPPRESS_AND_LOG_ERRORS — continues dispatch after errors
         var handler1Called = new AtomicInteger(0);
         var handler2Called = new AtomicInteger(0);
 
@@ -394,7 +394,7 @@ public class SessionEventHandlingTest {
         sessionLogger.setLevel(Level.OFF);
 
         try {
-            // Both handlers throw — with PROPAGATE only one should execute
+            // Both handlers throw — with SUPPRESS both should execute
             session.on(AssistantMessageEvent.class, msg -> {
                 handler1Called.incrementAndGet();
                 throw new RuntimeException("boom 1");
@@ -407,9 +407,9 @@ public class SessionEventHandlingTest {
 
             assertDoesNotThrow(() -> dispatchEvent(createAssistantMessageEvent("Test")));
 
-            // Only one handler should execute (default PROPAGATE_AND_LOG_ERRORS policy)
+            // Both handlers should execute (default SUPPRESS_AND_LOG_ERRORS policy)
             int totalCalls = handler1Called.get() + handler2Called.get();
-            assertEquals(1, totalCalls, "Only one handler should execute with default PROPAGATE_AND_LOG_ERRORS policy");
+            assertEquals(2, totalCalls, "Both handlers should execute with default SUPPRESS_AND_LOG_ERRORS policy");
         } finally {
             sessionLogger.setLevel(originalLevel);
         }
@@ -582,7 +582,7 @@ public class SessionEventHandlingTest {
     // ====================================================================
 
     @Test
-    void testDefaultPolicyPropagatesOnError() {
+    void testDefaultPolicySuppressesOnError() {
         var handler1Called = new AtomicInteger(0);
         var handler2Called = new AtomicInteger(0);
 
@@ -595,7 +595,7 @@ public class SessionEventHandlingTest {
                 // just consume
             });
 
-            // Both handlers throw — with PROPAGATE only one should execute
+            // Both handlers throw — with SUPPRESS both should execute
             session.on(AssistantMessageEvent.class, msg -> {
                 handler1Called.incrementAndGet();
                 throw new RuntimeException("error 1");
@@ -608,9 +608,9 @@ public class SessionEventHandlingTest {
 
             dispatchEvent(createAssistantMessageEvent("Test"));
 
-            // Default is PROPAGATE_AND_LOG_ERRORS — only one handler runs
+            // Default is SUPPRESS_AND_LOG_ERRORS — both handlers run
             int totalCalls = handler1Called.get() + handler2Called.get();
-            assertEquals(1, totalCalls, "Only one handler should execute with default PROPAGATE_AND_LOG_ERRORS policy");
+            assertEquals(2, totalCalls, "Both handlers should execute with default SUPPRESS_AND_LOG_ERRORS policy");
         } finally {
             sessionLogger.setLevel(originalLevel);
         }
@@ -855,7 +855,7 @@ public class SessionEventHandlingTest {
 
     private SessionStartEvent createSessionStartEvent(String sessionId) {
         var event = new SessionStartEvent();
-        var data = new SessionStartEvent.SessionStartData(sessionId, 0, null, null, null, null);
+        var data = new SessionStartEvent.SessionStartData(sessionId, 0, null, null, null, null, null);
         event.setData(data);
         return event;
     }

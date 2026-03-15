@@ -360,4 +360,52 @@ public class ToolsTest {
             session.close();
         }
     }
+
+    /**
+     * Verifies that a tool created with {@code skipPermission=true} is invoked
+     * without triggering a permission request.
+     *
+     * @see Snapshot: tools/skippermission_sent_in_tool_definition
+     */
+    @Test
+    void testSkipPermissionSentInToolDefinition() throws Exception {
+        ctx.configureForTest("tools", "skippermission_sent_in_tool_definition");
+
+        var parameters = new HashMap<String, Object>();
+        var properties = new HashMap<String, Object>();
+        properties.put("id", Map.of("type", "string", "description", "Lookup ID"));
+        parameters.put("type", "object");
+        parameters.put("properties", properties);
+        parameters.put("required", List.of("id"));
+
+        boolean[] didRunPermissionRequest = {false};
+
+        ToolDefinition safeLookup = ToolDefinition.createWithSkipPermission("safe_lookup",
+                "A tool that skips permission", parameters, (invocation) -> {
+                    Map<String, Object> args = invocation.getArguments();
+                    String id = (String) args.get("id");
+                    return CompletableFuture.completedFuture("RESULT: " + id);
+                });
+
+        try (CopilotClient client = ctx.createClient()) {
+            CopilotSession session = client.createSession(
+                    new SessionConfig().setTools(List.of(safeLookup)).setOnPermissionRequest((request, invocation) -> {
+                        didRunPermissionRequest[0] = true;
+                        var result = new PermissionRequestResult();
+                        result.setKind(com.github.copilot.sdk.json.PermissionRequestResultKind.NO_RESULT);
+                        return CompletableFuture.completedFuture(result);
+                    })).get();
+
+            AssistantMessageEvent response = session
+                    .sendAndWait(new MessageOptions().setPrompt("Use safe_lookup to look up 'test123'"))
+                    .get(60, TimeUnit.SECONDS);
+
+            assertNotNull(response);
+            assertTrue(response.getData().content().contains("RESULT"),
+                    "Response should contain RESULT: " + response.getData().content());
+            assertFalse(didRunPermissionRequest[0], "Permission handler should not be called for skip-permission tool");
+
+            session.close();
+        }
+    }
 }

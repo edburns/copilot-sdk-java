@@ -51,6 +51,14 @@ public final class PermissionRequestResultKind {
     public static final PermissionRequestResultKind DENIED_INTERACTIVELY_BY_USER = new PermissionRequestResultKind(
             "denied-interactively-by-user");
 
+    /**
+     * Leave the pending permission request unanswered (for extensions that do not
+     * handle a particular permission).
+     *
+     * @since 1.1.0
+     */
+    public static final PermissionRequestResultKind NO_RESULT = new PermissionRequestResultKind("no-result");
+
     private final String value;
 
     /**

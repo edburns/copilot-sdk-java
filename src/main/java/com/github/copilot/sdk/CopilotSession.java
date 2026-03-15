@@ -119,7 +119,7 @@ public final class CopilotSession implements AutoCloseable {
     private final AtomicReference<UserInputHandler> userInputHandler = new AtomicReference<>();
     private final AtomicReference<SessionHooks> hooksHandler = new AtomicReference<>();
     private volatile EventErrorHandler eventErrorHandler;
-    private volatile EventErrorPolicy eventErrorPolicy = EventErrorPolicy.PROPAGATE_AND_LOG_ERRORS;
+    private volatile EventErrorPolicy eventErrorPolicy = EventErrorPolicy.SUPPRESS_AND_LOG_ERRORS;
 
     /** Tracks whether this session instance has been terminated via close(). */
     private volatile boolean isTerminated = false;
@@ -709,6 +709,9 @@ public final class CopilotSession implements AutoCloseable {
                 invocation.setSessionId(sessionId);
                 handler.handle(permissionRequest, invocation).thenAccept(result -> {
                     try {
+                        if (PermissionRequestResultKind.NO_RESULT.equals(result.getKind())) {
+                            return; // Leave the permission request unanswered (for extensions)
+                        }
                         rpc.invoke("session.permissions.handlePendingPermissionRequest",
                                 Map.of("sessionId", sessionId, "requestId", requestId, "result", result), Object.class);
                     } catch (Exception e) {
@@ -1000,7 +1003,36 @@ public final class CopilotSession implements AutoCloseable {
      * @since 1.0.11
      */
     public CompletableFuture<Void> setModel(String model) {
+        return setModel(model, null);
+    }
+
+    /**
+     * Changes the model and reasoning effort for this session.
+     * <p>
+     * The new model and reasoning effort take effect for the next message.
+     * Conversation history is preserved.
+     *
+     * <pre>{@code
+     * session.setModel("gpt-4.1", "high").get();
+     * }</pre>
+     *
+     * @param model
+     *            the model ID to switch to (e.g., {@code "gpt-4.1"})
+     * @param reasoningEffort
+     *            the reasoning effort level (e.g., {@code "low"}, {@code "medium"},
+     *            {@code "high"}, {@code "xhigh"}), or {@code null} to use the
+     *            default
+     * @return a future that completes when the model switch is acknowledged
+     * @throws IllegalStateException
+     *             if this session has been terminated
+     * @since 1.1.0
+     */
+    public CompletableFuture<Void> setModel(String model, String reasoningEffort) {
         ensureNotTerminated();
+        if (reasoningEffort != null) {
+            return rpc.invoke("session.model.switchTo",
+                    Map.of("sessionId", sessionId, "modelId", model, "reasoningEffort", reasoningEffort), Void.class);
+        }
         return rpc.invoke("session.model.switchTo", Map.of("sessionId", sessionId, "modelId", model), Void.class);
     }
 
