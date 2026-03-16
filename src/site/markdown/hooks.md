@@ -1,7 +1,5 @@
 # Session Hooks
 
-> ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
-
 Session hooks allow you to intercept and modify tool execution, user prompts, and session lifecycle events. Use hooks to implement custom logic like logging, security controls, or context injection.
 
 ---
@@ -339,7 +337,7 @@ public class HooksExample {
             ).get();
             
             var response = session.sendAndWait("List files in /tmp").get();
-            System.out.println(response.getData().getContent());
+            System.out.println(response.getData().content());
             
             session.close();
         }

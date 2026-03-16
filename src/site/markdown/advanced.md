@@ -1,7 +1,5 @@
 # Advanced Usage
 
-> ⚠️ **Disclaimer:** This is an **unofficial, community-driven SDK** and is **not supported or endorsed by GitHub**. Use at your own risk.
-
 This guide covers advanced scenarios for extending and customizing your Copilot integration.
 
 ## Table of Contents
@@ -339,8 +337,8 @@ session.on(SessionCompactionStartEvent.class, start -> {
 });
 session.on(SessionCompactionCompleteEvent.class, complete -> {
     var data = complete.getData();
-    System.out.println("Compaction completed - success: " + data.isSuccess() 
-        + ", tokens removed: " + data.getTokensRemoved());
+    System.out.println("Compaction completed - success: " + data.success() 
+        + ", tokens removed: " + data.tokensRemoved());
 });
 ```
 
@@ -856,7 +854,7 @@ session.on(AssistantMessageEvent.class, msg -> {
 
 session.on(AssistantMessageEvent.class, msg -> {
     // This handler executes normally despite the exception above
-    System.out.println(msg.getData().getContent());
+    System.out.println(msg.getData().content());
 });
 ```
 

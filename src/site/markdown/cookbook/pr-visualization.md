@@ -34,7 +34,7 @@ jbang PRVisualization.java github/copilot-sdk
 ## Full example: PRVisualization.java
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -101,11 +101,11 @@ public class PRVisualization {
 
             // Set up event handling
             session.on(AssistantMessageEvent.class, msg -> 
-                System.out.println("\n🤖 " + msg.getData().getContent() + "\n")
+                System.out.println("\n🤖 " + msg.getData().content() + "\n")
             );
 
             session.on(ToolExecutionStartEvent.class, evt -> 
-                System.out.println("  ⚙️  " + evt.getData().getToolName())
+                System.out.println("  ⚙️  " + evt.getData().toolName())
             );
 
             // Initial prompt - let Copilot figure out the details

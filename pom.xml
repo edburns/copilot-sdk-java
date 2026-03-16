@@ -5,14 +5,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.copilot-community-sdk</groupId>
-    <artifactId>copilot-sdk</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <groupId>com.github</groupId>
+    <artifactId>copilot-sdk-java</artifactId>
+    <version>0.1.33-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>GitHub Copilot Community SDK :: Java</name>
+    <name>GitHub Copilot SDK :: Java</name>
     <description>SDK for programmatic control of GitHub Copilot CLI</description>
-    <url>https://github.com/copilot-community-sdk/copilot-sdk-java</url>
+    <url>https://github.com/github/copilot-sdk-java</url>
 
     <licenses>
         <license>
@@ -23,18 +23,25 @@
 
     <developers>
         <developer>
-            <name>GitHub Copilot Community SDK</name>
-            <organization>GitHub Copilot Community SDK</organization>
-            <organizationUrl>https://github.com/copilot-community-sdk</organizationUrl>
+            <name>GitHub Copilot SDK</name>
+            <organization>GitHub Copilot SDK</organization>
+            <organizationUrl>https://github.com/github</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/copilot-community-sdk/copilot-sdk-java.git</connection>
-        <developerConnection>scm:git:https://github.com/copilot-community-sdk/copilot-sdk-java.git</developerConnection>
-        <url>https://github.com/copilot-community-sdk/copilot-sdk-java</url>
+        <connection>scm:git:https://github.com/github/copilot-sdk-java.git</connection>
+        <developerConnection>scm:git:https://github.com/github/copilot-sdk-java.git</developerConnection>
+        <url>https://github.com/github/copilot-sdk-java</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>central</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
@@ -107,6 +114,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>com.github.copilot.sdk.java</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <!-- Clone or update the official copilot-sdk repository for test resources, and copy image to site -->
             <plugin>
@@ -406,6 +425,16 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.10.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -563,16 +592,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.central</groupId>
-                        <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.10.0</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <publishingServerId>central</publishingServerId>
-                            <autoPublish>true</autoPublish>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

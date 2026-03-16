@@ -30,7 +30,7 @@ jbang MultipleSessions.java
 
 **Code:**
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -50,11 +50,11 @@ public class MultipleSessions {
 
             // Set up event handlers for each session
             session1.on(AssistantMessageEvent.class, msg -> 
-                System.out.println("Session 1: " + msg.getData().getContent()));
+                System.out.println("Session 1: " + msg.getData().content()));
             session2.on(AssistantMessageEvent.class, msg -> 
-                System.out.println("Session 2: " + msg.getData().getContent()));
+                System.out.println("Session 2: " + msg.getData().content()));
             session3.on(AssistantMessageEvent.class, msg -> 
-                System.out.println("Session 3: " + msg.getData().getContent()));
+                System.out.println("Session 3: " + msg.getData().content()));
 
             // Each session maintains its own conversation history
             session1.send(new MessageOptions()
@@ -121,7 +121,7 @@ try {
 ## Managing session lifecycle with CompletableFuture
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import java.util.concurrent.CompletableFuture;
 import java.util.List;
 

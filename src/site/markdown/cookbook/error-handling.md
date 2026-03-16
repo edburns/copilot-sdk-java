@@ -30,7 +30,7 @@ jbang BasicErrorHandling.java
 
 **Code:**
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -44,7 +44,7 @@ public class BasicErrorHandling {
                 new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL).setModel("gpt-5")).get();
 
             session.on(AssistantMessageEvent.class, msg -> {
-                System.out.println(msg.getData().getContent());
+                System.out.println(msg.getData().content());
             });
 
             session.sendAndWait(new MessageOptions()
@@ -62,7 +62,7 @@ public class BasicErrorHandling {
 ## Handling specific error types
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -99,7 +99,7 @@ public class SpecificErrorHandling {
 ## Timeout handling
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -110,7 +110,7 @@ public class TimeoutHandling {
     public static void sendWithTimeout(CopilotSession session) {
         try {
             session.on(AssistantMessageEvent.class, msg -> {
-                System.out.println(msg.getData().getContent());
+                System.out.println(msg.getData().content());
             });
 
             // Wait up to 30 seconds for response
@@ -130,7 +130,7 @@ public class TimeoutHandling {
 ## Aborting a request
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -163,7 +163,7 @@ public class AbortRequest {
 ## Graceful shutdown
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -195,7 +195,7 @@ public class GracefulShutdown {
 ## Try-with-resources pattern
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -209,7 +209,7 @@ public class TryWithResources {
                     new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL).setModel("gpt-5")).get()) {
 
                 session.on(AssistantMessageEvent.class, msg -> {
-                    System.out.println(msg.getData().getContent());
+                    System.out.println(msg.getData().content());
                 });
 
                 session.sendAndWait(new MessageOptions()
@@ -225,7 +225,7 @@ public class TryWithResources {
 ## Handling tool errors
 
 ```java
-//DEPS io.github.copilot-community-sdk:copilot-sdk:1.0.9
+//DEPS com.github:copilot-sdk-java:${project.version}
 import com.github.copilot.sdk.*;
 import com.github.copilot.sdk.events.*;
 import com.github.copilot.sdk.json.*;
@@ -254,7 +254,7 @@ public class ToolErrorHandling {
                 new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL).setTools(List.of(errorTool))).get();
 
             session.on(AssistantMessageEvent.class, msg -> {
-                System.out.println(msg.getData().getContent());
+                System.out.println(msg.getData().content());
             });
 
             // Session continues even when tool fails
