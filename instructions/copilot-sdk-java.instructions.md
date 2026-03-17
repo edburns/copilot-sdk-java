@@ -18,16 +18,16 @@ name: 'GitHub Copilot SDK Java Instructions'
 
 ```xml
 <dependency>
-    <groupId>com.github.copilot</groupId>
+    <groupId>com.github</groupId>
     <artifactId>copilot-sdk-java</artifactId>
-    <version>LATEST</version>
+    <version>${copilot-sdk-java.version}</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-implementation 'com.github.copilot:copilot-sdk-java:LATEST'
+implementation "com.github:copilot-sdk-java:${copilotSdkJavaVersion}"
 ```
 
 ## Client Initialization
