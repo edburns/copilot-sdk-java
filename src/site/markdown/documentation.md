@@ -1,6 +1,6 @@
-# Copilot SDK for Java - Documentation
+# GitHub Copilot SDK for Java - Documentation
 
-This guide covers common use cases for the Copilot SDK for Java. For complete API details, see the [Javadoc](apidocs/index.html).
+This guide covers common use cases for the GitHub Copilot SDK for Java. For complete API details, see the [Javadoc](apidocs/index.html).
 
 ## Table of Contents
 

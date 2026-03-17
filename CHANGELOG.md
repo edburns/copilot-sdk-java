@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Copilot SDK for Java will be documented in this file.
+All notable changes to the GitHub Copilot SDK for Java will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
@@ -414,7 +414,7 @@ New types: `GetForegroundSessionResponse`, `SetForegroundSessionResponse`
 
 ### Added
 
-- Initial release of the Copilot SDK for Java
+- Initial release of the GitHub Copilot SDK for Java
 - Core classes: `CopilotClient`, `CopilotSession`, `JsonRpcClient`
 - Session configuration with `SessionConfig`
 - Custom tools with `ToolDefinition` and `ToolHandler`

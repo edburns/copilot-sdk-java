@@ -1,6 +1,6 @@
 !# Build Your First Copilot-Powered App
 
-In this tutorial, you'll use the Copilot SDK for Java to build a command-line assistant. You'll start with the basics, add streaming responses, then add custom tools - giving Copilot the ability to call your code.
+In this tutorial, you'll use the GitHub Copilot SDK for Java to build a command-line assistant. You'll start with the basics, add streaming responses, then add custom tools - giving Copilot the ability to call your code.
 
 **What you'll build:**
 

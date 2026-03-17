@@ -1,4 +1,4 @@
-# Copilot SDK for Java
+# GitHub Copilot SDK for Java
 
 [![Build](https://github.com/github/copilot-sdk-java/actions/workflows/build-test.yml/badge.svg)](https://github.com/github/copilot-sdk-java/actions/workflows/build-test.yml)
 [![Site](https://github.com/github/copilot-sdk-java/actions/workflows/deploy-site.yml/badge.svg)](https://github.com/github/copilot-sdk-java/actions/workflows/deploy-site.yml)

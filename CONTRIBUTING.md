@@ -5,7 +5,7 @@
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your help is essential for keeping it great.
 
-This repository contains the **Copilot SDK for Java**, the official Java variant of the official [GitHub Copilot SDK](https://github.com/github/copilot-sdk). For issues or features related to the upstream SDK, please contribute there instead.
+This repository contains the **GitHub Copilot SDK for Java**, the official Java variant of the official [GitHub Copilot SDK](https://github.com/github/copilot-sdk). For issues or features related to the upstream SDK, please contribute there instead.
 
 Contributions to this project are [released](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license) to the public under the [project's open source license](LICENSE).
 
