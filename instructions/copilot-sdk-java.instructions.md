@@ -204,29 +204,22 @@ Use pattern matching (Java 17+) for event handling:
 
 ```java
 session.on(event -> {
-    switch (event) {
-        case UserMessageEvent userMsg ->
-            // Handle user message
-            {}
-        case AssistantMessageEvent assistantMsg ->
-            System.out.println(assistantMsg.getData().content());
-        case AssistantMessageDeltaEvent delta ->
-            System.out.print(delta.getData().deltaContent());
-        case ToolExecutionStartEvent toolStart ->
-            // Tool execution started
-            {}
-        case ToolExecutionCompleteEvent toolComplete ->
-            // Tool execution completed
-            {}
-        case SessionStartEvent start ->
-            // Session started
-            {}
-        case SessionIdleEvent idle ->
-            // Session is idle (processing complete)
-            {}
-        case SessionErrorEvent error ->
-            System.err.println("Error: " + error.getData().message());
-        default -> { }
+    if (event instanceof UserMessageEvent userMsg) {
+        // Handle user message
+    } else if (event instanceof AssistantMessageEvent assistantMsg) {
+        System.out.println(assistantMsg.getData().content());
+    } else if (event instanceof AssistantMessageDeltaEvent delta) {
+        System.out.print(delta.getData().deltaContent());
+    } else if (event instanceof ToolExecutionStartEvent toolStart) {
+        // Tool execution started
+    } else if (event instanceof ToolExecutionCompleteEvent toolComplete) {
+        // Tool execution completed
+    } else if (event instanceof SessionStartEvent start) {
+        // Session started
+    } else if (event instanceof SessionIdleEvent idle) {
+        // Session is idle (processing complete)
+    } else if (event instanceof SessionErrorEvent error) {
+        System.err.println("Error: " + error.getData().message());
     }
 });
 ```
