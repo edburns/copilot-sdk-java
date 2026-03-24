@@ -8,7 +8,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-> **Upstream sync:** [`github/copilot-sdk@062b61c`](https://github.com/github/copilot-sdk/commit/062b61c8aa63b9b5d45fa1d7b01723e6660ffa83)
+> **Upstream sync:** [`github/copilot-sdk@4088739`](https://github.com/github/copilot-sdk/commit/40887393a9e687dacc141a645799441b0313ff15)
+
+### Added
+
+- `UnknownSessionEvent` — forward-compatible placeholder for event types not yet known to the SDK; unknown events are now dispatched to handlers instead of being silently dropped (upstream: [`d82fd62`](https://github.com/github/copilot-sdk/commit/d82fd62))
+- `PermissionRequestResultKind.NO_RESULT` — new constant that signals the handler intentionally abstains from answering a permission request, leaving it unanswered for another client (upstream: [`df59a0e`](https://github.com/github/copilot-sdk/commit/df59a0e))
+- `ToolDefinition.skipPermission` field and `ToolDefinition.createSkipPermission()` factory — marks a tool to skip the permission prompt (upstream: [`10c4d02`](https://github.com/github/copilot-sdk/commit/10c4d02))
+- `SystemMessageMode.CUSTOMIZE` — new enum value for fine-grained system prompt customization (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `SectionOverrideAction` enum — specifies the operation on a system prompt section (replace, remove, append, prepend, transform) (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `SectionOverride` class — describes how one section of the system prompt should be modified, with optional transform callback (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `SystemPromptSections` constants — well-known section identifier strings for use with CUSTOMIZE mode (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `SystemMessageConfig.setSections(Map<String,SectionOverride>)` — section-level overrides for CUSTOMIZE mode (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `systemMessage.transform` RPC handler — the SDK now registers a handler that invokes transform callbacks registered in the session config (upstream: [`005b780`](https://github.com/github/copilot-sdk/commit/005b780))
+- `CopilotSession.setModel(String, String)` — new overload that accepts an optional reasoning effort level (upstream: [`ea90f07`](https://github.com/github/copilot-sdk/commit/ea90f07))
+- `CopilotSession.log(String, String, Boolean, String)` — new overload with an optional `url` parameter (minor addition)
+- `BlobAttachment` class — inline base64-encoded binary attachment for messages (e.g., images) (upstream: [`698b259`](https://github.com/github/copilot-sdk/commit/698b259))
+- `TelemetryConfig` class — OpenTelemetry configuration for the CLI server; set on `CopilotClientOptions.setTelemetry()` (upstream: [`f2d21a0`](https://github.com/github/copilot-sdk/commit/f2d21a0))
+- `CopilotClientOptions.setTelemetry(TelemetryConfig)` — enables OpenTelemetry instrumentation in the CLI server (upstream: [`f2d21a0`](https://github.com/github/copilot-sdk/commit/f2d21a0))
+
+### Changed
+
+- `MessageOptions.setAttachments(List<?>)` — parameter type widened from `List<Attachment>` to `List<?>` to support both `Attachment` and `BlobAttachment` in the same list
+- `SendMessageRequest.setAttachments(List<Object>)` — matching change for the internal request type
+
+### Deprecated
+
+- `CopilotClientOptions.setAutoRestart(boolean)` — this option has no effect and will be removed in a future release
 
 ## [0.1.32-java.0] - 2026-03-17
 
