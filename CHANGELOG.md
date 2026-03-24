@@ -24,13 +24,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `CopilotSession.setModel(String, String)` — new overload that accepts an optional reasoning effort level (upstream: [`ea90f07`](https://github.com/github/copilot-sdk/commit/ea90f07))
 - `CopilotSession.log(String, String, Boolean, String)` — new overload with an optional `url` parameter (minor addition)
 - `BlobAttachment` class — inline base64-encoded binary attachment for messages (e.g., images) (upstream: [`698b259`](https://github.com/github/copilot-sdk/commit/698b259))
+- `MessageAttachment` sealed interface — type-safe base for all attachment types (`Attachment`, `BlobAttachment`), with Jackson polymorphic serialization support
 - `TelemetryConfig` class — OpenTelemetry configuration for the CLI server; set on `CopilotClientOptions.setTelemetry()` (upstream: [`f2d21a0`](https://github.com/github/copilot-sdk/commit/f2d21a0))
 - `CopilotClientOptions.setTelemetry(TelemetryConfig)` — enables OpenTelemetry instrumentation in the CLI server (upstream: [`f2d21a0`](https://github.com/github/copilot-sdk/commit/f2d21a0))
 
 ### Changed
 
-- `MessageOptions.setAttachments(List<?>)` — parameter type widened from `List<Attachment>` to `List<?>` to support both `Attachment` and `BlobAttachment` in the same list
-- `SendMessageRequest.setAttachments(List<Object>)` — matching change for the internal request type
+- `Attachment` record now implements `MessageAttachment` sealed interface
+- `BlobAttachment` class now implements `MessageAttachment` sealed interface and is `final`
+- `MessageOptions.setAttachments(List<? extends MessageAttachment>)` — parameter type changed from `List<Attachment>` to `List<? extends MessageAttachment>` to support both `Attachment` and `BlobAttachment` in the same list with full compile-time safety
+- `SendMessageRequest.setAttachments(List<MessageAttachment>)` — matching change for the internal request type
 
 ### Deprecated
 

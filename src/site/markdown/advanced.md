@@ -315,6 +315,22 @@ session.send(new MessageOptions()
 
 See [BlobAttachment](apidocs/com/github/copilot/sdk/json/BlobAttachment.html) Javadoc for details.
 
+Both `Attachment` and `BlobAttachment` implement the sealed `MessageAttachment` interface.
+For a mixed list with both types, use an explicit type hint:
+
+```java
+session.send(new MessageOptions()
+    .setPrompt("Analyze these")
+    .setAttachments(List.<MessageAttachment>of(
+        new Attachment("file", "/path/to/file.java", "Source"),
+        new BlobAttachment()
+            .setData(base64Data)
+            .setMimeType("image/png")
+            .setDisplayName("screenshot.png")
+    ))
+).get();
+```
+
 ---
 
 ## Bring Your Own Key (BYOK)
