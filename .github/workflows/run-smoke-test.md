@@ -14,6 +14,7 @@ network:
   allowed:
     - defaults
     - github
+    - java
 
 tools:
   github:
@@ -32,6 +33,34 @@ This workflow builds the copilot-sdk-java SDK locally and runs the smoke test pr
 ## Instructions
 
 You are running inside the copilot-sdk-java repository.
+
+### Step 0 — Install JDK 17 and Maven
+
+Before anything else, install the required build tools:
+
+1. **Microsoft Build of OpenJDK 17** (latest stable). Download and install from the official Microsoft packages:
+   ```bash
+   wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
+   sudo dpkg -i /tmp/packages-microsoft-prod.deb
+   sudo apt-get update
+   sudo apt-get install -y msopenjdk-17
+   export JAVA_HOME=/usr/lib/jvm/msopenjdk-17-amd64
+   export PATH="$JAVA_HOME/bin:$PATH"
+   ```
+
+2. **Maven 3.9.14**:
+   ```bash
+   wget -q https://archive.apache.org/dist/maven/maven-3/3.9.14/binaries/apache-maven-3.9.14-bin.tar.gz -O /tmp/maven.tar.gz
+   sudo tar -xzf /tmp/maven.tar.gz -C /opt
+   export PATH="/opt/apache-maven-3.9.14/bin:$PATH"
+   ```
+
+3. **Verify** both are working:
+   ```bash
+   java -version    # Must show "Microsoft" and version 17
+   mvn --version    # Must show 3.9.14
+   ```
+   If either installation fails, report failure and stop.
 
 ### Step 1 — Build the SDK locally
 
