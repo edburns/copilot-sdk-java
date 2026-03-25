@@ -83,7 +83,7 @@ Follow every step in the prompt: create the `smoke-test/` directory, create `pom
 ### Step 3 — Report result
 
 - **Success** (exit code 0): use the `noop` tool with a message like "Smoke test passed — Quick Start code compiled and ran successfully against SDK version X.Y.Z-SNAPSHOT".
-- **Failure** (SDK build failure, smoke test build failure, smoke test run failure, or non-zero exit code): use the `missing_data` tool with `reason` set to a description of what failed and `context` containing the relevant error output. Do NOT call `noop` on failure. Examples:
-  - SDK build fails: `missing_data(reason="SDK build failed with mvn -DskipTests clean install", context="<error output>")`
-  - Smoke test compilation fails: `missing_data(reason="Smoke test Maven build failed", context="<error output>")`
-  - Smoke test run returns non-zero: `missing_data(reason="Smoke test exited with code N", context="<program output>")`
+- **Failure** (SDK build failure, smoke test build failure, smoke test run failure, or non-zero exit code): use the `missing_data` tool with `reason` set to a description of what failed and `context` containing a brief summary or the most relevant one or two error lines (keep this under ~200 characters). Do NOT call `noop` on failure. Do not paste full logs into `context`. Examples:
+  - SDK build fails: `missing_data(reason="SDK build failed with mvn -DskipTests clean install", context="[ERROR] Failed to execute goal ...")`
+  - Smoke test compilation fails: `missing_data(reason="Smoke test Maven build failed", context="[ERROR] Compilation failure: ...")`
+  - Smoke test run returns non-zero: `missing_data(reason="Smoke test exited with code N", context="Main class threw <ExceptionType>: <message>")`
