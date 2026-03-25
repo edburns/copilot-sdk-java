@@ -24,8 +24,15 @@ permissions:
 
 jobs:
 
+  smoke-test:
+    name: "Smoke Test"
+    uses: ./.github/workflows/run-smoke-test.yml
+    secrets:
+      COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+
   java-sdk:
     name: "Java SDK Tests"
+    needs: smoke-test
 
     runs-on: ubuntu-latest
     defaults:
@@ -39,7 +46,7 @@ jobs:
       - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "17"
-          distribution: "temurin"
+          distribution: "microsoft"
           cache: "maven"
 
       - name: Run spotless check
