@@ -36,11 +36,11 @@ jobs:
 
                   Execute the prompt at `src/test/prompts/PROMPT-smoke-test.md` with the following critical overrides:
 
-                  **Critical override — offline build:** The goal of this workflow is to validate the SDK snapshot that was just built and installed locally, not any newer SNAPSHOT that might exist in a remote repository. To ensure Maven does not download a newer timestamped SNAPSHOT, you must run the smoke-test Maven build in offline mode and without `-U`, so that it uses the locally installed artifact. Use `mvn -o clean package` instead of `mvn -U clean package`.
+                  **Critical override — disable SNAPSHOT updates (but allow downloads):** The goal of this workflow is to validate the SDK SNAPSHOT that was just built and installed locally, not any newer SNAPSHOT that might exist in a remote repository. To ensure Maven does not download a newer timestamped SNAPSHOT of the SDK while still allowing it to download any missing plugins or dependencies, you must run the smoke-test Maven build without `-U` and with `--no-snapshot-updates`, so that it uses the locally installed SDK artifact. Use `mvn --no-snapshot-updates clean package` instead of `mvn -U clean package` or `mvn -o clean package`.
 
-                  **Critical override — do NOT run the jar:** Stop after the `mvn -o clean package` build succeeds. Do NOT execute Step 4 (java -jar) or Step 5 (verify exit code) from the prompt. The workflow will run the jar in a separate deterministic step to guarantee the exit code propagates correctly.
+                  **Critical override — do NOT run the jar:** Stop after the `mvn --no-snapshot-updates clean package` build succeeds. Do NOT execute Step 4 (java -jar) or Step 5 (verify exit code) from the prompt. The workflow will run the jar in a separate deterministic step to guarantee the exit code propagates correctly.
 
-                  Follow steps 1-3 only: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, and build with `mvn -o clean package` (offline and without `-U`).
+                  Follow steps 1-3 only: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, and build with `mvn --no-snapshot-updates clean package` (no SNAPSHOT updates and without `-U`).
 
                   If any step fails, exit with a non-zero exit code. Do not silently fix errors.
                   PROMPT_EOF
