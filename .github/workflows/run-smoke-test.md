@@ -74,11 +74,11 @@ This must complete with `BUILD SUCCESS`. If it fails, report failure and stop.
 
 ### Step 2 — Execute the smoke test prompt
 
-Read the file `src/test/prompts/PROMPT-smoke-test.md` and follow its instructions exactly.
+Read the file `src/test/prompts/PROMPT-smoke-test.md` and follow its instructions, with the override described below.
 
-**Critical override:** Because the SDK was already built and installed into the local Maven repository in Step 1, the snapshot artifact is already available locally. Maven resolves local repository artifacts before remote ones, so the snapshot repository configuration in the prompt will still work correctly — it will just find the artifact locally instead of downloading it.
+**Critical override:** The goal of this workflow is to validate the SDK snapshot you just built and installed locally in Step 1, not any newer SNAPSHOT that might exist in a remote repository. To ensure Maven does not download a newer timestamped SNAPSHOT, you must run the smoke-test Maven build in offline mode and without `-U`, so that it uses the locally installed artifact.
 
-Follow every step in the prompt: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, build with `mvn -U clean package`, run with `java -jar`, and verify the exit code.
+Follow every step in the prompt: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, then **when the prompt instructs you to run `mvn -U clean package`, instead run** `mvn -o clean package` (no `-U`), run with `java -jar`, and verify the exit code.
 
 ### Step 3 — Report result
 
