@@ -49,6 +49,8 @@
         <!-- Directory where the copilot-sdk repo will be cloned for tests -->
         <copilot.sdk.clone.dir>${project.build.directory}/copilot-sdk</copilot.sdk.clone.dir>
         <copilot.tests.dir>${copilot.sdk.clone.dir}/test</copilot.tests.dir>
+        <!-- Set to true (via -Pskip-test-harness) to skip git-clone + npm install of test harness -->
+        <skip.test.harness>false</skip.test.harness>
     </properties>
 
     <dependencies>
@@ -140,6 +142,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skip.test.harness}</skip>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <!-- Load the target commit from .lastmerge file -->
                                 <loadfile property="copilot.sdk.commit" srcFile="${project.basedir}/.lastmerge">
@@ -221,6 +224,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skip.test.harness}</skip>
                             <executable>npm</executable>
                             <workingDirectory>${copilot.sdk.clone.dir}/test/harness</workingDirectory>
                             <arguments>
@@ -533,6 +537,13 @@
     </reporting>
 
     <profiles>
+        <!-- Skip git-clone + npm install of the copilot-sdk test harness -->
+        <profile>
+            <id>skip-test-harness</id>
+            <properties>
+                <skip.test.harness>true</skip.test.harness>
+            </properties>
+        </profile>
         <!-- Debug profile for FINE logging during tests -->
         <profile>
             <id>debug</id>

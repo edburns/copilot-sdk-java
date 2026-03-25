@@ -23,7 +23,7 @@ jobs:
             - uses: ./.github/actions/setup-copilot
 
             - name: Build SDK and install to local repo
-              run: mvn -DskipTests clean install
+              run: mvn -DskipTests -Pskip-test-harness clean install
 
             - name: Create and run smoke test via Copilot CLI
               env:
