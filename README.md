@@ -66,9 +66,12 @@ implementation 'com.github:copilot-sdk-java:0.1.32-java.0'
 ## Quick Start
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.events.*;
-import com.github.copilot.sdk.json.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.events.AssistantMessageEvent;
+import com.github.copilot.sdk.events.SessionUsageInfoEvent;
+import com.github.copilot.sdk.json.MessageOptions;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.SessionConfig;
 import java.util.concurrent.CompletableFuture;
 
 public class CopilotSDK {
