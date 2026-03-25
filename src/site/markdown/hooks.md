@@ -284,8 +284,11 @@ var hooks = new SessionHooks()
 Combining multiple hooks for comprehensive session control:
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.json.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.PreToolUseHookOutput;
+import com.github.copilot.sdk.json.SessionConfig;
+import com.github.copilot.sdk.json.SessionHooks;
 import java.util.concurrent.CompletableFuture;
 
 public class HooksExample {

@@ -64,9 +64,10 @@ For the fastest way to try the SDK without setting up a project, use [JBang](htt
 Create a new file and add the following code. This is the simplest way to use the SDK.
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.events.*;
-import com.github.copilot.sdk.json.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.json.MessageOptions;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.SessionConfig;
 
 public class HelloCopilot {
     public static void main(String[] args) throws Exception {
@@ -108,9 +109,12 @@ Congratulations! You just built your first Copilot-powered app.
 Right now, you wait for the complete response before seeing anything. Let's make it interactive by streaming the response as it's generated.
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.events.*;
-import com.github.copilot.sdk.json.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.events.AssistantMessageDeltaEvent;
+import com.github.copilot.sdk.events.SessionIdleEvent;
+import com.github.copilot.sdk.json.MessageOptions;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.SessionConfig;
 import java.util.concurrent.CompletableFuture;
 
 public class StreamingExample {
@@ -152,11 +156,17 @@ Run the code again. You'll see the response appear word by word.
 Now for the powerful part. Let's give Copilot the ability to call your code by defining a custom tool. We'll create a simple weather lookup tool.
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.events.*;
-import com.github.copilot.sdk.json.*;
-import java.util.*;
-import java.util.concurrent.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.events.AssistantMessageDeltaEvent;
+import com.github.copilot.sdk.events.SessionIdleEvent;
+import com.github.copilot.sdk.json.MessageOptions;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.SessionConfig;
+import com.github.copilot.sdk.json.ToolDefinition;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class ToolExample {
     public static void main(String[] args) throws Exception {
@@ -228,12 +238,19 @@ Run it and you'll see Copilot call your tool to get weather data, then respond w
 Let's put it all together into a useful interactive assistant:
 
 ```java
-import com.github.copilot.sdk.*;
-import com.github.copilot.sdk.events.*;
-import com.github.copilot.sdk.json.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
+import com.github.copilot.sdk.CopilotClient;
+import com.github.copilot.sdk.events.AssistantMessageDeltaEvent;
+import com.github.copilot.sdk.events.SessionIdleEvent;
+import com.github.copilot.sdk.json.MessageOptions;
+import com.github.copilot.sdk.json.PermissionHandler;
+import com.github.copilot.sdk.json.SessionConfig;
+import com.github.copilot.sdk.json.ToolDefinition;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class WeatherAssistant {
     public static void main(String[] args) throws Exception {
