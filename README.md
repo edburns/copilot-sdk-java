@@ -72,7 +72,6 @@ import com.github.copilot.sdk.events.SessionUsageInfoEvent;
 import com.github.copilot.sdk.json.MessageOptions;
 import com.github.copilot.sdk.json.PermissionHandler;
 import com.github.copilot.sdk.json.SessionConfig;
-import java.util.concurrent.CompletableFuture;
 
 public class CopilotSDK {
     public static void main(String[] args) throws Exception {
