@@ -83,7 +83,7 @@ Read the file `src/test/prompts/PROMPT-smoke-test.md` and follow its instruction
 COPILOT_GITHUB_TOKEN="$COPILOT_GITHUB_TOKEN" java -jar ./target/copilot-sdk-smoketest-1.0-SNAPSHOT.jar
 ```
 
-Follow every step in the prompt: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, build with `mvn -U clean package`, run with `java -jar` (with `COPILOT_GITHUB_TOKEN` passed through), and verify the exit code.
+Follow every step in the prompt: create the `smoke-test/` directory, create `pom.xml` and the Java source file exactly as specified, build with `mvn -o clean package` (offline and without \`-U\`), run with `java -jar` (with `COPILOT_GITHUB_TOKEN` passed through), and verify the exit code.
 
 ### Step 3 — Report result
 
