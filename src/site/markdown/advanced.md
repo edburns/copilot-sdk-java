@@ -1093,6 +1093,143 @@ See [TelemetryConfig](apidocs/com/github/copilot/sdk/json/TelemetryConfig.html) 
 
 ---
 
+## Slash Commands
+
+Register custom slash commands that users can invoke from the CLI TUI with `/commandname`.
+
+### Registering Commands
+
+```java
+var config = new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+    .setCommands(List.of(
+        new CommandDefinition()
+            .setName("deploy")
+            .setDescription("Deploy the current branch")
+            .setHandler(context -> {
+                System.out.println("Deploying with args: " + context.getArgs());
+                // perform deployment ...
+                return CompletableFuture.completedFuture(null);
+            }),
+        new CommandDefinition()
+            .setName("rollback")
+            .setDescription("Roll back the last deployment")
+            .setHandler(context -> {
+                // perform rollback ...
+                return CompletableFuture.completedFuture(null);
+            })
+    ));
+
+try (CopilotClient client = new CopilotClient()) {
+    client.start().get();
+    var session = client.createSession(config).get();
+    // Users can now type /deploy or /rollback in the TUI
+}
+```
+
+Each `CommandDefinition` requires a `name` (without the leading `/`), an optional `description` shown in the TUI's command completion UI, and a `CommandHandler` that is invoked when the user executes the command.
+
+The `CommandContext` passed to the handler provides:
+- `getSessionId()` — the ID of the session where the command was invoked
+- `getCommand()` — the full command text (e.g., `/deploy production`)
+- `getCommandName()` — command name without the leading `/` (e.g., `deploy`)
+- `getArgs()` — the argument string after the command name (e.g., `production`)
+
+---
+
+## Elicitation (UI Dialogs)
+
+Elicitation allows your application to present structured UI dialogs to the user. There are two directions:
+
+1. **Incoming** — The server or an MCP tool requests input from the user via your `onElicitationRequest` handler.
+2. **Outgoing** — Your session-side code proactively requests input via `session.getUi()`.
+
+### Incoming Elicitation Handler
+
+Register a handler to receive elicitation requests from the server:
+
+```java
+var config = new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+    .setOnElicitationRequest(context -> {
+        System.out.println("Elicitation request: " + context.getMessage());
+        // Show the form to the user ...
+        var content = Map.of("confirmed", true);
+        return CompletableFuture.completedFuture(
+            new ElicitationResult()
+                .setAction(ElicitationResultAction.ACCEPT)
+                .setContent(content)
+        );
+    });
+```
+
+When `onElicitationRequest` is set, the SDK reports elicitation as a supported capability and the server will route elicitation requests to your handler.
+
+### Session Capabilities
+
+After `createSession` or `resumeSession`, check `session.getCapabilities()` to see what the host supports:
+
+```java
+var session = client.createSession(config).get();
+
+var caps = session.getCapabilities();
+if (caps.getUi() != null && Boolean.TRUE.equals(caps.getUi().getElicitation())) {
+    System.out.println("Elicitation is supported");
+}
+```
+
+Capabilities are updated in real time when a `capabilities.changed` event is received.
+
+### Outgoing Elicitation via `session.getUi()`
+
+If the host reports elicitation support, you can call the convenience methods on `session.getUi()`:
+
+```java
+var ui = session.getUi();
+
+// Boolean confirmation
+boolean confirmed = ui.confirm("Are you sure you want to proceed?").get();
+
+// Selection from options
+String choice = ui.select("Choose an environment", new String[]{"dev", "staging", "prod"}).get();
+
+// Text input
+String value = ui.input("Enter your name", null).get();
+
+// Custom schema
+var result = ui.elicitation(new ElicitationParams()
+    .setMessage("Enter deployment details")
+    .setRequestedSchema(new ElicitationSchema()
+        .setProperties(Map.of(
+            "branch", Map.of("type", "string"),
+            "environment", Map.of("type", "string", "enum", List.of("dev", "staging", "prod"))
+        ))
+        .setRequired(List.of("branch", "environment"))
+    )).get();
+```
+
+All `getUi()` methods throw `IllegalStateException` if the host does not support elicitation. Always check capabilities first.
+
+---
+
+## Getting Session Metadata by ID
+
+Retrieve metadata for a specific session without listing all sessions:
+
+```java
+SessionMetadata metadata = client.getSessionMetadata("session-123").get();
+if (metadata != null) {
+    System.out.println("Session: " + metadata.getSessionId());
+    System.out.println("Started: " + metadata.getStartTime());
+} else {
+    System.out.println("Session not found");
+}
+```
+
+This is more efficient than `listSessions()` when you already know the session ID, as it performs a direct O(1) lookup instead of scanning all sessions.
+
+---
+
 ## Next Steps
 
 - 📖 **[Documentation](documentation.html)** - Core concepts, events, streaming, models, tool filtering, reasoning effort
