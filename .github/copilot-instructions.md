@@ -104,7 +104,7 @@ When porting from .NET:
 - 4-space indentation (enforced by Spotless with Eclipse formatter)
 - Fluent setter pattern for configuration classes (e.g., `new SessionConfig().setModel("gpt-5").setTools(tools)`)
 - Public APIs require Javadoc (enforced by Checkstyle, except `json` and `events` packages)
-- Pre-commit hook runs `mvn spotless:check` - enable with: `git config core.hooksPath .githooks`
+- Pre-commit hook runs `mvn spotless:check` - Must be manually enabled with: `git config core.hooksPath .githooks`, except in the Copilot coding agent environment. This hook is explicitly enabled in the Copilot coding agent environment. See [copilot-setup-steps.yml](workflows/copilot-setup-steps.yml).
 
 ### Handler Pattern
 
