@@ -206,7 +206,7 @@ jobs:
                   
                   # Build the gh release command
                   GH_ARGS=("${CURRENT_TAG}")
-                  GH_ARGS+=("--title" "Copilot Java SDK ${VERSION}")
+                  GH_ARGS+=("--title" "GitHub Copilot SDK for Java ${VERSION}")
                   GH_ARGS+=("--notes" "${RELEASE_NOTES}")
                   GH_ARGS+=("--generate-notes")
                   
