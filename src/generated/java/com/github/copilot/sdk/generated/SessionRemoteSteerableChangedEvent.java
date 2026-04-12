@@ -1,0 +1,38 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *--------------------------------------------------------------------------------------------*/
+
+// AUTO-GENERATED FILE - DO NOT EDIT
+// Generated from: session-events.schema.json
+
+package com.github.copilot.sdk.generated;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.annotation.processing.Generated;
+
+/** The {@code session.remote_steerable_changed} session event. */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@javax.annotation.processing.Generated("copilot-sdk-codegen")
+public final class SessionRemoteSteerableChangedEvent extends SessionEvent {
+
+    @JsonProperty("data")
+    private SessionRemoteSteerableChangedEventData data;
+
+    public SessionRemoteSteerableChangedEventData getData() { return data; }
+    public void setData(SessionRemoteSteerableChangedEventData data) { this.data = data; }
+
+    /** Data payload for {@link SessionRemoteSteerableChangedEvent}. */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class SessionRemoteSteerableChangedEventData {
+
+        /** Whether this session now supports remote steering via Mission Control */
+        @JsonProperty("remoteSteerable")
+        private Boolean remoteSteerable;
+
+        public Boolean getRemoteSteerable() { return remoteSteerable; }
+        public void setRemoteSteerable(Boolean remoteSteerable) { this.remoteSteerable = remoteSteerable; }
+    }
+}
