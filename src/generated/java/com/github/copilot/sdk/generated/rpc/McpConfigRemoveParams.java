@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code mcp.config.remove} RPC method. */
+/**
+ * Request parameters for the {@code mcp.config.remove} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class McpConfigRemoveParams {
-
+public record McpConfigRemoveParams(
     /** Name of the MCP server to remove */
-    @JsonProperty("name")
-    private String name;
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    @JsonProperty("name") String name
+) {
 }

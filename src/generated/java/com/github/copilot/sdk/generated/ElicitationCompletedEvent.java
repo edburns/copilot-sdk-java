@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** The {@code elicitation.completed} session event. */
+/**
+ * The {@code elicitation.completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ElicitationCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "elicitation.completed"; }
 
     @JsonProperty("data")
     private ElicitationCompletedEventData data;
@@ -27,29 +34,14 @@ public final class ElicitationCompletedEvent extends SessionEvent {
     /** Data payload for {@link ElicitationCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ElicitationCompletedEventData {
-
+    public record ElicitationCompletedEventData(
         /** Request ID of the resolved elicitation request; clients should dismiss any UI for this request */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** The user action: "accept" (submitted form), "decline" (explicitly refused), or "cancel" (dismissed) */
-        @JsonProperty("action")
-        private ElicitationCompletedEventDataAction action;
-
+        @JsonProperty("action") ElicitationCompletedEventDataAction action,
         /** The submitted form data when action is 'accept'; keys match the requested schema fields */
-        @JsonProperty("content")
-        private Map<String, Object> content;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public ElicitationCompletedEventDataAction getAction() { return action; }
-        public void setAction(ElicitationCompletedEventDataAction action) { this.action = action; }
-
-        public Map<String, Object> getContent() { return content; }
-        public void setContent(Map<String, Object> content) { this.content = content; }
-
+        @JsonProperty("content") Map<String, Object> content
+    ) {
 
         /** The user action: "accept" (submitted form), "decline" (explicitly refused), or "cancel" (dismissed) */
         public enum ElicitationCompletedEventDataAction {
@@ -64,6 +56,13 @@ public final class ElicitationCompletedEvent extends SessionEvent {
             ElicitationCompletedEventDataAction(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static ElicitationCompletedEventDataAction fromValue(String value) {
+                for (ElicitationCompletedEventDataAction v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown ElicitationCompletedEventDataAction value: " + value);
+            }
         }
     }
 }

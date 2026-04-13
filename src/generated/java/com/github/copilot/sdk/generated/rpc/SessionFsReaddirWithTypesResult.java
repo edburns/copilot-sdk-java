@@ -13,38 +13,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code sessionFs.readdirWithTypes} RPC method. */
+/**
+ * Result for the {@code sessionFs.readdirWithTypes} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsReaddirWithTypesResult {
-
+public record SessionFsReaddirWithTypesResult(
     /** Directory entries with type information */
-    @JsonProperty("entries")
-    private List<SessionFsReaddirWithTypesResultEntriesItem> entries;
-
-    public List<SessionFsReaddirWithTypesResultEntriesItem> getEntries() { return entries; }
-    public void setEntries(List<SessionFsReaddirWithTypesResultEntriesItem> entries) { this.entries = entries; }
-
+    @JsonProperty("entries") List<SessionFsReaddirWithTypesResultEntriesItem> entries
+) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionFsReaddirWithTypesResultEntriesItem {
-
+    public record SessionFsReaddirWithTypesResultEntriesItem(
         /** Entry name */
-        @JsonProperty("name")
-        private String name;
-
+        @JsonProperty("name") String name,
         /** Entry type */
-        @JsonProperty("type")
-        private SessionFsReaddirWithTypesResultEntriesItemType type;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public SessionFsReaddirWithTypesResultEntriesItemType getType() { return type; }
-        public void setType(SessionFsReaddirWithTypesResultEntriesItemType type) { this.type = type; }
-
+        @JsonProperty("type") SessionFsReaddirWithTypesResultEntriesItemType type
+    ) {
 
         /** Entry type */
         public enum SessionFsReaddirWithTypesResultEntriesItemType {
@@ -57,6 +46,13 @@ public class SessionFsReaddirWithTypesResult {
             SessionFsReaddirWithTypesResultEntriesItemType(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SessionFsReaddirWithTypesResultEntriesItemType fromValue(String value) {
+                for (SessionFsReaddirWithTypesResultEntriesItemType v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SessionFsReaddirWithTypesResultEntriesItemType value: " + value);
+            }
         }
     }
 }

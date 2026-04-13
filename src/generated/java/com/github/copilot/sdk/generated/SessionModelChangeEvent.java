@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.model_change} session event. */
+/**
+ * The {@code session.model_change} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionModelChangeEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.model_change"; }
 
     @JsonProperty("data")
     private SessionModelChangeEventData data;
@@ -26,34 +33,15 @@ public final class SessionModelChangeEvent extends SessionEvent {
     /** Data payload for {@link SessionModelChangeEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionModelChangeEventData {
-
+    public record SessionModelChangeEventData(
         /** Model that was previously selected, if any */
-        @JsonProperty("previousModel")
-        private String previousModel;
-
+        @JsonProperty("previousModel") String previousModel,
         /** Newly selected model identifier */
-        @JsonProperty("newModel")
-        private String newModel;
-
+        @JsonProperty("newModel") String newModel,
         /** Reasoning effort level before the model change, if applicable */
-        @JsonProperty("previousReasoningEffort")
-        private String previousReasoningEffort;
-
+        @JsonProperty("previousReasoningEffort") String previousReasoningEffort,
         /** Reasoning effort level after the model change, if applicable */
-        @JsonProperty("reasoningEffort")
-        private String reasoningEffort;
-
-        public String getPreviousModel() { return previousModel; }
-        public void setPreviousModel(String previousModel) { this.previousModel = previousModel; }
-
-        public String getNewModel() { return newModel; }
-        public void setNewModel(String newModel) { this.newModel = newModel; }
-
-        public String getPreviousReasoningEffort() { return previousReasoningEffort; }
-        public void setPreviousReasoningEffort(String previousReasoningEffort) { this.previousReasoningEffort = previousReasoningEffort; }
-
-        public String getReasoningEffort() { return reasoningEffort; }
-        public void setReasoningEffort(String reasoningEffort) { this.reasoningEffort = reasoningEffort; }
+        @JsonProperty("reasoningEffort") String reasoningEffort
+    ) {
     }
 }

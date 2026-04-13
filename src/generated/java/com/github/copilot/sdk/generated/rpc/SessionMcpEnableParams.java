@@ -12,23 +12,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.mcp.enable} RPC method. */
+/**
+ * Request parameters for the {@code session.mcp.enable} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionMcpEnableParams {
-
+public record SessionMcpEnableParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Name of the MCP server to enable */
-    @JsonProperty("serverName")
-    private String serverName;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getServerName() { return serverName; }
-    public void setServerName(String serverName) { this.serverName = serverName; }
+    @JsonProperty("serverName") String serverName
+) {
 }

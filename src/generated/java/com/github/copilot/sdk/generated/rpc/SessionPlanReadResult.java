@@ -12,30 +12,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.plan.read} RPC method. */
+/**
+ * Result for the {@code session.plan.read} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionPlanReadResult {
-
+public record SessionPlanReadResult(
     /** Whether the plan file exists in the workspace */
-    @JsonProperty("exists")
-    private Boolean exists;
-
+    @JsonProperty("exists") Boolean exists,
     /** The content of the plan file, or null if it does not exist */
-    @JsonProperty("content")
-    private String content;
-
+    @JsonProperty("content") String content,
     /** Absolute file path of the plan file, or null if workspace is not enabled */
-    @JsonProperty("path")
-    private String path;
-
-    public Boolean getExists() { return exists; }
-    public void setExists(Boolean exists) { this.exists = exists; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public String getPath() { return path; }
-    public void setPath(String path) { this.path = path; }
+    @JsonProperty("path") String path
+) {
 }

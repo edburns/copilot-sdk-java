@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code subagent.selected} session event. */
+/**
+ * The {@code subagent.selected} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SubagentSelectedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "subagent.selected"; }
 
     @JsonProperty("data")
     private SubagentSelectedEventData data;
@@ -27,27 +34,13 @@ public final class SubagentSelectedEvent extends SessionEvent {
     /** Data payload for {@link SubagentSelectedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SubagentSelectedEventData {
-
+    public record SubagentSelectedEventData(
         /** Internal name of the selected custom agent */
-        @JsonProperty("agentName")
-        private String agentName;
-
+        @JsonProperty("agentName") String agentName,
         /** Human-readable display name of the selected custom agent */
-        @JsonProperty("agentDisplayName")
-        private String agentDisplayName;
-
+        @JsonProperty("agentDisplayName") String agentDisplayName,
         /** List of tool names available to this agent, or null for all tools */
-        @JsonProperty("tools")
-        private List<String> tools;
-
-        public String getAgentName() { return agentName; }
-        public void setAgentName(String agentName) { this.agentName = agentName; }
-
-        public String getAgentDisplayName() { return agentDisplayName; }
-        public void setAgentDisplayName(String agentDisplayName) { this.agentDisplayName = agentDisplayName; }
-
-        public List<String> getTools() { return tools; }
-        public void setTools(List<String> tools) { this.tools = tools; }
+        @JsonProperty("tools") List<String> tools
+    ) {
     }
 }

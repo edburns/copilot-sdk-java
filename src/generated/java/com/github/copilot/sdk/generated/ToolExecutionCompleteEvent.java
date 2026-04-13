@@ -14,10 +14,17 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** The {@code tool.execution_complete} session event. */
+/**
+ * The {@code tool.execution_complete} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ToolExecutionCompleteEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "tool.execution_complete"; }
 
     @JsonProperty("data")
     private ToolExecutionCompleteEventData data;
@@ -28,117 +35,49 @@ public final class ToolExecutionCompleteEvent extends SessionEvent {
     /** Data payload for {@link ToolExecutionCompleteEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ToolExecutionCompleteEventData {
-
+    public record ToolExecutionCompleteEventData(
         /** Unique identifier for the completed tool call */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Whether the tool execution completed successfully */
-        @JsonProperty("success")
-        private Boolean success;
-
+        @JsonProperty("success") Boolean success,
         /** Model identifier that generated this tool call */
-        @JsonProperty("model")
-        private String model;
-
+        @JsonProperty("model") String model,
         /** CAPI interaction ID for correlating this tool execution with upstream telemetry */
-        @JsonProperty("interactionId")
-        private String interactionId;
-
+        @JsonProperty("interactionId") String interactionId,
         /** Whether this tool call was explicitly requested by the user rather than the assistant */
-        @JsonProperty("isUserRequested")
-        private Boolean isUserRequested;
-
+        @JsonProperty("isUserRequested") Boolean isUserRequested,
         /** Tool execution result on success */
-        @JsonProperty("result")
-        private ToolExecutionCompleteEventDataResult result;
-
+        @JsonProperty("result") ToolExecutionCompleteEventDataResult result,
         /** Error details when the tool execution failed */
-        @JsonProperty("error")
-        private ToolExecutionCompleteEventDataError error;
-
+        @JsonProperty("error") ToolExecutionCompleteEventDataError error,
         /** Tool-specific telemetry data (e.g., CodeQL check counts, grep match counts) */
-        @JsonProperty("toolTelemetry")
-        private Map<String, Object> toolTelemetry;
-
+        @JsonProperty("toolTelemetry") Map<String, Object> toolTelemetry,
         /** Tool call ID of the parent tool invocation when this event originates from a sub-agent */
-        @JsonProperty("parentToolCallId")
-        private String parentToolCallId;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public Boolean getSuccess() { return success; }
-        public void setSuccess(Boolean success) { this.success = success; }
-
-        public String getModel() { return model; }
-        public void setModel(String model) { this.model = model; }
-
-        public String getInteractionId() { return interactionId; }
-        public void setInteractionId(String interactionId) { this.interactionId = interactionId; }
-
-        public Boolean getIsUserRequested() { return isUserRequested; }
-        public void setIsUserRequested(Boolean isUserRequested) { this.isUserRequested = isUserRequested; }
-
-        public ToolExecutionCompleteEventDataResult getResult() { return result; }
-        public void setResult(ToolExecutionCompleteEventDataResult result) { this.result = result; }
-
-        public ToolExecutionCompleteEventDataError getError() { return error; }
-        public void setError(ToolExecutionCompleteEventDataError error) { this.error = error; }
-
-        public Map<String, Object> getToolTelemetry() { return toolTelemetry; }
-        public void setToolTelemetry(Map<String, Object> toolTelemetry) { this.toolTelemetry = toolTelemetry; }
-
-        public String getParentToolCallId() { return parentToolCallId; }
-        public void setParentToolCallId(String parentToolCallId) { this.parentToolCallId = parentToolCallId; }
-
+        @JsonProperty("parentToolCallId") String parentToolCallId
+    ) {
 
         /** Tool execution result on success */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class ToolExecutionCompleteEventDataResult {
-
+        public record ToolExecutionCompleteEventDataResult(
             /** Concise tool result text sent to the LLM for chat completion, potentially truncated for token efficiency */
-            @JsonProperty("content")
-            private String content;
-
+            @JsonProperty("content") String content,
             /** Full detailed tool result for UI/timeline display, preserving complete content such as diffs. Falls back to content when absent. */
-            @JsonProperty("detailedContent")
-            private String detailedContent;
-
+            @JsonProperty("detailedContent") String detailedContent,
             /** Structured content blocks (text, images, audio, resources) returned by the tool in their native format */
-            @JsonProperty("contents")
-            private List<Object> contents;
-
-            public String getContent() { return content; }
-            public void setContent(String content) { this.content = content; }
-
-            public String getDetailedContent() { return detailedContent; }
-            public void setDetailedContent(String detailedContent) { this.detailedContent = detailedContent; }
-
-            public List<Object> getContents() { return contents; }
-            public void setContents(List<Object> contents) { this.contents = contents; }
+            @JsonProperty("contents") List<Object> contents
+        ) {
         }
 
         /** Error details when the tool execution failed */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class ToolExecutionCompleteEventDataError {
-
+        public record ToolExecutionCompleteEventDataError(
             /** Human-readable error message */
-            @JsonProperty("message")
-            private String message;
-
+            @JsonProperty("message") String message,
             /** Machine-readable error code */
-            @JsonProperty("code")
-            private String code;
-
-            public String getMessage() { return message; }
-            public void setMessage(String message) { this.message = message; }
-
-            public String getCode() { return code; }
-            public void setCode(String code) { this.code = code; }
+            @JsonProperty("code") String code
+        ) {
         }
     }
 }

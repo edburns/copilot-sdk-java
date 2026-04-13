@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.title_changed} session event. */
+/**
+ * The {@code session.title_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionTitleChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.title_changed"; }
 
     @JsonProperty("data")
     private SessionTitleChangedEventData data;
@@ -26,13 +33,9 @@ public final class SessionTitleChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionTitleChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionTitleChangedEventData {
-
+    public record SessionTitleChangedEventData(
         /** The new display title for the session */
-        @JsonProperty("title")
-        private String title;
-
-        public String getTitle() { return title; }
-        public void setTitle(String title) { this.title = title; }
+        @JsonProperty("title") String title
+    ) {
     }
 }

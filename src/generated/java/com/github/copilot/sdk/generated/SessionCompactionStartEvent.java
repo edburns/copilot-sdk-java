@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.compaction_start} session event. */
+/**
+ * The {@code session.compaction_start} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionCompactionStartEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.compaction_start"; }
 
     @JsonProperty("data")
     private SessionCompactionStartEventData data;
@@ -26,27 +33,13 @@ public final class SessionCompactionStartEvent extends SessionEvent {
     /** Data payload for {@link SessionCompactionStartEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionCompactionStartEventData {
-
+    public record SessionCompactionStartEventData(
         /** Token count from system message(s) at compaction start */
-        @JsonProperty("systemTokens")
-        private Double systemTokens;
-
+        @JsonProperty("systemTokens") Double systemTokens,
         /** Token count from non-system messages (user, assistant, tool) at compaction start */
-        @JsonProperty("conversationTokens")
-        private Double conversationTokens;
-
+        @JsonProperty("conversationTokens") Double conversationTokens,
         /** Token count from tool definitions at compaction start */
-        @JsonProperty("toolDefinitionsTokens")
-        private Double toolDefinitionsTokens;
-
-        public Double getSystemTokens() { return systemTokens; }
-        public void setSystemTokens(Double systemTokens) { this.systemTokens = systemTokens; }
-
-        public Double getConversationTokens() { return conversationTokens; }
-        public void setConversationTokens(Double conversationTokens) { this.conversationTokens = conversationTokens; }
-
-        public Double getToolDefinitionsTokens() { return toolDefinitionsTokens; }
-        public void setToolDefinitionsTokens(Double toolDefinitionsTokens) { this.toolDefinitionsTokens = toolDefinitionsTokens; }
+        @JsonProperty("toolDefinitionsTokens") Double toolDefinitionsTokens
+    ) {
     }
 }

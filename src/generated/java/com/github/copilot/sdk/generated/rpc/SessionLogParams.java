@@ -12,47 +12,26 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.log} RPC method. */
+/**
+ * Request parameters for the {@code session.log} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionLogParams {
-
+public record SessionLogParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Human-readable message */
-    @JsonProperty("message")
-    private String message;
-
+    @JsonProperty("message") String message,
     /** Log severity level. Determines how the message is displayed in the timeline. Defaults to "info". */
-    @JsonProperty("level")
-    private SessionLogParamsLevel level;
-
+    @JsonProperty("level") SessionLogParamsLevel level,
     /** When true, the message is transient and not persisted to the session event log on disk */
-    @JsonProperty("ephemeral")
-    private Boolean ephemeral;
-
+    @JsonProperty("ephemeral") Boolean ephemeral,
     /** Optional URL the user can open in their browser for more details */
-    @JsonProperty("url")
-    private String url;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public SessionLogParamsLevel getLevel() { return level; }
-    public void setLevel(SessionLogParamsLevel level) { this.level = level; }
-
-    public Boolean getEphemeral() { return ephemeral; }
-    public void setEphemeral(Boolean ephemeral) { this.ephemeral = ephemeral; }
-
-    public String getUrl() { return url; }
-    public void setUrl(String url) { this.url = url; }
-
+    @JsonProperty("url") String url
+) {
 
     /** Log severity level. Determines how the message is displayed in the timeline. Defaults to "info". */
     public enum SessionLogParamsLevel {
@@ -67,5 +46,12 @@ public class SessionLogParams {
         SessionLogParamsLevel(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionLogParamsLevel fromValue(String value) {
+            for (SessionLogParamsLevel v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionLogParamsLevel value: " + value);
+        }
     }
 }

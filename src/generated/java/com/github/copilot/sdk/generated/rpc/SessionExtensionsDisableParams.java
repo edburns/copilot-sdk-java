@@ -12,23 +12,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.extensions.disable} RPC method. */
+/**
+ * Request parameters for the {@code session.extensions.disable} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionExtensionsDisableParams {
-
+public record SessionExtensionsDisableParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Source-qualified extension ID to disable */
-    @JsonProperty("id")
-    private String id;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @JsonProperty("id") String id
+) {
 }

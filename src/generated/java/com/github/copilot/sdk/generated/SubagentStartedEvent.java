@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code subagent.started} session event. */
+/**
+ * The {@code subagent.started} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SubagentStartedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "subagent.started"; }
 
     @JsonProperty("data")
     private SubagentStartedEventData data;
@@ -26,34 +33,15 @@ public final class SubagentStartedEvent extends SessionEvent {
     /** Data payload for {@link SubagentStartedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SubagentStartedEventData {
-
+    public record SubagentStartedEventData(
         /** Tool call ID of the parent tool invocation that spawned this sub-agent */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Internal name of the sub-agent */
-        @JsonProperty("agentName")
-        private String agentName;
-
+        @JsonProperty("agentName") String agentName,
         /** Human-readable display name of the sub-agent */
-        @JsonProperty("agentDisplayName")
-        private String agentDisplayName;
-
+        @JsonProperty("agentDisplayName") String agentDisplayName,
         /** Description of what the sub-agent does */
-        @JsonProperty("agentDescription")
-        private String agentDescription;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getAgentName() { return agentName; }
-        public void setAgentName(String agentName) { this.agentName = agentName; }
-
-        public String getAgentDisplayName() { return agentDisplayName; }
-        public void setAgentDisplayName(String agentDisplayName) { this.agentDisplayName = agentDisplayName; }
-
-        public String getAgentDescription() { return agentDescription; }
-        public void setAgentDescription(String agentDescription) { this.agentDescription = agentDescription; }
+        @JsonProperty("agentDescription") String agentDescription
+    ) {
     }
 }

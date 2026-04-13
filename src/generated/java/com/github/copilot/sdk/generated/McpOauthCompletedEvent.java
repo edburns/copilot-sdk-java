@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code mcp.oauth_completed} session event. */
+/**
+ * The {@code mcp.oauth_completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class McpOauthCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "mcp.oauth_completed"; }
 
     @JsonProperty("data")
     private McpOauthCompletedEventData data;
@@ -26,13 +33,9 @@ public final class McpOauthCompletedEvent extends SessionEvent {
     /** Data payload for {@link McpOauthCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class McpOauthCompletedEventData {
-
+    public record McpOauthCompletedEventData(
         /** Request ID of the resolved OAuth request */
-        @JsonProperty("requestId")
-        private String requestId;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
+        @JsonProperty("requestId") String requestId
+    ) {
     }
 }

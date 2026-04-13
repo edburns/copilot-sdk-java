@@ -13,181 +13,83 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.usage.getMetrics} RPC method. */
+/**
+ * Result for the {@code session.usage.getMetrics} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionUsageGetMetricsResult {
-
+public record SessionUsageGetMetricsResult(
     /** Total user-initiated premium request cost across all models (may be fractional due to multipliers) */
-    @JsonProperty("totalPremiumRequestCost")
-    private Double totalPremiumRequestCost;
-
+    @JsonProperty("totalPremiumRequestCost") Double totalPremiumRequestCost,
     /** Raw count of user-initiated API requests */
-    @JsonProperty("totalUserRequests")
-    private Double totalUserRequests;
-
+    @JsonProperty("totalUserRequests") Long totalUserRequests,
     /** Total time spent in model API calls (milliseconds) */
-    @JsonProperty("totalApiDurationMs")
-    private Double totalApiDurationMs;
-
+    @JsonProperty("totalApiDurationMs") Double totalApiDurationMs,
     /** Session start timestamp (epoch milliseconds) */
-    @JsonProperty("sessionStartTime")
-    private Double sessionStartTime;
-
+    @JsonProperty("sessionStartTime") Long sessionStartTime,
     /** Aggregated code change metrics */
-    @JsonProperty("codeChanges")
-    private SessionUsageGetMetricsResultCodeChanges codeChanges;
-
+    @JsonProperty("codeChanges") SessionUsageGetMetricsResultCodeChanges codeChanges,
     /** Per-model token and request metrics, keyed by model identifier */
-    @JsonProperty("modelMetrics")
-    private Map<String, SessionUsageGetMetricsResultModelMetricsValue> modelMetrics;
-
+    @JsonProperty("modelMetrics") Map<String, SessionUsageGetMetricsResultModelMetricsValue> modelMetrics,
     /** Currently active model identifier */
-    @JsonProperty("currentModel")
-    private String currentModel;
-
+    @JsonProperty("currentModel") String currentModel,
     /** Input tokens from the most recent main-agent API call */
-    @JsonProperty("lastCallInputTokens")
-    private Double lastCallInputTokens;
-
+    @JsonProperty("lastCallInputTokens") Long lastCallInputTokens,
     /** Output tokens from the most recent main-agent API call */
-    @JsonProperty("lastCallOutputTokens")
-    private Double lastCallOutputTokens;
-
-    public Double getTotalPremiumRequestCost() { return totalPremiumRequestCost; }
-    public void setTotalPremiumRequestCost(Double totalPremiumRequestCost) { this.totalPremiumRequestCost = totalPremiumRequestCost; }
-
-    public Double getTotalUserRequests() { return totalUserRequests; }
-    public void setTotalUserRequests(Double totalUserRequests) { this.totalUserRequests = totalUserRequests; }
-
-    public Double getTotalApiDurationMs() { return totalApiDurationMs; }
-    public void setTotalApiDurationMs(Double totalApiDurationMs) { this.totalApiDurationMs = totalApiDurationMs; }
-
-    public Double getSessionStartTime() { return sessionStartTime; }
-    public void setSessionStartTime(Double sessionStartTime) { this.sessionStartTime = sessionStartTime; }
-
-    public SessionUsageGetMetricsResultCodeChanges getCodeChanges() { return codeChanges; }
-    public void setCodeChanges(SessionUsageGetMetricsResultCodeChanges codeChanges) { this.codeChanges = codeChanges; }
-
-    public Map<String, SessionUsageGetMetricsResultModelMetricsValue> getModelMetrics() { return modelMetrics; }
-    public void setModelMetrics(Map<String, SessionUsageGetMetricsResultModelMetricsValue> modelMetrics) { this.modelMetrics = modelMetrics; }
-
-    public String getCurrentModel() { return currentModel; }
-    public void setCurrentModel(String currentModel) { this.currentModel = currentModel; }
-
-    public Double getLastCallInputTokens() { return lastCallInputTokens; }
-    public void setLastCallInputTokens(Double lastCallInputTokens) { this.lastCallInputTokens = lastCallInputTokens; }
-
-    public Double getLastCallOutputTokens() { return lastCallOutputTokens; }
-    public void setLastCallOutputTokens(Double lastCallOutputTokens) { this.lastCallOutputTokens = lastCallOutputTokens; }
-
+    @JsonProperty("lastCallOutputTokens") Long lastCallOutputTokens
+) {
 
     /** Aggregated code change metrics */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionUsageGetMetricsResultCodeChanges {
-
+    public record SessionUsageGetMetricsResultCodeChanges(
         /** Total lines of code added */
-        @JsonProperty("linesAdded")
-        private Double linesAdded;
-
+        @JsonProperty("linesAdded") Long linesAdded,
         /** Total lines of code removed */
-        @JsonProperty("linesRemoved")
-        private Double linesRemoved;
-
+        @JsonProperty("linesRemoved") Long linesRemoved,
         /** Number of distinct files modified */
-        @JsonProperty("filesModifiedCount")
-        private Double filesModifiedCount;
-
-        public Double getLinesAdded() { return linesAdded; }
-        public void setLinesAdded(Double linesAdded) { this.linesAdded = linesAdded; }
-
-        public Double getLinesRemoved() { return linesRemoved; }
-        public void setLinesRemoved(Double linesRemoved) { this.linesRemoved = linesRemoved; }
-
-        public Double getFilesModifiedCount() { return filesModifiedCount; }
-        public void setFilesModifiedCount(Double filesModifiedCount) { this.filesModifiedCount = filesModifiedCount; }
+        @JsonProperty("filesModifiedCount") Long filesModifiedCount
+    ) {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionUsageGetMetricsResultModelMetricsValue {
-
+    public record SessionUsageGetMetricsResultModelMetricsValue(
         /** Request count and cost metrics for this model */
-        @JsonProperty("requests")
-        private SessionUsageGetMetricsResultModelMetricsValueRequests requests;
-
+        @JsonProperty("requests") SessionUsageGetMetricsResultModelMetricsValueRequests requests,
         /** Token usage metrics for this model */
-        @JsonProperty("usage")
-        private SessionUsageGetMetricsResultModelMetricsValueUsage usage;
-
-        public SessionUsageGetMetricsResultModelMetricsValueRequests getRequests() { return requests; }
-        public void setRequests(SessionUsageGetMetricsResultModelMetricsValueRequests requests) { this.requests = requests; }
-
-        public SessionUsageGetMetricsResultModelMetricsValueUsage getUsage() { return usage; }
-        public void setUsage(SessionUsageGetMetricsResultModelMetricsValueUsage usage) { this.usage = usage; }
-
+        @JsonProperty("usage") SessionUsageGetMetricsResultModelMetricsValueUsage usage
+    ) {
 
         /** Request count and cost metrics for this model */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionUsageGetMetricsResultModelMetricsValueRequests {
-
+        public record SessionUsageGetMetricsResultModelMetricsValueRequests(
             /** Number of API requests made with this model */
-            @JsonProperty("count")
-            private Double count;
-
+            @JsonProperty("count") Long count,
             /** User-initiated premium request cost (with multiplier applied) */
-            @JsonProperty("cost")
-            private Double cost;
-
-            public Double getCount() { return count; }
-            public void setCount(Double count) { this.count = count; }
-
-            public Double getCost() { return cost; }
-            public void setCost(Double cost) { this.cost = cost; }
+            @JsonProperty("cost") Double cost
+        ) {
         }
 
         /** Token usage metrics for this model */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionUsageGetMetricsResultModelMetricsValueUsage {
-
+        public record SessionUsageGetMetricsResultModelMetricsValueUsage(
             /** Total input tokens consumed */
-            @JsonProperty("inputTokens")
-            private Double inputTokens;
-
+            @JsonProperty("inputTokens") Long inputTokens,
             /** Total output tokens produced */
-            @JsonProperty("outputTokens")
-            private Double outputTokens;
-
+            @JsonProperty("outputTokens") Long outputTokens,
             /** Total tokens read from prompt cache */
-            @JsonProperty("cacheReadTokens")
-            private Double cacheReadTokens;
-
+            @JsonProperty("cacheReadTokens") Long cacheReadTokens,
             /** Total tokens written to prompt cache */
-            @JsonProperty("cacheWriteTokens")
-            private Double cacheWriteTokens;
-
+            @JsonProperty("cacheWriteTokens") Long cacheWriteTokens,
             /** Total output tokens used for reasoning */
-            @JsonProperty("reasoningTokens")
-            private Double reasoningTokens;
-
-            public Double getInputTokens() { return inputTokens; }
-            public void setInputTokens(Double inputTokens) { this.inputTokens = inputTokens; }
-
-            public Double getOutputTokens() { return outputTokens; }
-            public void setOutputTokens(Double outputTokens) { this.outputTokens = outputTokens; }
-
-            public Double getCacheReadTokens() { return cacheReadTokens; }
-            public void setCacheReadTokens(Double cacheReadTokens) { this.cacheReadTokens = cacheReadTokens; }
-
-            public Double getCacheWriteTokens() { return cacheWriteTokens; }
-            public void setCacheWriteTokens(Double cacheWriteTokens) { this.cacheWriteTokens = cacheWriteTokens; }
-
-            public Double getReasoningTokens() { return reasoningTokens; }
-            public void setReasoningTokens(Double reasoningTokens) { this.reasoningTokens = reasoningTokens; }
+            @JsonProperty("reasoningTokens") Long reasoningTokens
+        ) {
         }
     }
 }

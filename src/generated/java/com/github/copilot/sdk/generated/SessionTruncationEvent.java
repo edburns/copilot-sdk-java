@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.truncation} session event. */
+/**
+ * The {@code session.truncation} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionTruncationEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.truncation"; }
 
     @JsonProperty("data")
     private SessionTruncationEventData data;
@@ -26,62 +33,23 @@ public final class SessionTruncationEvent extends SessionEvent {
     /** Data payload for {@link SessionTruncationEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionTruncationEventData {
-
+    public record SessionTruncationEventData(
         /** Maximum token count for the model's context window */
-        @JsonProperty("tokenLimit")
-        private Double tokenLimit;
-
+        @JsonProperty("tokenLimit") Double tokenLimit,
         /** Total tokens in conversation messages before truncation */
-        @JsonProperty("preTruncationTokensInMessages")
-        private Double preTruncationTokensInMessages;
-
+        @JsonProperty("preTruncationTokensInMessages") Double preTruncationTokensInMessages,
         /** Number of conversation messages before truncation */
-        @JsonProperty("preTruncationMessagesLength")
-        private Double preTruncationMessagesLength;
-
+        @JsonProperty("preTruncationMessagesLength") Double preTruncationMessagesLength,
         /** Total tokens in conversation messages after truncation */
-        @JsonProperty("postTruncationTokensInMessages")
-        private Double postTruncationTokensInMessages;
-
+        @JsonProperty("postTruncationTokensInMessages") Double postTruncationTokensInMessages,
         /** Number of conversation messages after truncation */
-        @JsonProperty("postTruncationMessagesLength")
-        private Double postTruncationMessagesLength;
-
+        @JsonProperty("postTruncationMessagesLength") Double postTruncationMessagesLength,
         /** Number of tokens removed by truncation */
-        @JsonProperty("tokensRemovedDuringTruncation")
-        private Double tokensRemovedDuringTruncation;
-
+        @JsonProperty("tokensRemovedDuringTruncation") Double tokensRemovedDuringTruncation,
         /** Number of messages removed by truncation */
-        @JsonProperty("messagesRemovedDuringTruncation")
-        private Double messagesRemovedDuringTruncation;
-
+        @JsonProperty("messagesRemovedDuringTruncation") Double messagesRemovedDuringTruncation,
         /** Identifier of the component that performed truncation (e.g., "BasicTruncator") */
-        @JsonProperty("performedBy")
-        private String performedBy;
-
-        public Double getTokenLimit() { return tokenLimit; }
-        public void setTokenLimit(Double tokenLimit) { this.tokenLimit = tokenLimit; }
-
-        public Double getPreTruncationTokensInMessages() { return preTruncationTokensInMessages; }
-        public void setPreTruncationTokensInMessages(Double preTruncationTokensInMessages) { this.preTruncationTokensInMessages = preTruncationTokensInMessages; }
-
-        public Double getPreTruncationMessagesLength() { return preTruncationMessagesLength; }
-        public void setPreTruncationMessagesLength(Double preTruncationMessagesLength) { this.preTruncationMessagesLength = preTruncationMessagesLength; }
-
-        public Double getPostTruncationTokensInMessages() { return postTruncationTokensInMessages; }
-        public void setPostTruncationTokensInMessages(Double postTruncationTokensInMessages) { this.postTruncationTokensInMessages = postTruncationTokensInMessages; }
-
-        public Double getPostTruncationMessagesLength() { return postTruncationMessagesLength; }
-        public void setPostTruncationMessagesLength(Double postTruncationMessagesLength) { this.postTruncationMessagesLength = postTruncationMessagesLength; }
-
-        public Double getTokensRemovedDuringTruncation() { return tokensRemovedDuringTruncation; }
-        public void setTokensRemovedDuringTruncation(Double tokensRemovedDuringTruncation) { this.tokensRemovedDuringTruncation = tokensRemovedDuringTruncation; }
-
-        public Double getMessagesRemovedDuringTruncation() { return messagesRemovedDuringTruncation; }
-        public void setMessagesRemovedDuringTruncation(Double messagesRemovedDuringTruncation) { this.messagesRemovedDuringTruncation = messagesRemovedDuringTruncation; }
-
-        public String getPerformedBy() { return performedBy; }
-        public void setPerformedBy(String performedBy) { this.performedBy = performedBy; }
+        @JsonProperty("performedBy") String performedBy
+    ) {
     }
 }

@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code system.notification} session event. */
+/**
+ * The {@code system.notification} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SystemNotificationEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "system.notification"; }
 
     @JsonProperty("data")
     private SystemNotificationEventData data;
@@ -26,20 +33,11 @@ public final class SystemNotificationEvent extends SessionEvent {
     /** Data payload for {@link SystemNotificationEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SystemNotificationEventData {
-
+    public record SystemNotificationEventData(
         /** The notification text, typically wrapped in <system_notification> XML tags */
-        @JsonProperty("content")
-        private String content;
-
+        @JsonProperty("content") String content,
         /** Structured metadata identifying what triggered this notification */
-        @JsonProperty("kind")
-        private Object kind;
-
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-
-        public Object getKind() { return kind; }
-        public void setKind(Object kind) { this.kind = kind; }
+        @JsonProperty("kind") Object kind
+    ) {
     }
 }

@@ -12,30 +12,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.commands.handlePendingCommand} RPC method. */
+/**
+ * Request parameters for the {@code session.commands.handlePendingCommand} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionCommandsHandlePendingCommandParams {
-
+public record SessionCommandsHandlePendingCommandParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Request ID from the command invocation event */
-    @JsonProperty("requestId")
-    private String requestId;
-
+    @JsonProperty("requestId") String requestId,
     /** Error message if the command handler failed */
-    @JsonProperty("error")
-    private String error;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getRequestId() { return requestId; }
-    public void setRequestId(String requestId) { this.requestId = requestId; }
-
-    public String getError() { return error; }
-    public void setError(String error) { this.error = error; }
+    @JsonProperty("error") String error
+) {
 }

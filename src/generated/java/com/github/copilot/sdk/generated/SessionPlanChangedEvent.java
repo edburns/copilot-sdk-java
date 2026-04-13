@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.plan_changed} session event. */
+/**
+ * The {@code session.plan_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionPlanChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.plan_changed"; }
 
     @JsonProperty("data")
     private SessionPlanChangedEventData data;
@@ -26,15 +33,10 @@ public final class SessionPlanChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionPlanChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionPlanChangedEventData {
-
+    public record SessionPlanChangedEventData(
         /** The type of operation performed on the plan file */
-        @JsonProperty("operation")
-        private SessionPlanChangedEventDataOperation operation;
-
-        public SessionPlanChangedEventDataOperation getOperation() { return operation; }
-        public void setOperation(SessionPlanChangedEventDataOperation operation) { this.operation = operation; }
-
+        @JsonProperty("operation") SessionPlanChangedEventDataOperation operation
+    ) {
 
         /** The type of operation performed on the plan file */
         public enum SessionPlanChangedEventDataOperation {
@@ -49,6 +51,13 @@ public final class SessionPlanChangedEvent extends SessionEvent {
             SessionPlanChangedEventDataOperation(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SessionPlanChangedEventDataOperation fromValue(String value) {
+                for (SessionPlanChangedEventDataOperation v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SessionPlanChangedEventDataOperation value: " + value);
+            }
         }
     }
 }

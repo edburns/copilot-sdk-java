@@ -13,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.workspace.listFiles} RPC method. */
+/**
+ * Result for the {@code session.workspace.listFiles} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionWorkspaceListFilesResult {
-
+public record SessionWorkspaceListFilesResult(
     /** Relative file paths in the workspace files directory */
-    @JsonProperty("files")
-    private List<String> files;
-
-    public List<String> getFiles() { return files; }
-    public void setFiles(List<String> files) { this.files = files; }
+    @JsonProperty("files") List<String> files
+) {
 }

@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code subagent.completed} session event. */
+/**
+ * The {@code subagent.completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SubagentCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "subagent.completed"; }
 
     @JsonProperty("data")
     private SubagentCompletedEventData data;
@@ -26,55 +33,21 @@ public final class SubagentCompletedEvent extends SessionEvent {
     /** Data payload for {@link SubagentCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SubagentCompletedEventData {
-
+    public record SubagentCompletedEventData(
         /** Tool call ID of the parent tool invocation that spawned this sub-agent */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Internal name of the sub-agent */
-        @JsonProperty("agentName")
-        private String agentName;
-
+        @JsonProperty("agentName") String agentName,
         /** Human-readable display name of the sub-agent */
-        @JsonProperty("agentDisplayName")
-        private String agentDisplayName;
-
+        @JsonProperty("agentDisplayName") String agentDisplayName,
         /** Model used by the sub-agent */
-        @JsonProperty("model")
-        private String model;
-
+        @JsonProperty("model") String model,
         /** Total number of tool calls made by the sub-agent */
-        @JsonProperty("totalToolCalls")
-        private Double totalToolCalls;
-
+        @JsonProperty("totalToolCalls") Double totalToolCalls,
         /** Total tokens (input + output) consumed by the sub-agent */
-        @JsonProperty("totalTokens")
-        private Double totalTokens;
-
+        @JsonProperty("totalTokens") Double totalTokens,
         /** Wall-clock duration of the sub-agent execution in milliseconds */
-        @JsonProperty("durationMs")
-        private Double durationMs;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getAgentName() { return agentName; }
-        public void setAgentName(String agentName) { this.agentName = agentName; }
-
-        public String getAgentDisplayName() { return agentDisplayName; }
-        public void setAgentDisplayName(String agentDisplayName) { this.agentDisplayName = agentDisplayName; }
-
-        public String getModel() { return model; }
-        public void setModel(String model) { this.model = model; }
-
-        public Double getTotalToolCalls() { return totalToolCalls; }
-        public void setTotalToolCalls(Double totalToolCalls) { this.totalToolCalls = totalToolCalls; }
-
-        public Double getTotalTokens() { return totalTokens; }
-        public void setTotalTokens(Double totalTokens) { this.totalTokens = totalTokens; }
-
-        public Double getDurationMs() { return durationMs; }
-        public void setDurationMs(Double durationMs) { this.durationMs = durationMs; }
+        @JsonProperty("durationMs") Double durationMs
+    ) {
     }
 }

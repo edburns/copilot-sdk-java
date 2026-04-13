@@ -12,30 +12,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.workspace.createFile} RPC method. */
+/**
+ * Request parameters for the {@code session.workspace.createFile} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionWorkspaceCreateFileParams {
-
+public record SessionWorkspaceCreateFileParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Relative path within the workspace files directory */
-    @JsonProperty("path")
-    private String path;
-
+    @JsonProperty("path") String path,
     /** File content to write as a UTF-8 string */
-    @JsonProperty("content")
-    private String content;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getPath() { return path; }
-    public void setPath(String path) { this.path = path; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    @JsonProperty("content") String content
+) {
 }

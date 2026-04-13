@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code user_input.completed} session event. */
+/**
+ * The {@code user_input.completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class UserInputCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "user_input.completed"; }
 
     @JsonProperty("data")
     private UserInputCompletedEventData data;
@@ -26,27 +33,13 @@ public final class UserInputCompletedEvent extends SessionEvent {
     /** Data payload for {@link UserInputCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class UserInputCompletedEventData {
-
+    public record UserInputCompletedEventData(
         /** Request ID of the resolved user input request; clients should dismiss any UI for this request */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** The user's answer to the input request */
-        @JsonProperty("answer")
-        private String answer;
-
+        @JsonProperty("answer") String answer,
         /** Whether the answer was typed as free-form text rather than selected from choices */
-        @JsonProperty("wasFreeform")
-        private Boolean wasFreeform;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public String getAnswer() { return answer; }
-        public void setAnswer(String answer) { this.answer = answer; }
-
-        public Boolean getWasFreeform() { return wasFreeform; }
-        public void setWasFreeform(Boolean wasFreeform) { this.wasFreeform = wasFreeform; }
+        @JsonProperty("wasFreeform") Boolean wasFreeform
+    ) {
     }
 }

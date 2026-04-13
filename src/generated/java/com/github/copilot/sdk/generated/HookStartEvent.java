@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code hook.start} session event. */
+/**
+ * The {@code hook.start} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class HookStartEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "hook.start"; }
 
     @JsonProperty("data")
     private HookStartEventData data;
@@ -26,27 +33,13 @@ public final class HookStartEvent extends SessionEvent {
     /** Data payload for {@link HookStartEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class HookStartEventData {
-
+    public record HookStartEventData(
         /** Unique identifier for this hook invocation */
-        @JsonProperty("hookInvocationId")
-        private String hookInvocationId;
-
+        @JsonProperty("hookInvocationId") String hookInvocationId,
         /** Type of hook being invoked (e.g., "preToolUse", "postToolUse", "sessionStart") */
-        @JsonProperty("hookType")
-        private String hookType;
-
+        @JsonProperty("hookType") String hookType,
         /** Input data passed to the hook */
-        @JsonProperty("input")
-        private Object input;
-
-        public String getHookInvocationId() { return hookInvocationId; }
-        public void setHookInvocationId(String hookInvocationId) { this.hookInvocationId = hookInvocationId; }
-
-        public String getHookType() { return hookType; }
-        public void setHookType(String hookType) { this.hookType = hookType; }
-
-        public Object getInput() { return input; }
-        public void setInput(Object input) { this.input = input; }
+        @JsonProperty("input") Object input
+    ) {
     }
 }

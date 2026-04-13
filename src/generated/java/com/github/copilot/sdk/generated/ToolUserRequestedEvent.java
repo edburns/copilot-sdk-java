@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code tool.user_requested} session event. */
+/**
+ * The {@code tool.user_requested} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ToolUserRequestedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "tool.user_requested"; }
 
     @JsonProperty("data")
     private ToolUserRequestedEventData data;
@@ -26,27 +33,13 @@ public final class ToolUserRequestedEvent extends SessionEvent {
     /** Data payload for {@link ToolUserRequestedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ToolUserRequestedEventData {
-
+    public record ToolUserRequestedEventData(
         /** Unique identifier for this tool call */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Name of the tool the user wants to invoke */
-        @JsonProperty("toolName")
-        private String toolName;
-
+        @JsonProperty("toolName") String toolName,
         /** Arguments for the tool invocation */
-        @JsonProperty("arguments")
-        private Object arguments;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getToolName() { return toolName; }
-        public void setToolName(String toolName) { this.toolName = toolName; }
-
-        public Object getArguments() { return arguments; }
-        public void setArguments(Object arguments) { this.arguments = arguments; }
+        @JsonProperty("arguments") Object arguments
+    ) {
     }
 }

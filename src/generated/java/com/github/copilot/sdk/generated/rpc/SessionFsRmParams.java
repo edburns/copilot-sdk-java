@@ -12,37 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code sessionFs.rm} RPC method. */
+/**
+ * Request parameters for the {@code sessionFs.rm} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsRmParams {
-
+public record SessionFsRmParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Path using SessionFs conventions */
-    @JsonProperty("path")
-    private String path;
-
+    @JsonProperty("path") String path,
     /** Remove directories and their contents recursively */
-    @JsonProperty("recursive")
-    private Boolean recursive;
-
+    @JsonProperty("recursive") Boolean recursive,
     /** Ignore errors if the path does not exist */
-    @JsonProperty("force")
-    private Boolean force;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getPath() { return path; }
-    public void setPath(String path) { this.path = path; }
-
-    public Boolean getRecursive() { return recursive; }
-    public void setRecursive(Boolean recursive) { this.recursive = recursive; }
-
-    public Boolean getForce() { return force; }
-    public void setForce(Boolean force) { this.force = force; }
+    @JsonProperty("force") Boolean force
+) {
 }

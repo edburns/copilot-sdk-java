@@ -15,7 +15,11 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.annotation.processing.Generated;
 
-/** Provides the base class from which all session events derive. */
+/**
+ * Base class for all generated session events.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = UnknownSessionEvent.class)
 @JsonSubTypes({
@@ -95,7 +99,82 @@ import javax.annotation.processing.Generated;
     @JsonSubTypes.Type(value = SessionExtensionsLoadedEvent.class, name = "session.extensions_loaded")
 })
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
-public class SessionEvent {
+public abstract sealed class SessionEvent permits
+        SessionStartEvent,
+        SessionResumeEvent,
+        SessionRemoteSteerableChangedEvent,
+        SessionErrorEvent,
+        SessionIdleEvent,
+        SessionTitleChangedEvent,
+        SessionInfoEvent,
+        SessionWarningEvent,
+        SessionModelChangeEvent,
+        SessionModeChangedEvent,
+        SessionPlanChangedEvent,
+        SessionWorkspaceFileChangedEvent,
+        SessionHandoffEvent,
+        SessionTruncationEvent,
+        SessionSnapshotRewindEvent,
+        SessionShutdownEvent,
+        SessionContextChangedEvent,
+        SessionUsageInfoEvent,
+        SessionCompactionStartEvent,
+        SessionCompactionCompleteEvent,
+        SessionTaskCompleteEvent,
+        UserMessageEvent,
+        PendingMessagesModifiedEvent,
+        AssistantTurnStartEvent,
+        AssistantIntentEvent,
+        AssistantReasoningEvent,
+        AssistantReasoningDeltaEvent,
+        AssistantStreamingDeltaEvent,
+        AssistantMessageEvent,
+        AssistantMessageDeltaEvent,
+        AssistantTurnEndEvent,
+        AssistantUsageEvent,
+        AbortEvent,
+        ToolUserRequestedEvent,
+        ToolExecutionStartEvent,
+        ToolExecutionPartialResultEvent,
+        ToolExecutionProgressEvent,
+        ToolExecutionCompleteEvent,
+        SkillInvokedEvent,
+        SubagentStartedEvent,
+        SubagentCompletedEvent,
+        SubagentFailedEvent,
+        SubagentSelectedEvent,
+        SubagentDeselectedEvent,
+        HookStartEvent,
+        HookEndEvent,
+        SystemMessageEvent,
+        SystemNotificationEvent,
+        PermissionRequestedEvent,
+        PermissionCompletedEvent,
+        UserInputRequestedEvent,
+        UserInputCompletedEvent,
+        ElicitationRequestedEvent,
+        ElicitationCompletedEvent,
+        SamplingRequestedEvent,
+        SamplingCompletedEvent,
+        McpOauthRequiredEvent,
+        McpOauthCompletedEvent,
+        ExternalToolRequestedEvent,
+        ExternalToolCompletedEvent,
+        CommandQueuedEvent,
+        CommandExecuteEvent,
+        CommandCompletedEvent,
+        CommandsChangedEvent,
+        CapabilitiesChangedEvent,
+        ExitPlanModeRequestedEvent,
+        ExitPlanModeCompletedEvent,
+        SessionToolsUpdatedEvent,
+        SessionBackgroundTasksChangedEvent,
+        SessionSkillsLoadedEvent,
+        SessionCustomAgentsUpdatedEvent,
+        SessionMcpServersLoadedEvent,
+        SessionMcpServerStatusChangedEvent,
+        SessionExtensionsLoadedEvent,
+        UnknownSessionEvent {
 
     /** Unique event identifier (UUID v4), generated when the event is emitted. */
     @JsonProperty("id")
@@ -105,10 +184,6 @@ public class SessionEvent {
     @JsonProperty("timestamp")
     private OffsetDateTime timestamp;
 
-    /** The event type discriminator. */
-    @JsonProperty("type")
-    private String type;
-
     /** ID of the chronologically preceding event in the session. Null for the first event. */
     @JsonProperty("parentId")
     private UUID parentId;
@@ -117,14 +192,18 @@ public class SessionEvent {
     @JsonProperty("ephemeral")
     private Boolean ephemeral;
 
+    /**
+     * Returns the event-type discriminator string (e.g., {@code "session.idle"}).
+     *
+     * @return the event type
+     */
+    public abstract String getType();
+
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
     public OffsetDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(OffsetDateTime timestamp) { this.timestamp = timestamp; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     public UUID getParentId() { return parentId; }
     public void setParentId(UUID parentId) { this.parentId = parentId; }

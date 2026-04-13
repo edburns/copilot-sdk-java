@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code mcp.oauth_required} session event. */
+/**
+ * The {@code mcp.oauth_required} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class McpOauthRequiredEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "mcp.oauth_required"; }
 
     @JsonProperty("data")
     private McpOauthRequiredEventData data;
@@ -26,55 +33,26 @@ public final class McpOauthRequiredEvent extends SessionEvent {
     /** Data payload for {@link McpOauthRequiredEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class McpOauthRequiredEventData {
-
+    public record McpOauthRequiredEventData(
         /** Unique identifier for this OAuth request; used to respond via session.respondToMcpOAuth() */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** Display name of the MCP server that requires OAuth */
-        @JsonProperty("serverName")
-        private String serverName;
-
+        @JsonProperty("serverName") String serverName,
         /** URL of the MCP server that requires OAuth */
-        @JsonProperty("serverUrl")
-        private String serverUrl;
-
+        @JsonProperty("serverUrl") String serverUrl,
         /** Static OAuth client configuration, if the server specifies one */
-        @JsonProperty("staticClientConfig")
-        private McpOauthRequiredEventDataStaticClientConfig staticClientConfig;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public String getServerName() { return serverName; }
-        public void setServerName(String serverName) { this.serverName = serverName; }
-
-        public String getServerUrl() { return serverUrl; }
-        public void setServerUrl(String serverUrl) { this.serverUrl = serverUrl; }
-
-        public McpOauthRequiredEventDataStaticClientConfig getStaticClientConfig() { return staticClientConfig; }
-        public void setStaticClientConfig(McpOauthRequiredEventDataStaticClientConfig staticClientConfig) { this.staticClientConfig = staticClientConfig; }
-
+        @JsonProperty("staticClientConfig") McpOauthRequiredEventDataStaticClientConfig staticClientConfig
+    ) {
 
         /** Static OAuth client configuration, if the server specifies one */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class McpOauthRequiredEventDataStaticClientConfig {
-
+        public record McpOauthRequiredEventDataStaticClientConfig(
             /** OAuth client ID for the server */
-            @JsonProperty("clientId")
-            private String clientId;
-
+            @JsonProperty("clientId") String clientId,
             /** Whether this is a public OAuth client */
-            @JsonProperty("publicClient")
-            private Boolean publicClient;
-
-            public String getClientId() { return clientId; }
-            public void setClientId(String clientId) { this.clientId = clientId; }
-
-            public Boolean getPublicClient() { return publicClient; }
-            public void setPublicClient(Boolean publicClient) { this.publicClient = publicClient; }
+            @JsonProperty("publicClient") Boolean publicClient
+        ) {
         }
     }
 }

@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.turn_start} session event. */
+/**
+ * The {@code assistant.turn_start} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantTurnStartEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.turn_start"; }
 
     @JsonProperty("data")
     private AssistantTurnStartEventData data;
@@ -26,20 +33,11 @@ public final class AssistantTurnStartEvent extends SessionEvent {
     /** Data payload for {@link AssistantTurnStartEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantTurnStartEventData {
-
+    public record AssistantTurnStartEventData(
         /** Identifier for this turn within the agentic loop, typically a stringified turn number */
-        @JsonProperty("turnId")
-        private String turnId;
-
+        @JsonProperty("turnId") String turnId,
         /** CAPI interaction ID for correlating this turn with upstream telemetry */
-        @JsonProperty("interactionId")
-        private String interactionId;
-
-        public String getTurnId() { return turnId; }
-        public void setTurnId(String turnId) { this.turnId = turnId; }
-
-        public String getInteractionId() { return interactionId; }
-        public void setInteractionId(String interactionId) { this.interactionId = interactionId; }
+        @JsonProperty("interactionId") String interactionId
+    ) {
     }
 }

@@ -12,37 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code sessionFs.mkdir} RPC method. */
+/**
+ * Request parameters for the {@code sessionFs.mkdir} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsMkdirParams {
-
+public record SessionFsMkdirParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Path using SessionFs conventions */
-    @JsonProperty("path")
-    private String path;
-
+    @JsonProperty("path") String path,
     /** Create parent directories as needed */
-    @JsonProperty("recursive")
-    private Boolean recursive;
-
+    @JsonProperty("recursive") Boolean recursive,
     /** Optional POSIX-style mode for newly created directories */
-    @JsonProperty("mode")
-    private Double mode;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getPath() { return path; }
-    public void setPath(String path) { this.path = path; }
-
-    public Boolean getRecursive() { return recursive; }
-    public void setRecursive(Boolean recursive) { this.recursive = recursive; }
-
-    public Double getMode() { return mode; }
-    public void setMode(Double mode) { this.mode = mode; }
+    @JsonProperty("mode") Double mode
+) {
 }

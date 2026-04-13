@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code permission.completed} session event. */
+/**
+ * The {@code permission.completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class PermissionCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "permission.completed"; }
 
     @JsonProperty("data")
     private PermissionCompletedEventData data;
@@ -26,35 +33,20 @@ public final class PermissionCompletedEvent extends SessionEvent {
     /** Data payload for {@link PermissionCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class PermissionCompletedEventData {
-
+    public record PermissionCompletedEventData(
         /** Request ID of the resolved permission request; clients should dismiss any UI for this request */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** The result of the permission request */
-        @JsonProperty("result")
-        private PermissionCompletedEventDataResult result;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public PermissionCompletedEventDataResult getResult() { return result; }
-        public void setResult(PermissionCompletedEventDataResult result) { this.result = result; }
-
+        @JsonProperty("result") PermissionCompletedEventDataResult result
+    ) {
 
         /** The result of the permission request */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class PermissionCompletedEventDataResult {
-
+        public record PermissionCompletedEventDataResult(
             /** The outcome of the permission request */
-            @JsonProperty("kind")
-            private PermissionCompletedEventDataResultKind kind;
-
-            public PermissionCompletedEventDataResultKind getKind() { return kind; }
-            public void setKind(PermissionCompletedEventDataResultKind kind) { this.kind = kind; }
-
+            @JsonProperty("kind") PermissionCompletedEventDataResultKind kind
+        ) {
 
             /** The outcome of the permission request */
             public enum PermissionCompletedEventDataResultKind {
@@ -75,6 +67,13 @@ public final class PermissionCompletedEvent extends SessionEvent {
                 PermissionCompletedEventDataResultKind(String value) { this.value = value; }
                 @com.fasterxml.jackson.annotation.JsonValue
                 public String getValue() { return value; }
+                @com.fasterxml.jackson.annotation.JsonCreator
+                public static PermissionCompletedEventDataResultKind fromValue(String value) {
+                    for (PermissionCompletedEventDataResultKind v : values()) {
+                        if (v.value.equals(value)) return v;
+                    }
+                    throw new IllegalArgumentException("Unknown PermissionCompletedEventDataResultKind value: " + value);
+                }
             }
         }
     }

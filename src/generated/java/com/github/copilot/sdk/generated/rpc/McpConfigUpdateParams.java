@@ -12,23 +12,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code mcp.config.update} RPC method. */
+/**
+ * Request parameters for the {@code mcp.config.update} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class McpConfigUpdateParams {
-
+public record McpConfigUpdateParams(
     /** Name of the MCP server to update */
-    @JsonProperty("name")
-    private String name;
-
+    @JsonProperty("name") String name,
     /** MCP server configuration (local/stdio or remote/http) */
-    @JsonProperty("config")
-    private Object config;
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Object getConfig() { return config; }
-    public void setConfig(Object config) { this.config = config; }
+    @JsonProperty("config") Object config
+) {
 }

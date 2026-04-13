@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.workspace_file_changed} session event. */
+/**
+ * The {@code session.workspace_file_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionWorkspaceFileChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.workspace_file_changed"; }
 
     @JsonProperty("data")
     private SessionWorkspaceFileChangedEventData data;
@@ -26,22 +33,12 @@ public final class SessionWorkspaceFileChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionWorkspaceFileChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionWorkspaceFileChangedEventData {
-
+    public record SessionWorkspaceFileChangedEventData(
         /** Relative path within the session workspace files directory */
-        @JsonProperty("path")
-        private String path;
-
+        @JsonProperty("path") String path,
         /** Whether the file was newly created or updated */
-        @JsonProperty("operation")
-        private SessionWorkspaceFileChangedEventDataOperation operation;
-
-        public String getPath() { return path; }
-        public void setPath(String path) { this.path = path; }
-
-        public SessionWorkspaceFileChangedEventDataOperation getOperation() { return operation; }
-        public void setOperation(SessionWorkspaceFileChangedEventDataOperation operation) { this.operation = operation; }
-
+        @JsonProperty("operation") SessionWorkspaceFileChangedEventDataOperation operation
+    ) {
 
         /** Whether the file was newly created or updated */
         public enum SessionWorkspaceFileChangedEventDataOperation {
@@ -54,6 +51,13 @@ public final class SessionWorkspaceFileChangedEvent extends SessionEvent {
             SessionWorkspaceFileChangedEventDataOperation(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SessionWorkspaceFileChangedEventDataOperation fromValue(String value) {
+                for (SessionWorkspaceFileChangedEventDataOperation v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SessionWorkspaceFileChangedEventDataOperation value: " + value);
+            }
         }
     }
 }

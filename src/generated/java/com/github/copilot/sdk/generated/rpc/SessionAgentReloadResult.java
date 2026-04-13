@@ -13,43 +13,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.agent.reload} RPC method. */
+/**
+ * Result for the {@code session.agent.reload} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionAgentReloadResult {
-
+public record SessionAgentReloadResult(
     /** Reloaded custom agents */
-    @JsonProperty("agents")
-    private List<SessionAgentReloadResultAgentsItem> agents;
-
-    public List<SessionAgentReloadResultAgentsItem> getAgents() { return agents; }
-    public void setAgents(List<SessionAgentReloadResultAgentsItem> agents) { this.agents = agents; }
-
+    @JsonProperty("agents") List<SessionAgentReloadResultAgentsItem> agents
+) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionAgentReloadResultAgentsItem {
-
+    public record SessionAgentReloadResultAgentsItem(
         /** Unique identifier of the custom agent */
-        @JsonProperty("name")
-        private String name;
-
+        @JsonProperty("name") String name,
         /** Human-readable display name */
-        @JsonProperty("displayName")
-        private String displayName;
-
+        @JsonProperty("displayName") String displayName,
         /** Description of the agent's purpose */
-        @JsonProperty("description")
-        private String description;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getDisplayName() { return displayName; }
-        public void setDisplayName(String displayName) { this.displayName = displayName; }
-
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
+        @JsonProperty("description") String description
+    ) {
     }
 }

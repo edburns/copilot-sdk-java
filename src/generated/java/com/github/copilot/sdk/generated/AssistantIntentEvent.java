@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.intent} session event. */
+/**
+ * The {@code assistant.intent} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantIntentEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.intent"; }
 
     @JsonProperty("data")
     private AssistantIntentEventData data;
@@ -26,13 +33,9 @@ public final class AssistantIntentEvent extends SessionEvent {
     /** Data payload for {@link AssistantIntentEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantIntentEventData {
-
+    public record AssistantIntentEventData(
         /** Short description of what the agent is currently doing or planning to do */
-        @JsonProperty("intent")
-        private String intent;
-
-        public String getIntent() { return intent; }
-        public void setIntent(String intent) { this.intent = intent; }
+        @JsonProperty("intent") String intent
+    ) {
     }
 }

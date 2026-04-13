@@ -13,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code sessionFs.readdir} RPC method. */
+/**
+ * Result for the {@code sessionFs.readdir} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsReaddirResult {
-
+public record SessionFsReaddirResult(
     /** Entry names in the directory */
-    @JsonProperty("entries")
-    private List<String> entries;
-
-    public List<String> getEntries() { return entries; }
-    public void setEntries(List<String> entries) { this.entries = entries; }
+    @JsonProperty("entries") List<String> entries
+) {
 }

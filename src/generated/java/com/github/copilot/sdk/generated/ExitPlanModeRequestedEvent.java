@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code exit_plan_mode.requested} session event. */
+/**
+ * The {@code exit_plan_mode.requested} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ExitPlanModeRequestedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "exit_plan_mode.requested"; }
 
     @JsonProperty("data")
     private ExitPlanModeRequestedEventData data;
@@ -27,41 +34,17 @@ public final class ExitPlanModeRequestedEvent extends SessionEvent {
     /** Data payload for {@link ExitPlanModeRequestedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ExitPlanModeRequestedEventData {
-
+    public record ExitPlanModeRequestedEventData(
         /** Unique identifier for this request; used to respond via session.respondToExitPlanMode() */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** Summary of the plan that was created */
-        @JsonProperty("summary")
-        private String summary;
-
+        @JsonProperty("summary") String summary,
         /** Full content of the plan file */
-        @JsonProperty("planContent")
-        private String planContent;
-
+        @JsonProperty("planContent") String planContent,
         /** Available actions the user can take (e.g., approve, edit, reject) */
-        @JsonProperty("actions")
-        private List<String> actions;
-
+        @JsonProperty("actions") List<String> actions,
         /** The recommended action for the user to take */
-        @JsonProperty("recommendedAction")
-        private String recommendedAction;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public String getSummary() { return summary; }
-        public void setSummary(String summary) { this.summary = summary; }
-
-        public String getPlanContent() { return planContent; }
-        public void setPlanContent(String planContent) { this.planContent = planContent; }
-
-        public List<String> getActions() { return actions; }
-        public void setActions(List<String> actions) { this.actions = actions; }
-
-        public String getRecommendedAction() { return recommendedAction; }
-        public void setRecommendedAction(String recommendedAction) { this.recommendedAction = recommendedAction; }
+        @JsonProperty("recommendedAction") String recommendedAction
+    ) {
     }
 }

@@ -113,6 +113,16 @@ function schemaTypeToJava(
             const result = schemaTypeToJava(nonNull[0] as JSONSchema7, required && !hasNull, context, propName, nestedTypes);
             return result;
         }
+        // When exactly two non-null types and one of them is string, prefer String
+        // over Object to avoid unnecessary type erasure on common wire-level unions
+        // (e.g., string | null, string | boolean).  For wider unions keep Object.
+        if (nonNull.length === 2) {
+            const hasString = nonNull.some((s) => typeof s === "object" && (s as JSONSchema7).type === "string");
+            if (hasString) {
+                return { javaType: "String", imports };
+            }
+        }
+        console.warn(`[codegen] ${context}.${propName}: anyOf with ${nonNull.length} non-null branches — falling back to Object`);
         return { javaType: "Object", imports };
     }
 
@@ -146,12 +156,18 @@ function schemaTypeToJava(
         }
     }
 
-    if (schema.type === "number" || schema.type === "integer") {
-        return { javaType: "Double", imports };
+    if (schema.type === "integer") {
+        // JSON Schema "integer" maps to Long (boxed — always used for records).
+        // Use primitive long for required fields in mutable-bean contexts if needed.
+        return { javaType: required ? "long" : "Long", imports };
+    }
+
+    if (schema.type === "number") {
+        return { javaType: required ? "double" : "Double", imports };
     }
 
     if (schema.type === "boolean") {
-        return { javaType: "Boolean", imports };
+        return { javaType: required ? "boolean" : "Boolean", imports };
     }
 
     if (schema.type === "array") {
@@ -197,6 +213,7 @@ function schemaTypeToJava(
         return { javaType: refName, imports };
     }
 
+    console.warn(`[codegen] ${context}.${propName}: unrecognized schema (type=${JSON.stringify(schema.type)}) — falling back to Object`);
     return { javaType: "Object", imports };
 }
 
@@ -208,80 +225,6 @@ interface JavaClassDef {
     description?: string;
     schema?: JSONSchema7;
     values?: string[];  // for enum
-}
-
-// ── Generate a simple data class ──────────────────────────────────────────────
-
-function generateDataClass(
-    className: string,
-    schema: JSONSchema7,
-    nestedTypes: Map<string, JavaClassDef>,
-    packageName: string,
-    schemaSource: string,
-    indentLevel: number = 0
-): string {
-    const indent = "    ".repeat(indentLevel);
-    const lines: string[] = [];
-    const allImports = new Set<string>();
-
-    interface PropInfo {
-        jsonName: string;
-        javaName: string;
-        javaType: string;
-        required: boolean;
-        description?: string;
-    }
-
-    const requiredSet = new Set(schema.required || []);
-    const properties: PropInfo[] = [];
-
-    for (const [propName, propSchema] of Object.entries(schema.properties || {})) {
-        if (typeof propSchema !== "object") continue;
-        const prop = propSchema as JSONSchema7;
-        const isRequired = requiredSet.has(propName);
-        const result = schemaTypeToJava(prop, isRequired, className, propName, nestedTypes);
-        for (const imp of result.imports) allImports.add(imp);
-        properties.push({
-            jsonName: propName,
-            javaName: toCamelCase(propName),
-            javaType: result.javaType,
-            required: isRequired,
-            description: prop.description,
-        });
-    }
-
-    if (schema.description) {
-        lines.push(`${indent}/** ${schema.description} */`);
-    }
-    lines.push(`${indent}@JsonInclude(JsonInclude.Include.NON_NULL)`);
-    lines.push(`${indent}@JsonIgnoreProperties(ignoreUnknown = true)`);
-    if (indentLevel === 0) {
-        lines.push(`${indent}${GENERATED_ANNOTATION}`);
-    }
-    lines.push(`${indent}public class ${className} {`);
-    lines.push("");
-
-    for (const prop of properties) {
-        if (prop.description) {
-            lines.push(`${indent}    /** ${prop.description} */`);
-        }
-        lines.push(`${indent}    @JsonProperty("${prop.jsonName}")`);
-        lines.push(`${indent}    private ${prop.javaType} ${prop.javaName};`);
-        lines.push("");
-    }
-
-    for (const prop of properties) {
-        const getterName = "get" + prop.javaName.charAt(0).toUpperCase() + prop.javaName.slice(1);
-        const setterName = "set" + prop.javaName.charAt(0).toUpperCase() + prop.javaName.slice(1);
-        lines.push(`${indent}    public ${prop.javaType} ${getterName}() { return ${prop.javaName}; }`);
-        lines.push(`${indent}    public void ${setterName}(${prop.javaType} ${prop.javaName}) { this.${prop.javaName} = ${prop.javaName}; }`);
-        lines.push("");
-    }
-
-    if (lines[lines.length - 1] === "") lines.pop();
-    lines.push(`${indent}}`);
-
-    return { content: lines.join("\n"), imports: allImports } as any;
 }
 
 // ── Session Events codegen ────────────────────────────────────────────────────
@@ -355,7 +298,11 @@ async function generateSessionEventBaseClass(
     lines.push(`import java.util.UUID;`);
     lines.push(`import javax.annotation.processing.Generated;`);
     lines.push("");
-    lines.push(`/** Provides the base class from which all session events derive. */`);
+    lines.push(`/**`);
+    lines.push(` * Base class for all generated session events.`);
+    lines.push(` *`);
+    lines.push(` * @since 1.0.0`);
+    lines.push(` */`);
     lines.push(`@JsonIgnoreProperties(ignoreUnknown = true)`);
     lines.push(`@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = UnknownSessionEvent.class)`);
     lines.push(`@JsonSubTypes({`);
@@ -366,7 +313,14 @@ async function generateSessionEventBaseClass(
     }
     lines.push(`})`);
     lines.push(GENERATED_ANNOTATION);
-    lines.push(`public class SessionEvent {`);
+
+    // Build the permits clause (all variant classes + UnknownSessionEvent last)
+    const allPermitted = [...variants.map((v) => v.className), "UnknownSessionEvent"];
+    lines.push(`public abstract sealed class SessionEvent permits`);
+    for (let i = 0; i < allPermitted.length; i++) {
+        const comma = i < allPermitted.length - 1 ? "," : " {";
+        lines.push(`        ${allPermitted[i]}${comma}`);
+    }
     lines.push("");
     lines.push(`    /** Unique event identifier (UUID v4), generated when the event is emitted. */`);
     lines.push(`    @JsonProperty("id")`);
@@ -376,10 +330,6 @@ async function generateSessionEventBaseClass(
     lines.push(`    @JsonProperty("timestamp")`);
     lines.push(`    private OffsetDateTime timestamp;`);
     lines.push("");
-    lines.push(`    /** The event type discriminator. */`);
-    lines.push(`    @JsonProperty("type")`);
-    lines.push(`    private String type;`);
-    lines.push("");
     lines.push(`    /** ID of the chronologically preceding event in the session. Null for the first event. */`);
     lines.push(`    @JsonProperty("parentId")`);
     lines.push(`    private UUID parentId;`);
@@ -388,14 +338,18 @@ async function generateSessionEventBaseClass(
     lines.push(`    @JsonProperty("ephemeral")`);
     lines.push(`    private Boolean ephemeral;`);
     lines.push("");
+    lines.push(`    /**`);
+    lines.push(`     * Returns the event-type discriminator string (e.g., {@code "session.idle"}).`);
+    lines.push(`     *`);
+    lines.push(`     * @return the event type`);
+    lines.push(`     */`);
+    lines.push(`    public abstract String getType();`);
+    lines.push("");
     lines.push(`    public UUID getId() { return id; }`);
     lines.push(`    public void setId(UUID id) { this.id = id; }`);
     lines.push("");
     lines.push(`    public OffsetDateTime getTimestamp() { return timestamp; }`);
     lines.push(`    public void setTimestamp(OffsetDateTime timestamp) { this.timestamp = timestamp; }`);
-    lines.push("");
-    lines.push(`    public String getType() { return type; }`);
-    lines.push(`    public void setType(String type) { this.type = type; }`);
     lines.push("");
     lines.push(`    public UUID getParentId() { return parentId; }`);
     lines.push(`    public void setParentId(UUID parentId) { this.parentId = parentId; }`);
@@ -423,16 +377,24 @@ async function generateUnknownEventClass(packageName: string, packageDir: string
     lines.push(`import com.fasterxml.jackson.annotation.JsonIgnoreProperties;`);
     lines.push(`import javax.annotation.processing.Generated;`);
     lines.push("");
-    lines.push(`/** Fallback for event types not yet known to this SDK version. */`);
+    lines.push(`/**`);
+    lines.push(` * Fallback for event types not yet known to this SDK version.`);
+    lines.push(` *`);
+    lines.push(` * @since 1.0.0`);
+    lines.push(` */`);
     lines.push(`@JsonIgnoreProperties(ignoreUnknown = true)`);
     lines.push(GENERATED_ANNOTATION);
-    lines.push(`public final class UnknownSessionEvent extends SessionEvent {}`);
+    lines.push(`public final class UnknownSessionEvent extends SessionEvent {`);
+    lines.push("");
+    lines.push(`    @Override`);
+    lines.push(`    public String getType() { return "unknown"; }`);
+    lines.push(`}`);
     lines.push("");
 
     await writeGeneratedFile(`${packageDir}/UnknownSessionEvent.java`, lines.join("\n"));
 }
 
-/** Render a nested type (enum or class) as a static inner class, indented at the given level. */
+/** Render a nested type (enum or record) indented at the given level. */
 function renderNestedType(nested: JavaClassDef, indentLevel: number, nestedTypes: Map<string, JavaClassDef>, allImports: Set<string>): string[] {
     const ind = "    ".repeat(indentLevel);
     const lines: string[] = [];
@@ -454,6 +416,13 @@ function renderNestedType(nested: JavaClassDef, indentLevel: number, nestedTypes
         lines.push(`${ind}    ${nested.name}(String value) { this.value = value; }`);
         lines.push(`${ind}    @com.fasterxml.jackson.annotation.JsonValue`);
         lines.push(`${ind}    public String getValue() { return value; }`);
+        lines.push(`${ind}    @com.fasterxml.jackson.annotation.JsonCreator`);
+        lines.push(`${ind}    public static ${nested.name} fromValue(String value) {`);
+        lines.push(`${ind}        for (${nested.name} v : values()) {`);
+        lines.push(`${ind}            if (v.value.equals(value)) return v;`);
+        lines.push(`${ind}        }`);
+        lines.push(`${ind}        throw new IllegalArgumentException("Unknown ${nested.name} value: " + value);`);
+        lines.push(`${ind}    }`);
         lines.push(`${ind}}`);
     } else if (nested.kind === "class" && nested.schema?.properties) {
         const localNestedTypes = new Map<string, JavaClassDef>();
@@ -463,8 +432,8 @@ function renderNestedType(nested: JavaClassDef, indentLevel: number, nestedTypes
         for (const [propName, propSchema] of Object.entries(nested.schema.properties)) {
             if (typeof propSchema !== "object") continue;
             const prop = propSchema as JSONSchema7;
-            const isRequired = requiredSet.has(propName);
-            const result = schemaTypeToJava(prop, isRequired, nested.name, propName, localNestedTypes);
+            // Record components are always boxed (nullable by design).
+            const result = schemaTypeToJava(prop, false, nested.name, propName, localNestedTypes);
             for (const imp of result.imports) allImports.add(imp);
             fields.push({ jsonName: propName, javaName: toCamelCase(propName), javaType: result.javaType, description: prop.description });
         }
@@ -475,26 +444,24 @@ function renderNestedType(nested: JavaClassDef, indentLevel: number, nestedTypes
         }
         lines.push(`${ind}@JsonIgnoreProperties(ignoreUnknown = true)`);
         lines.push(`${ind}@JsonInclude(JsonInclude.Include.NON_NULL)`);
-        lines.push(`${ind}public static class ${nested.name} {`);
-        lines.push("");
-        for (const f of fields) {
-            if (f.description) lines.push(`${ind}    /** ${f.description} */`);
-            lines.push(`${ind}    @JsonProperty("${f.jsonName}")`);
-            lines.push(`${ind}    private ${f.javaType} ${f.javaName};`);
-            lines.push("");
+        if (fields.length === 0) {
+            lines.push(`${ind}public record ${nested.name}() {`);
+        } else {
+            lines.push(`${ind}public record ${nested.name}(`);
+            for (let i = 0; i < fields.length; i++) {
+                const f = fields[i];
+                const comma = i < fields.length - 1 ? "," : "";
+                if (f.description) lines.push(`${ind}    /** ${f.description} */`);
+                lines.push(`${ind}    @JsonProperty("${f.jsonName}") ${f.javaType} ${f.javaName}${comma}`);
+            }
+            lines.push(`${ind}) {`);
         }
-        for (const f of fields) {
-            const g = "get" + f.javaName.charAt(0).toUpperCase() + f.javaName.slice(1);
-            const s = "set" + f.javaName.charAt(0).toUpperCase() + f.javaName.slice(1);
-            lines.push(`${ind}    public ${f.javaType} ${g}() { return ${f.javaName}; }`);
-            lines.push(`${ind}    public void ${s}(${f.javaType} ${f.javaName}) { this.${f.javaName} = ${f.javaName}; }`);
-            lines.push("");
-        }
-        // Render any further nested types inside this class
+        // Render any further nested types inside this record
         for (const [, localNested] of localNestedTypes) {
             lines.push(...renderNestedType(localNested, indentLevel + 1, nestedTypes, allImports));
         }
-        if (lines[lines.length - 1] === "") lines.pop();
+        if (lines[lines.length - 1] !== "") lines.push("");
+        lines.pop(); // remove trailing blank before closing brace
         lines.push(`${ind}}`);
     }
 
@@ -515,7 +482,7 @@ async function generateEventVariantClass(
     ]);
     const nestedTypes = new Map<string, JavaClassDef>();
 
-    // Collect data class fields
+    // Collect data record fields
     interface FieldInfo {
         jsonName: string;
         javaName: string;
@@ -526,12 +493,11 @@ async function generateEventVariantClass(
     const dataFields: FieldInfo[] = [];
 
     if (variant.dataSchema?.properties) {
-        const requiredSet = new Set(variant.dataSchema.required || []);
         for (const [propName, propSchema] of Object.entries(variant.dataSchema.properties)) {
             if (typeof propSchema !== "object") continue;
             const prop = propSchema as JSONSchema7;
-            const isRequired = requiredSet.has(propName);
-            const result = schemaTypeToJava(prop, isRequired, `${variant.className}Data`, propName, nestedTypes);
+            // Record components are always boxed (nullable by design).
+            const result = schemaTypeToJava(prop, false, `${variant.className}Data`, propName, nestedTypes);
             for (const imp of result.imports) allImports.add(imp);
             dataFields.push({
                 jsonName: propName,
@@ -541,6 +507,9 @@ async function generateEventVariantClass(
             });
         }
     }
+
+    // Whether a data record should be emitted (always when dataSchema is present)
+    const hasDataSchema = variant.dataSchema !== null;
 
     // Build the file
     lines.push(COPYRIGHT);
@@ -557,48 +526,56 @@ async function generateEventVariantClass(
     lines.push("");
 
     if (variant.description) {
-        lines.push(`/** ${variant.description} */`);
+        lines.push(`/**`);
+        lines.push(` * ${variant.description}`);
+        lines.push(` *`);
+        lines.push(` * @since 1.0.0`);
+        lines.push(` */`);
     } else {
-        lines.push(`/** The {@code ${variant.typeName}} session event. */`);
+        lines.push(`/**`);
+        lines.push(` * The {@code ${variant.typeName}} session event.`);
+        lines.push(` *`);
+        lines.push(` * @since 1.0.0`);
+        lines.push(` */`);
     }
     lines.push(`@JsonIgnoreProperties(ignoreUnknown = true)`);
     lines.push(GENERATED_ANNOTATION);
     lines.push(`public final class ${variant.className} extends SessionEvent {`);
     lines.push("");
+    lines.push(`    @Override`);
+    lines.push(`    public String getType() { return "${variant.typeName}"; }`);
 
-    if (dataFields.length > 0) {
+    if (hasDataSchema) {
+        lines.push("");
         lines.push(`    @JsonProperty("data")`);
         lines.push(`    private ${variant.className}Data data;`);
         lines.push("");
         lines.push(`    public ${variant.className}Data getData() { return data; }`);
         lines.push(`    public void setData(${variant.className}Data data) { this.data = data; }`);
         lines.push("");
-        // Generate data inner class
+        // Generate data inner record
         lines.push(`    /** Data payload for {@link ${variant.className}}. */`);
         lines.push(`    @JsonIgnoreProperties(ignoreUnknown = true)`);
         lines.push(`    @JsonInclude(JsonInclude.Include.NON_NULL)`);
-        lines.push(`    public static class ${variant.className}Data {`);
-        lines.push("");
-        for (const field of dataFields) {
-            if (field.description) {
-                lines.push(`        /** ${field.description} */`);
+        if (dataFields.length === 0) {
+            lines.push(`    public record ${variant.className}Data() {`);
+        } else {
+            lines.push(`    public record ${variant.className}Data(`);
+            for (let i = 0; i < dataFields.length; i++) {
+                const field = dataFields[i];
+                const comma = i < dataFields.length - 1 ? "," : "";
+                if (field.description) {
+                    lines.push(`        /** ${field.description} */`);
+                }
+                lines.push(`        @JsonProperty("${field.jsonName}") ${field.javaType} ${field.javaName}${comma}`);
             }
-            lines.push(`        @JsonProperty("${field.jsonName}")`);
-            lines.push(`        private ${field.javaType} ${field.javaName};`);
-            lines.push("");
+            lines.push(`    ) {`);
         }
-        for (const field of dataFields) {
-            const getterName = "get" + field.javaName.charAt(0).toUpperCase() + field.javaName.slice(1);
-            const setterName = "set" + field.javaName.charAt(0).toUpperCase() + field.javaName.slice(1);
-            lines.push(`        public ${field.javaType} ${getterName}() { return ${field.javaName}; }`);
-            lines.push(`        public void ${setterName}(${field.javaType} ${field.javaName}) { this.${field.javaName} = ${field.javaName}; }`);
-            lines.push("");
-        }
-        // Render nested types inside Data class
+        // Render nested types inside Data record
         for (const [, nested] of nestedTypes) {
             lines.push(...renderNestedType(nested, 2, nestedTypes, allImports));
         }
-        if (lines[lines.length - 1] === "") lines.pop();
+        if (nestedTypes.size > 0 && lines[lines.length - 1] === "") lines.pop();
         lines.push(`    }`);
     }
 
@@ -643,7 +620,7 @@ function rpcMethodToClassName(rpcMethod: string): string {
     return rpcMethod.split(/[._-]/).map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join("");
 }
 
-/** Generate a Java class for a JSON Schema object type. Returns the class content. */
+/** Generate a Java record for a JSON Schema object type. Returns the class content. */
 function generateRpcClass(
     className: string,
     schema: JSONSchema7,
@@ -654,50 +631,41 @@ function generateRpcClass(
     const imports = new Set<string>();
     const localNestedTypes = new Map<string, JavaClassDef>();
     const lines: string[] = [];
+    const visModifier = visibility === "public" ? "public " : "";
 
-    if (schema.description) {
-        lines.push(`/** ${schema.description} */`);
-    }
+    const properties = Object.entries(schema.properties || {});
+    const fields = properties.flatMap(([propName, propSchema]) => {
+        if (typeof propSchema !== "object") return [];
+        const prop = propSchema as JSONSchema7;
+        // Record components are always boxed (nullable by design).
+        const result = schemaTypeToJava(prop, false, className, propName, localNestedTypes);
+        for (const imp of result.imports) imports.add(imp);
+        return [{ propName, javaName: toCamelCase(propName), javaType: result.javaType, description: prop.description }];
+    });
+
     lines.push(`@JsonInclude(JsonInclude.Include.NON_NULL)`);
     lines.push(`@JsonIgnoreProperties(ignoreUnknown = true)`);
-    const visModifier = visibility === "public" ? "public" : "";
-    lines.push(`${visModifier} class ${className} {`.trimStart());
-    lines.push("");
-
-    const requiredSet = new Set(schema.required || []);
-    for (const [propName, propSchema] of Object.entries(schema.properties || {})) {
-        if (typeof propSchema !== "object") continue;
-        const prop = propSchema as JSONSchema7;
-        const isRequired = requiredSet.has(propName);
-        const result = schemaTypeToJava(prop, isRequired, className, propName, localNestedTypes);
-        for (const imp of result.imports) imports.add(imp);
-        if (prop.description) {
-            lines.push(`    /** ${prop.description} */`);
+    if (fields.length === 0) {
+        lines.push(`${visModifier}record ${className}() {`);
+    } else {
+        lines.push(`${visModifier}record ${className}(`);
+        for (let i = 0; i < fields.length; i++) {
+            const f = fields[i];
+            const comma = i < fields.length - 1 ? "," : "";
+            if (f.description) {
+                lines.push(`    /** ${f.description} */`);
+            }
+            lines.push(`    @JsonProperty("${f.propName}") ${f.javaType} ${f.javaName}${comma}`);
         }
-        lines.push(`    @JsonProperty("${propName}")`);
-        lines.push(`    private ${result.javaType} ${toCamelCase(propName)};`);
-        lines.push("");
+        lines.push(`) {`);
     }
 
-    for (const [propName] of Object.entries(schema.properties || {})) {
-        if (typeof schema.properties![propName] !== "object") continue;
-        const prop = schema.properties![propName] as JSONSchema7;
-        const isRequired = requiredSet.has(propName);
-        const result = schemaTypeToJava(prop, isRequired, className, propName, localNestedTypes);
-        const javaName = toCamelCase(propName);
-        const getterName = "get" + javaName.charAt(0).toUpperCase() + javaName.slice(1);
-        const setterName = "set" + javaName.charAt(0).toUpperCase() + javaName.slice(1);
-        lines.push(`    public ${result.javaType} ${getterName}() { return ${javaName}; }`);
-        lines.push(`    public void ${setterName}(${result.javaType} ${javaName}) { this.${javaName} = ${javaName}; }`);
-        lines.push("");
-    }
-
-    // Add nested types as static inner classes
+    // Add nested types as nested records/enums inside this record
     for (const [, nested] of localNestedTypes) {
         lines.push(...renderNestedType(nested, 1, new Map(), imports));
     }
 
-    if (lines[lines.length - 1] === "") lines.pop();
+    if (localNestedTypes.size > 0 && lines[lines.length - 1] === "") lines.pop();
     lines.push(`}`);
 
     return { code: lines.join("\n"), imports };
@@ -786,9 +754,17 @@ async function generateRpcDataClass(
     lines.push("");
 
     if (schema.description) {
-        lines.push(`/** ${schema.description} */`);
+        lines.push(`/**`);
+        lines.push(` * ${schema.description}`);
+        lines.push(` *`);
+        lines.push(` * @since 1.0.0`);
+        lines.push(` */`);
     } else {
-        lines.push(`/** ${kind === "params" ? "Request parameters" : "Result"} for the {@code ${rpcMethod}} RPC method. */`);
+        lines.push(`/**`);
+        lines.push(` * ${kind === "params" ? "Request parameters" : "Result"} for the {@code ${rpcMethod}} RPC method.`);
+        lines.push(` *`);
+        lines.push(` * @since 1.0.0`);
+        lines.push(` */`);
     }
     lines.push(GENERATED_ANNOTATION);
     lines.push(code);

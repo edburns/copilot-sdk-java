@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code abort} session event. */
+/**
+ * The {@code abort} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AbortEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "abort"; }
 
     @JsonProperty("data")
     private AbortEventData data;
@@ -26,13 +33,9 @@ public final class AbortEvent extends SessionEvent {
     /** Data payload for {@link AbortEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AbortEventData {
-
+    public record AbortEventData(
         /** Reason the current turn was aborted (e.g., "user initiated") */
-        @JsonProperty("reason")
-        private String reason;
-
-        public String getReason() { return reason; }
-        public void setReason(String reason) { this.reason = reason; }
+        @JsonProperty("reason") String reason
+    ) {
     }
 }

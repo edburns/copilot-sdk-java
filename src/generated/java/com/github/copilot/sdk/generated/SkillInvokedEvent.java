@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code skill.invoked} session event. */
+/**
+ * The {@code skill.invoked} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SkillInvokedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "skill.invoked"; }
 
     @JsonProperty("data")
     private SkillInvokedEventData data;
@@ -27,55 +34,21 @@ public final class SkillInvokedEvent extends SessionEvent {
     /** Data payload for {@link SkillInvokedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SkillInvokedEventData {
-
+    public record SkillInvokedEventData(
         /** Name of the invoked skill */
-        @JsonProperty("name")
-        private String name;
-
+        @JsonProperty("name") String name,
         /** File path to the SKILL.md definition */
-        @JsonProperty("path")
-        private String path;
-
+        @JsonProperty("path") String path,
         /** Full content of the skill file, injected into the conversation for the model */
-        @JsonProperty("content")
-        private String content;
-
+        @JsonProperty("content") String content,
         /** Tool names that should be auto-approved when this skill is active */
-        @JsonProperty("allowedTools")
-        private List<String> allowedTools;
-
+        @JsonProperty("allowedTools") List<String> allowedTools,
         /** Name of the plugin this skill originated from, when applicable */
-        @JsonProperty("pluginName")
-        private String pluginName;
-
+        @JsonProperty("pluginName") String pluginName,
         /** Version of the plugin this skill originated from, when applicable */
-        @JsonProperty("pluginVersion")
-        private String pluginVersion;
-
+        @JsonProperty("pluginVersion") String pluginVersion,
         /** Description of the skill from its SKILL.md frontmatter */
-        @JsonProperty("description")
-        private String description;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getPath() { return path; }
-        public void setPath(String path) { this.path = path; }
-
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-
-        public List<String> getAllowedTools() { return allowedTools; }
-        public void setAllowedTools(List<String> allowedTools) { this.allowedTools = allowedTools; }
-
-        public String getPluginName() { return pluginName; }
-        public void setPluginName(String pluginName) { this.pluginName = pluginName; }
-
-        public String getPluginVersion() { return pluginVersion; }
-        public void setPluginVersion(String pluginVersion) { this.pluginVersion = pluginVersion; }
-
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
+        @JsonProperty("description") String description
+    ) {
     }
 }

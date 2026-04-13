@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code hook.end} session event. */
+/**
+ * The {@code hook.end} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class HookEndEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "hook.end"; }
 
     @JsonProperty("data")
     private HookEndEventData data;
@@ -26,62 +33,28 @@ public final class HookEndEvent extends SessionEvent {
     /** Data payload for {@link HookEndEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class HookEndEventData {
-
+    public record HookEndEventData(
         /** Identifier matching the corresponding hook.start event */
-        @JsonProperty("hookInvocationId")
-        private String hookInvocationId;
-
+        @JsonProperty("hookInvocationId") String hookInvocationId,
         /** Type of hook that was invoked (e.g., "preToolUse", "postToolUse", "sessionStart") */
-        @JsonProperty("hookType")
-        private String hookType;
-
+        @JsonProperty("hookType") String hookType,
         /** Output data produced by the hook */
-        @JsonProperty("output")
-        private Object output;
-
+        @JsonProperty("output") Object output,
         /** Whether the hook completed successfully */
-        @JsonProperty("success")
-        private Boolean success;
-
+        @JsonProperty("success") Boolean success,
         /** Error details when the hook failed */
-        @JsonProperty("error")
-        private HookEndEventDataError error;
-
-        public String getHookInvocationId() { return hookInvocationId; }
-        public void setHookInvocationId(String hookInvocationId) { this.hookInvocationId = hookInvocationId; }
-
-        public String getHookType() { return hookType; }
-        public void setHookType(String hookType) { this.hookType = hookType; }
-
-        public Object getOutput() { return output; }
-        public void setOutput(Object output) { this.output = output; }
-
-        public Boolean getSuccess() { return success; }
-        public void setSuccess(Boolean success) { this.success = success; }
-
-        public HookEndEventDataError getError() { return error; }
-        public void setError(HookEndEventDataError error) { this.error = error; }
-
+        @JsonProperty("error") HookEndEventDataError error
+    ) {
 
         /** Error details when the hook failed */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class HookEndEventDataError {
-
+        public record HookEndEventDataError(
             /** Human-readable error message */
-            @JsonProperty("message")
-            private String message;
-
+            @JsonProperty("message") String message,
             /** Error stack trace, when available */
-            @JsonProperty("stack")
-            private String stack;
-
-            public String getMessage() { return message; }
-            public void setMessage(String message) { this.message = message; }
-
-            public String getStack() { return stack; }
-            public void setStack(String stack) { this.stack = stack; }
+            @JsonProperty("stack") String stack
+        ) {
         }
     }
 }

@@ -12,26 +12,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.mode.set} RPC method. */
+/**
+ * Request parameters for the {@code session.mode.set} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionModeSetParams {
-
+public record SessionModeSetParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** The mode to switch to. Valid values: "interactive", "plan", "autopilot". */
-    @JsonProperty("mode")
-    private SessionModeSetParamsMode mode;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public SessionModeSetParamsMode getMode() { return mode; }
-    public void setMode(SessionModeSetParamsMode mode) { this.mode = mode; }
-
+    @JsonProperty("mode") SessionModeSetParamsMode mode
+) {
 
     /** The mode to switch to. Valid values: "interactive", "plan", "autopilot". */
     public enum SessionModeSetParamsMode {
@@ -46,5 +40,12 @@ public class SessionModeSetParams {
         SessionModeSetParamsMode(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionModeSetParamsMode fromValue(String value) {
+            for (SessionModeSetParamsMode v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionModeSetParamsMode value: " + value);
+        }
     }
 }

@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.mode.get} RPC method. */
+/**
+ * Request parameters for the {@code session.mode.get} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionModeGetParams {
-
+public record SessionModeGetParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+    @JsonProperty("sessionId") String sessionId
+) {
 }

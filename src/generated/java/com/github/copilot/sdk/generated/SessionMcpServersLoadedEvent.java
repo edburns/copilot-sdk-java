@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.mcp_servers_loaded} session event. */
+/**
+ * The {@code session.mcp_servers_loaded} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionMcpServersLoadedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.mcp_servers_loaded"; }
 
     @JsonProperty("data")
     private SessionMcpServersLoadedEventData data;
@@ -27,48 +34,23 @@ public final class SessionMcpServersLoadedEvent extends SessionEvent {
     /** Data payload for {@link SessionMcpServersLoadedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionMcpServersLoadedEventData {
-
+    public record SessionMcpServersLoadedEventData(
         /** Array of MCP server status summaries */
-        @JsonProperty("servers")
-        private List<SessionMcpServersLoadedEventDataServersItem> servers;
-
-        public List<SessionMcpServersLoadedEventDataServersItem> getServers() { return servers; }
-        public void setServers(List<SessionMcpServersLoadedEventDataServersItem> servers) { this.servers = servers; }
-
+        @JsonProperty("servers") List<SessionMcpServersLoadedEventDataServersItem> servers
+    ) {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionMcpServersLoadedEventDataServersItem {
-
+        public record SessionMcpServersLoadedEventDataServersItem(
             /** Server name (config key) */
-            @JsonProperty("name")
-            private String name;
-
+            @JsonProperty("name") String name,
             /** Connection status: connected, failed, needs-auth, pending, disabled, or not_configured */
-            @JsonProperty("status")
-            private SessionMcpServersLoadedEventDataServersItemStatus status;
-
+            @JsonProperty("status") SessionMcpServersLoadedEventDataServersItemStatus status,
             /** Configuration source: user, workspace, plugin, or builtin */
-            @JsonProperty("source")
-            private String source;
-
+            @JsonProperty("source") String source,
             /** Error message if the server failed to connect */
-            @JsonProperty("error")
-            private String error;
-
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
-
-            public SessionMcpServersLoadedEventDataServersItemStatus getStatus() { return status; }
-            public void setStatus(SessionMcpServersLoadedEventDataServersItemStatus status) { this.status = status; }
-
-            public String getSource() { return source; }
-            public void setSource(String source) { this.source = source; }
-
-            public String getError() { return error; }
-            public void setError(String error) { this.error = error; }
-
+            @JsonProperty("error") String error
+        ) {
 
             /** Connection status: connected, failed, needs-auth, pending, disabled, or not_configured */
             public enum SessionMcpServersLoadedEventDataServersItemStatus {
@@ -89,6 +71,13 @@ public final class SessionMcpServersLoadedEvent extends SessionEvent {
                 SessionMcpServersLoadedEventDataServersItemStatus(String value) { this.value = value; }
                 @com.fasterxml.jackson.annotation.JsonValue
                 public String getValue() { return value; }
+                @com.fasterxml.jackson.annotation.JsonCreator
+                public static SessionMcpServersLoadedEventDataServersItemStatus fromValue(String value) {
+                    for (SessionMcpServersLoadedEventDataServersItemStatus v : values()) {
+                        if (v.value.equals(value)) return v;
+                    }
+                    throw new IllegalArgumentException("Unknown SessionMcpServersLoadedEventDataServersItemStatus value: " + value);
+                }
             }
         }
     }

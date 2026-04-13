@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.snapshot_rewind} session event. */
+/**
+ * The {@code session.snapshot_rewind} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionSnapshotRewindEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.snapshot_rewind"; }
 
     @JsonProperty("data")
     private SessionSnapshotRewindEventData data;
@@ -26,20 +33,11 @@ public final class SessionSnapshotRewindEvent extends SessionEvent {
     /** Data payload for {@link SessionSnapshotRewindEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionSnapshotRewindEventData {
-
+    public record SessionSnapshotRewindEventData(
         /** Event ID that was rewound to; this event and all after it were removed */
-        @JsonProperty("upToEventId")
-        private String upToEventId;
-
+        @JsonProperty("upToEventId") String upToEventId,
         /** Number of events that were removed by the rewind */
-        @JsonProperty("eventsRemoved")
-        private Double eventsRemoved;
-
-        public String getUpToEventId() { return upToEventId; }
-        public void setUpToEventId(String upToEventId) { this.upToEventId = upToEventId; }
-
-        public Double getEventsRemoved() { return eventsRemoved; }
-        public void setEventsRemoved(Double eventsRemoved) { this.eventsRemoved = eventsRemoved; }
+        @JsonProperty("eventsRemoved") Double eventsRemoved
+    ) {
     }
 }

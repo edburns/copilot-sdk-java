@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.message_delta} session event. */
+/**
+ * The {@code assistant.message_delta} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantMessageDeltaEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.message_delta"; }
 
     @JsonProperty("data")
     private AssistantMessageDeltaEventData data;
@@ -26,27 +33,13 @@ public final class AssistantMessageDeltaEvent extends SessionEvent {
     /** Data payload for {@link AssistantMessageDeltaEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantMessageDeltaEventData {
-
+    public record AssistantMessageDeltaEventData(
         /** Message ID this delta belongs to, matching the corresponding assistant.message event */
-        @JsonProperty("messageId")
-        private String messageId;
-
+        @JsonProperty("messageId") String messageId,
         /** Incremental text chunk to append to the message content */
-        @JsonProperty("deltaContent")
-        private String deltaContent;
-
+        @JsonProperty("deltaContent") String deltaContent,
         /** Tool call ID of the parent tool invocation when this event originates from a sub-agent */
-        @JsonProperty("parentToolCallId")
-        private String parentToolCallId;
-
-        public String getMessageId() { return messageId; }
-        public void setMessageId(String messageId) { this.messageId = messageId; }
-
-        public String getDeltaContent() { return deltaContent; }
-        public void setDeltaContent(String deltaContent) { this.deltaContent = deltaContent; }
-
-        public String getParentToolCallId() { return parentToolCallId; }
-        public void setParentToolCallId(String parentToolCallId) { this.parentToolCallId = parentToolCallId; }
+        @JsonProperty("parentToolCallId") String parentToolCallId
+    ) {
     }
 }

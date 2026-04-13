@@ -12,37 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.shell.exec} RPC method. */
+/**
+ * Request parameters for the {@code session.shell.exec} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionShellExecParams {
-
+public record SessionShellExecParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Shell command to execute */
-    @JsonProperty("command")
-    private String command;
-
+    @JsonProperty("command") String command,
     /** Working directory (defaults to session working directory) */
-    @JsonProperty("cwd")
-    private String cwd;
-
+    @JsonProperty("cwd") String cwd,
     /** Timeout in milliseconds (default: 30000) */
-    @JsonProperty("timeout")
-    private Double timeout;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getCommand() { return command; }
-    public void setCommand(String command) { this.command = command; }
-
-    public String getCwd() { return cwd; }
-    public void setCwd(String cwd) { this.cwd = cwd; }
-
-    public Double getTimeout() { return timeout; }
-    public void setTimeout(Double timeout) { this.timeout = timeout; }
+    @JsonProperty("timeout") Double timeout
+) {
 }

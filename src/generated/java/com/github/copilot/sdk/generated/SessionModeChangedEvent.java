@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.mode_changed} session event. */
+/**
+ * The {@code session.mode_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionModeChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.mode_changed"; }
 
     @JsonProperty("data")
     private SessionModeChangedEventData data;
@@ -26,20 +33,11 @@ public final class SessionModeChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionModeChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionModeChangedEventData {
-
+    public record SessionModeChangedEventData(
         /** Agent mode before the change (e.g., "interactive", "plan", "autopilot") */
-        @JsonProperty("previousMode")
-        private String previousMode;
-
+        @JsonProperty("previousMode") String previousMode,
         /** Agent mode after the change (e.g., "interactive", "plan", "autopilot") */
-        @JsonProperty("newMode")
-        private String newMode;
-
-        public String getPreviousMode() { return previousMode; }
-        public void setPreviousMode(String previousMode) { this.previousMode = previousMode; }
-
-        public String getNewMode() { return newMode; }
-        public void setNewMode(String newMode) { this.newMode = newMode; }
+        @JsonProperty("newMode") String newMode
+    ) {
     }
 }

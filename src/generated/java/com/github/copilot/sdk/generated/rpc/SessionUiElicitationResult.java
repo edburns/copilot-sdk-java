@@ -13,26 +13,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.ui.elicitation} RPC method. */
+/**
+ * Result for the {@code session.ui.elicitation} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionUiElicitationResult {
-
+public record SessionUiElicitationResult(
     /** The user's response: accept (submitted), decline (rejected), or cancel (dismissed) */
-    @JsonProperty("action")
-    private SessionUiElicitationResultAction action;
-
+    @JsonProperty("action") SessionUiElicitationResultAction action,
     /** The form values submitted by the user (present when action is 'accept') */
-    @JsonProperty("content")
-    private Map<String, Object> content;
-
-    public SessionUiElicitationResultAction getAction() { return action; }
-    public void setAction(SessionUiElicitationResultAction action) { this.action = action; }
-
-    public Map<String, Object> getContent() { return content; }
-    public void setContent(Map<String, Object> content) { this.content = content; }
-
+    @JsonProperty("content") Map<String, Object> content
+) {
 
     /** The user's response: accept (submitted), decline (rejected), or cancel (dismissed) */
     public enum SessionUiElicitationResultAction {
@@ -47,5 +41,12 @@ public class SessionUiElicitationResult {
         SessionUiElicitationResultAction(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionUiElicitationResultAction fromValue(String value) {
+            for (SessionUiElicitationResultAction v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionUiElicitationResultAction value: " + value);
+        }
     }
 }

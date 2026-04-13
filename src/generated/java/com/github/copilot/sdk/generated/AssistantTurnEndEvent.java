@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.turn_end} session event. */
+/**
+ * The {@code assistant.turn_end} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantTurnEndEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.turn_end"; }
 
     @JsonProperty("data")
     private AssistantTurnEndEventData data;
@@ -26,13 +33,9 @@ public final class AssistantTurnEndEvent extends SessionEvent {
     /** Data payload for {@link AssistantTurnEndEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantTurnEndEventData {
-
+    public record AssistantTurnEndEventData(
         /** Identifier of the turn that has ended, matching the corresponding assistant.turn_start event */
-        @JsonProperty("turnId")
-        private String turnId;
-
-        public String getTurnId() { return turnId; }
-        public void setTurnId(String turnId) { this.turnId = turnId; }
+        @JsonProperty("turnId") String turnId
+    ) {
     }
 }

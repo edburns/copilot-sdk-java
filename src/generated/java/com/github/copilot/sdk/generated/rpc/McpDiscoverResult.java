@@ -13,52 +13,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code mcp.discover} RPC method. */
+/**
+ * Result for the {@code mcp.discover} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class McpDiscoverResult {
-
+public record McpDiscoverResult(
     /** MCP servers discovered from all sources */
-    @JsonProperty("servers")
-    private List<McpDiscoverResultServersItem> servers;
-
-    public List<McpDiscoverResultServersItem> getServers() { return servers; }
-    public void setServers(List<McpDiscoverResultServersItem> servers) { this.servers = servers; }
-
+    @JsonProperty("servers") List<McpDiscoverResultServersItem> servers
+) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class McpDiscoverResultServersItem {
-
+    public record McpDiscoverResultServersItem(
         /** Server name (config key) */
-        @JsonProperty("name")
-        private String name;
-
+        @JsonProperty("name") String name,
         /** Server type: local, stdio, http, or sse */
-        @JsonProperty("type")
-        private String type;
-
+        @JsonProperty("type") String type,
         /** Configuration source */
-        @JsonProperty("source")
-        private McpDiscoverResultServersItemSource source;
-
+        @JsonProperty("source") McpDiscoverResultServersItemSource source,
         /** Whether the server is enabled (not in the disabled list) */
-        @JsonProperty("enabled")
-        private Boolean enabled;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-
-        public McpDiscoverResultServersItemSource getSource() { return source; }
-        public void setSource(McpDiscoverResultServersItemSource source) { this.source = source; }
-
-        public Boolean getEnabled() { return enabled; }
-        public void setEnabled(Boolean enabled) { this.enabled = enabled; }
-
+        @JsonProperty("enabled") Boolean enabled
+    ) {
 
         /** Configuration source */
         public enum McpDiscoverResultServersItemSource {
@@ -75,6 +54,13 @@ public class McpDiscoverResult {
             McpDiscoverResultServersItemSource(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static McpDiscoverResultServersItemSource fromValue(String value) {
+                for (McpDiscoverResultServersItemSource v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown McpDiscoverResultServersItemSource value: " + value);
+            }
         }
     }
 }

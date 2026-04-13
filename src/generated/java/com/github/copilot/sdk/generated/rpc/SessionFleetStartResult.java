@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.fleet.start} RPC method. */
+/**
+ * Result for the {@code session.fleet.start} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFleetStartResult {
-
+public record SessionFleetStartResult(
     /** Whether fleet mode was successfully activated */
-    @JsonProperty("started")
-    private Boolean started;
-
-    public Boolean getStarted() { return started; }
-    public void setStarted(Boolean started) { this.started = started; }
+    @JsonProperty("started") Boolean started
+) {
 }

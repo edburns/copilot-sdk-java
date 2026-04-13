@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code external_tool.requested} session event. */
+/**
+ * The {@code external_tool.requested} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ExternalToolRequestedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "external_tool.requested"; }
 
     @JsonProperty("data")
     private ExternalToolRequestedEventData data;
@@ -26,55 +33,21 @@ public final class ExternalToolRequestedEvent extends SessionEvent {
     /** Data payload for {@link ExternalToolRequestedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ExternalToolRequestedEventData {
-
+    public record ExternalToolRequestedEventData(
         /** Unique identifier for this request; used to respond via session.respondToExternalTool() */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** Session ID that this external tool request belongs to */
-        @JsonProperty("sessionId")
-        private String sessionId;
-
+        @JsonProperty("sessionId") String sessionId,
         /** Tool call ID assigned to this external tool invocation */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Name of the external tool to invoke */
-        @JsonProperty("toolName")
-        private String toolName;
-
+        @JsonProperty("toolName") String toolName,
         /** Arguments to pass to the external tool */
-        @JsonProperty("arguments")
-        private Object arguments;
-
+        @JsonProperty("arguments") Object arguments,
         /** W3C Trace Context traceparent header for the execute_tool span */
-        @JsonProperty("traceparent")
-        private String traceparent;
-
+        @JsonProperty("traceparent") String traceparent,
         /** W3C Trace Context tracestate header for the execute_tool span */
-        @JsonProperty("tracestate")
-        private String tracestate;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public String getSessionId() { return sessionId; }
-        public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getToolName() { return toolName; }
-        public void setToolName(String toolName) { this.toolName = toolName; }
-
-        public Object getArguments() { return arguments; }
-        public void setArguments(Object arguments) { this.arguments = arguments; }
-
-        public String getTraceparent() { return traceparent; }
-        public void setTraceparent(String traceparent) { this.traceparent = traceparent; }
-
-        public String getTracestate() { return tracestate; }
-        public void setTracestate(String tracestate) { this.tracestate = tracestate; }
+        @JsonProperty("tracestate") String tracestate
+    ) {
     }
 }

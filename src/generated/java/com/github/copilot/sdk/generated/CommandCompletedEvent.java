@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code command.completed} session event. */
+/**
+ * The {@code command.completed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class CommandCompletedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "command.completed"; }
 
     @JsonProperty("data")
     private CommandCompletedEventData data;
@@ -26,13 +33,9 @@ public final class CommandCompletedEvent extends SessionEvent {
     /** Data payload for {@link CommandCompletedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class CommandCompletedEventData {
-
+    public record CommandCompletedEventData(
         /** Request ID of the resolved command request; clients should dismiss any UI for this request */
-        @JsonProperty("requestId")
-        private String requestId;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
+        @JsonProperty("requestId") String requestId
+    ) {
     }
 }

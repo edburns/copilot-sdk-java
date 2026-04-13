@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.reasoning_delta} session event. */
+/**
+ * The {@code assistant.reasoning_delta} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantReasoningDeltaEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.reasoning_delta"; }
 
     @JsonProperty("data")
     private AssistantReasoningDeltaEventData data;
@@ -26,20 +33,11 @@ public final class AssistantReasoningDeltaEvent extends SessionEvent {
     /** Data payload for {@link AssistantReasoningDeltaEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantReasoningDeltaEventData {
-
+    public record AssistantReasoningDeltaEventData(
         /** Reasoning block ID this delta belongs to, matching the corresponding assistant.reasoning event */
-        @JsonProperty("reasoningId")
-        private String reasoningId;
-
+        @JsonProperty("reasoningId") String reasoningId,
         /** Incremental text chunk to append to the reasoning content */
-        @JsonProperty("deltaContent")
-        private String deltaContent;
-
-        public String getReasoningId() { return reasoningId; }
-        public void setReasoningId(String reasoningId) { this.reasoningId = reasoningId; }
-
-        public String getDeltaContent() { return deltaContent; }
-        public void setDeltaContent(String deltaContent) { this.deltaContent = deltaContent; }
+        @JsonProperty("deltaContent") String deltaContent
+    ) {
     }
 }

@@ -12,37 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code sessionFs.writeFile} RPC method. */
+/**
+ * Request parameters for the {@code sessionFs.writeFile} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsWriteFileParams {
-
+public record SessionFsWriteFileParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Path using SessionFs conventions */
-    @JsonProperty("path")
-    private String path;
-
+    @JsonProperty("path") String path,
     /** Content to write */
-    @JsonProperty("content")
-    private String content;
-
+    @JsonProperty("content") String content,
     /** Optional POSIX-style mode for newly created files */
-    @JsonProperty("mode")
-    private Double mode;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getPath() { return path; }
-    public void setPath(String path) { this.path = path; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public Double getMode() { return mode; }
-    public void setMode(Double mode) { this.mode = mode; }
+    @JsonProperty("mode") Double mode
+) {
 }

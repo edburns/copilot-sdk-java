@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.shell.kill} RPC method. */
+/**
+ * Result for the {@code session.shell.kill} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionShellKillResult {
-
+public record SessionShellKillResult(
     /** Whether the signal was sent successfully */
-    @JsonProperty("killed")
-    private Boolean killed;
-
-    public Boolean getKilled() { return killed; }
-    public void setKilled(Boolean killed) { this.killed = killed; }
+    @JsonProperty("killed") Boolean killed
+) {
 }

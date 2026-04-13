@@ -12,23 +12,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.plan.update} RPC method. */
+/**
+ * Request parameters for the {@code session.plan.update} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionPlanUpdateParams {
-
+public record SessionPlanUpdateParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** The new content for the plan file */
-    @JsonProperty("content")
-    private String content;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    @JsonProperty("content") String content
+) {
 }

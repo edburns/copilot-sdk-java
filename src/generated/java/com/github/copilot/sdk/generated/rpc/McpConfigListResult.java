@@ -13,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code mcp.config.list} RPC method. */
+/**
+ * Result for the {@code mcp.config.list} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class McpConfigListResult {
-
+public record McpConfigListResult(
     /** All MCP servers from user config, keyed by name */
-    @JsonProperty("servers")
-    private Map<String, Object> servers;
-
-    public Map<String, Object> getServers() { return servers; }
-    public void setServers(Map<String, Object> servers) { this.servers = servers; }
+    @JsonProperty("servers") Map<String, Object> servers
+) {
 }

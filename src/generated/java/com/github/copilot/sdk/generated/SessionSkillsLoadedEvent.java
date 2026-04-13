@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.skills_loaded} session event. */
+/**
+ * The {@code session.skills_loaded} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionSkillsLoadedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.skills_loaded"; }
 
     @JsonProperty("data")
     private SessionSkillsLoadedEventData data;
@@ -27,61 +34,27 @@ public final class SessionSkillsLoadedEvent extends SessionEvent {
     /** Data payload for {@link SessionSkillsLoadedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionSkillsLoadedEventData {
-
+    public record SessionSkillsLoadedEventData(
         /** Array of resolved skill metadata */
-        @JsonProperty("skills")
-        private List<SessionSkillsLoadedEventDataSkillsItem> skills;
-
-        public List<SessionSkillsLoadedEventDataSkillsItem> getSkills() { return skills; }
-        public void setSkills(List<SessionSkillsLoadedEventDataSkillsItem> skills) { this.skills = skills; }
-
+        @JsonProperty("skills") List<SessionSkillsLoadedEventDataSkillsItem> skills
+    ) {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionSkillsLoadedEventDataSkillsItem {
-
+        public record SessionSkillsLoadedEventDataSkillsItem(
             /** Unique identifier for the skill */
-            @JsonProperty("name")
-            private String name;
-
+            @JsonProperty("name") String name,
             /** Description of what the skill does */
-            @JsonProperty("description")
-            private String description;
-
+            @JsonProperty("description") String description,
             /** Source location type of the skill (e.g., project, personal, plugin) */
-            @JsonProperty("source")
-            private String source;
-
+            @JsonProperty("source") String source,
             /** Whether the skill can be invoked by the user as a slash command */
-            @JsonProperty("userInvocable")
-            private Boolean userInvocable;
-
+            @JsonProperty("userInvocable") Boolean userInvocable,
             /** Whether the skill is currently enabled */
-            @JsonProperty("enabled")
-            private Boolean enabled;
-
+            @JsonProperty("enabled") Boolean enabled,
             /** Absolute path to the skill file, if available */
-            @JsonProperty("path")
-            private String path;
-
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
-
-            public String getDescription() { return description; }
-            public void setDescription(String description) { this.description = description; }
-
-            public String getSource() { return source; }
-            public void setSource(String source) { this.source = source; }
-
-            public Boolean getUserInvocable() { return userInvocable; }
-            public void setUserInvocable(Boolean userInvocable) { this.userInvocable = userInvocable; }
-
-            public Boolean getEnabled() { return enabled; }
-            public void setEnabled(Boolean enabled) { this.enabled = enabled; }
-
-            public String getPath() { return path; }
-            public void setPath(String path) { this.path = path; }
+            @JsonProperty("path") String path
+        ) {
         }
     }
 }

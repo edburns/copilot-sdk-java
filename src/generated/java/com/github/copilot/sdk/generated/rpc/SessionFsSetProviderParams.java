@@ -12,33 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code sessionFs.setProvider} RPC method. */
+/**
+ * Request parameters for the {@code sessionFs.setProvider} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionFsSetProviderParams {
-
+public record SessionFsSetProviderParams(
     /** Initial working directory for sessions */
-    @JsonProperty("initialCwd")
-    private String initialCwd;
-
+    @JsonProperty("initialCwd") String initialCwd,
     /** Path within each session's SessionFs where the runtime stores files for that session */
-    @JsonProperty("sessionStatePath")
-    private String sessionStatePath;
-
+    @JsonProperty("sessionStatePath") String sessionStatePath,
     /** Path conventions used by this filesystem */
-    @JsonProperty("conventions")
-    private SessionFsSetProviderParamsConventions conventions;
-
-    public String getInitialCwd() { return initialCwd; }
-    public void setInitialCwd(String initialCwd) { this.initialCwd = initialCwd; }
-
-    public String getSessionStatePath() { return sessionStatePath; }
-    public void setSessionStatePath(String sessionStatePath) { this.sessionStatePath = sessionStatePath; }
-
-    public SessionFsSetProviderParamsConventions getConventions() { return conventions; }
-    public void setConventions(SessionFsSetProviderParamsConventions conventions) { this.conventions = conventions; }
-
+    @JsonProperty("conventions") SessionFsSetProviderParamsConventions conventions
+) {
 
     /** Path conventions used by this filesystem */
     public enum SessionFsSetProviderParamsConventions {
@@ -51,5 +40,12 @@ public class SessionFsSetProviderParams {
         SessionFsSetProviderParamsConventions(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionFsSetProviderParamsConventions fromValue(String value) {
+            for (SessionFsSetProviderParamsConventions v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionFsSetProviderParamsConventions value: " + value);
+        }
     }
 }

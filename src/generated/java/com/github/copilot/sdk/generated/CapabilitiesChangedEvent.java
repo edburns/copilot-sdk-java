@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code capabilities.changed} session event. */
+/**
+ * The {@code capabilities.changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class CapabilitiesChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "capabilities.changed"; }
 
     @JsonProperty("data")
     private CapabilitiesChangedEventData data;
@@ -26,27 +33,18 @@ public final class CapabilitiesChangedEvent extends SessionEvent {
     /** Data payload for {@link CapabilitiesChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class CapabilitiesChangedEventData {
-
+    public record CapabilitiesChangedEventData(
         /** UI capability changes */
-        @JsonProperty("ui")
-        private CapabilitiesChangedEventDataUi ui;
-
-        public CapabilitiesChangedEventDataUi getUi() { return ui; }
-        public void setUi(CapabilitiesChangedEventDataUi ui) { this.ui = ui; }
-
+        @JsonProperty("ui") CapabilitiesChangedEventDataUi ui
+    ) {
 
         /** UI capability changes */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class CapabilitiesChangedEventDataUi {
-
+        public record CapabilitiesChangedEventDataUi(
             /** Whether elicitation is now supported */
-            @JsonProperty("elicitation")
-            private Boolean elicitation;
-
-            public Boolean getElicitation() { return elicitation; }
-            public void setElicitation(Boolean elicitation) { this.elicitation = elicitation; }
+            @JsonProperty("elicitation") Boolean elicitation
+        ) {
         }
     }
 }

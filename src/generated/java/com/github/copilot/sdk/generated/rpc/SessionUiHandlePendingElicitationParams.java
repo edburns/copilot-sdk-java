@@ -13,53 +13,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.ui.handlePendingElicitation} RPC method. */
+/**
+ * Request parameters for the {@code session.ui.handlePendingElicitation} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionUiHandlePendingElicitationParams {
-
+public record SessionUiHandlePendingElicitationParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** The unique request ID from the elicitation.requested event */
-    @JsonProperty("requestId")
-    private String requestId;
-
+    @JsonProperty("requestId") String requestId,
     /** The elicitation response (accept with form values, decline, or cancel) */
-    @JsonProperty("result")
-    private SessionUiHandlePendingElicitationParamsResult result;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getRequestId() { return requestId; }
-    public void setRequestId(String requestId) { this.requestId = requestId; }
-
-    public SessionUiHandlePendingElicitationParamsResult getResult() { return result; }
-    public void setResult(SessionUiHandlePendingElicitationParamsResult result) { this.result = result; }
-
+    @JsonProperty("result") SessionUiHandlePendingElicitationParamsResult result
+) {
 
     /** The elicitation response (accept with form values, decline, or cancel) */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionUiHandlePendingElicitationParamsResult {
-
+    public record SessionUiHandlePendingElicitationParamsResult(
         /** The user's response: accept (submitted), decline (rejected), or cancel (dismissed) */
-        @JsonProperty("action")
-        private SessionUiHandlePendingElicitationParamsResultAction action;
-
+        @JsonProperty("action") SessionUiHandlePendingElicitationParamsResultAction action,
         /** The form values submitted by the user (present when action is 'accept') */
-        @JsonProperty("content")
-        private Map<String, Object> content;
-
-        public SessionUiHandlePendingElicitationParamsResultAction getAction() { return action; }
-        public void setAction(SessionUiHandlePendingElicitationParamsResultAction action) { this.action = action; }
-
-        public Map<String, Object> getContent() { return content; }
-        public void setContent(Map<String, Object> content) { this.content = content; }
-
+        @JsonProperty("content") Map<String, Object> content
+    ) {
 
         /** The user's response: accept (submitted), decline (rejected), or cancel (dismissed) */
         public enum SessionUiHandlePendingElicitationParamsResultAction {
@@ -74,6 +53,13 @@ public class SessionUiHandlePendingElicitationParams {
             SessionUiHandlePendingElicitationParamsResultAction(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SessionUiHandlePendingElicitationParamsResultAction fromValue(String value) {
+                for (SessionUiHandlePendingElicitationParamsResultAction v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SessionUiHandlePendingElicitationParamsResultAction value: " + value);
+            }
         }
     }
 }

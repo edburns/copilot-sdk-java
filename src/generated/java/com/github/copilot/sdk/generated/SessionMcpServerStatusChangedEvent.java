@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.mcp_server_status_changed} session event. */
+/**
+ * The {@code session.mcp_server_status_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionMcpServerStatusChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.mcp_server_status_changed"; }
 
     @JsonProperty("data")
     private SessionMcpServerStatusChangedEventData data;
@@ -26,22 +33,12 @@ public final class SessionMcpServerStatusChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionMcpServerStatusChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionMcpServerStatusChangedEventData {
-
+    public record SessionMcpServerStatusChangedEventData(
         /** Name of the MCP server whose status changed */
-        @JsonProperty("serverName")
-        private String serverName;
-
+        @JsonProperty("serverName") String serverName,
         /** New connection status: connected, failed, needs-auth, pending, disabled, or not_configured */
-        @JsonProperty("status")
-        private SessionMcpServerStatusChangedEventDataStatus status;
-
-        public String getServerName() { return serverName; }
-        public void setServerName(String serverName) { this.serverName = serverName; }
-
-        public SessionMcpServerStatusChangedEventDataStatus getStatus() { return status; }
-        public void setStatus(SessionMcpServerStatusChangedEventDataStatus status) { this.status = status; }
-
+        @JsonProperty("status") SessionMcpServerStatusChangedEventDataStatus status
+    ) {
 
         /** New connection status: connected, failed, needs-auth, pending, disabled, or not_configured */
         public enum SessionMcpServerStatusChangedEventDataStatus {
@@ -62,6 +59,13 @@ public final class SessionMcpServerStatusChangedEvent extends SessionEvent {
             SessionMcpServerStatusChangedEventDataStatus(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SessionMcpServerStatusChangedEventDataStatus fromValue(String value) {
+                for (SessionMcpServerStatusChangedEventDataStatus v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SessionMcpServerStatusChangedEventDataStatus value: " + value);
+            }
         }
     }
 }

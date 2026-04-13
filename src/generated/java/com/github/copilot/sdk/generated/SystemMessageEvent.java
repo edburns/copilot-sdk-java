@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** The {@code system.message} session event. */
+/**
+ * The {@code system.message} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SystemMessageEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "system.message"; }
 
     @JsonProperty("data")
     private SystemMessageEventData data;
@@ -27,36 +34,16 @@ public final class SystemMessageEvent extends SessionEvent {
     /** Data payload for {@link SystemMessageEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SystemMessageEventData {
-
+    public record SystemMessageEventData(
         /** The system or developer prompt text */
-        @JsonProperty("content")
-        private String content;
-
+        @JsonProperty("content") String content,
         /** Message role: "system" for system prompts, "developer" for developer-injected instructions */
-        @JsonProperty("role")
-        private SystemMessageEventDataRole role;
-
+        @JsonProperty("role") SystemMessageEventDataRole role,
         /** Optional name identifier for the message source */
-        @JsonProperty("name")
-        private String name;
-
+        @JsonProperty("name") String name,
         /** Metadata about the prompt template and its construction */
-        @JsonProperty("metadata")
-        private SystemMessageEventDataMetadata metadata;
-
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-
-        public SystemMessageEventDataRole getRole() { return role; }
-        public void setRole(SystemMessageEventDataRole role) { this.role = role; }
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public SystemMessageEventDataMetadata getMetadata() { return metadata; }
-        public void setMetadata(SystemMessageEventDataMetadata metadata) { this.metadata = metadata; }
-
+        @JsonProperty("metadata") SystemMessageEventDataMetadata metadata
+    ) {
 
         /** Message role: "system" for system prompts, "developer" for developer-injected instructions */
         public enum SystemMessageEventDataRole {
@@ -69,26 +56,24 @@ public final class SystemMessageEvent extends SessionEvent {
             SystemMessageEventDataRole(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static SystemMessageEventDataRole fromValue(String value) {
+                for (SystemMessageEventDataRole v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown SystemMessageEventDataRole value: " + value);
+            }
         }
 
         /** Metadata about the prompt template and its construction */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SystemMessageEventDataMetadata {
-
+        public record SystemMessageEventDataMetadata(
             /** Version identifier of the prompt template used */
-            @JsonProperty("promptVersion")
-            private String promptVersion;
-
+            @JsonProperty("promptVersion") String promptVersion,
             /** Template variables used when constructing the prompt */
-            @JsonProperty("variables")
-            private Map<String, Object> variables;
-
-            public String getPromptVersion() { return promptVersion; }
-            public void setPromptVersion(String promptVersion) { this.promptVersion = promptVersion; }
-
-            public Map<String, Object> getVariables() { return variables; }
-            public void setVariables(Map<String, Object> variables) { this.variables = variables; }
+            @JsonProperty("variables") Map<String, Object> variables
+        ) {
         }
     }
 }

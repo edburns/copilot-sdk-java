@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code assistant.reasoning} session event. */
+/**
+ * The {@code assistant.reasoning} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class AssistantReasoningEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "assistant.reasoning"; }
 
     @JsonProperty("data")
     private AssistantReasoningEventData data;
@@ -26,20 +33,11 @@ public final class AssistantReasoningEvent extends SessionEvent {
     /** Data payload for {@link AssistantReasoningEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class AssistantReasoningEventData {
-
+    public record AssistantReasoningEventData(
         /** Unique identifier for this reasoning block */
-        @JsonProperty("reasoningId")
-        private String reasoningId;
-
+        @JsonProperty("reasoningId") String reasoningId,
         /** The complete extended thinking text from the model */
-        @JsonProperty("content")
-        private String content;
-
-        public String getReasoningId() { return reasoningId; }
-        public void setReasoningId(String reasoningId) { this.reasoningId = reasoningId; }
-
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
+        @JsonProperty("content") String content
+    ) {
     }
 }

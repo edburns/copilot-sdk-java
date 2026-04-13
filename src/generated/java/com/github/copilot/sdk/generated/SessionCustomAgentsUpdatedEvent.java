@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.custom_agents_updated} session event. */
+/**
+ * The {@code session.custom_agents_updated} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionCustomAgentsUpdatedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.custom_agents_updated"; }
 
     @JsonProperty("data")
     private SessionCustomAgentsUpdatedEventData data;
@@ -27,89 +34,35 @@ public final class SessionCustomAgentsUpdatedEvent extends SessionEvent {
     /** Data payload for {@link SessionCustomAgentsUpdatedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionCustomAgentsUpdatedEventData {
-
+    public record SessionCustomAgentsUpdatedEventData(
         /** Array of loaded custom agent metadata */
-        @JsonProperty("agents")
-        private List<SessionCustomAgentsUpdatedEventDataAgentsItem> agents;
-
+        @JsonProperty("agents") List<SessionCustomAgentsUpdatedEventDataAgentsItem> agents,
         /** Non-fatal warnings from agent loading */
-        @JsonProperty("warnings")
-        private List<String> warnings;
-
+        @JsonProperty("warnings") List<String> warnings,
         /** Fatal errors from agent loading */
-        @JsonProperty("errors")
-        private List<String> errors;
-
-        public List<SessionCustomAgentsUpdatedEventDataAgentsItem> getAgents() { return agents; }
-        public void setAgents(List<SessionCustomAgentsUpdatedEventDataAgentsItem> agents) { this.agents = agents; }
-
-        public List<String> getWarnings() { return warnings; }
-        public void setWarnings(List<String> warnings) { this.warnings = warnings; }
-
-        public List<String> getErrors() { return errors; }
-        public void setErrors(List<String> errors) { this.errors = errors; }
-
+        @JsonProperty("errors") List<String> errors
+    ) {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionCustomAgentsUpdatedEventDataAgentsItem {
-
+        public record SessionCustomAgentsUpdatedEventDataAgentsItem(
             /** Unique identifier for the agent */
-            @JsonProperty("id")
-            private String id;
-
+            @JsonProperty("id") String id,
             /** Internal name of the agent */
-            @JsonProperty("name")
-            private String name;
-
+            @JsonProperty("name") String name,
             /** Human-readable display name */
-            @JsonProperty("displayName")
-            private String displayName;
-
+            @JsonProperty("displayName") String displayName,
             /** Description of what the agent does */
-            @JsonProperty("description")
-            private String description;
-
+            @JsonProperty("description") String description,
             /** Source location: user, project, inherited, remote, or plugin */
-            @JsonProperty("source")
-            private String source;
-
+            @JsonProperty("source") String source,
             /** List of tool names available to this agent */
-            @JsonProperty("tools")
-            private List<String> tools;
-
+            @JsonProperty("tools") List<String> tools,
             /** Whether the agent can be selected by the user */
-            @JsonProperty("userInvocable")
-            private Boolean userInvocable;
-
+            @JsonProperty("userInvocable") Boolean userInvocable,
             /** Model override for this agent, if set */
-            @JsonProperty("model")
-            private String model;
-
-            public String getId() { return id; }
-            public void setId(String id) { this.id = id; }
-
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
-
-            public String getDisplayName() { return displayName; }
-            public void setDisplayName(String displayName) { this.displayName = displayName; }
-
-            public String getDescription() { return description; }
-            public void setDescription(String description) { this.description = description; }
-
-            public String getSource() { return source; }
-            public void setSource(String source) { this.source = source; }
-
-            public List<String> getTools() { return tools; }
-            public void setTools(List<String> tools) { this.tools = tools; }
-
-            public Boolean getUserInvocable() { return userInvocable; }
-            public void setUserInvocable(Boolean userInvocable) { this.userInvocable = userInvocable; }
-
-            public String getModel() { return model; }
-            public void setModel(String model) { this.model = model; }
+            @JsonProperty("model") String model
+        ) {
         }
     }
 }

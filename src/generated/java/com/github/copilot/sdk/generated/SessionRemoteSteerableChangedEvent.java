@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.remote_steerable_changed} session event. */
+/**
+ * The {@code session.remote_steerable_changed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionRemoteSteerableChangedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.remote_steerable_changed"; }
 
     @JsonProperty("data")
     private SessionRemoteSteerableChangedEventData data;
@@ -26,13 +33,9 @@ public final class SessionRemoteSteerableChangedEvent extends SessionEvent {
     /** Data payload for {@link SessionRemoteSteerableChangedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionRemoteSteerableChangedEventData {
-
+    public record SessionRemoteSteerableChangedEventData(
         /** Whether this session now supports remote steering via Mission Control */
-        @JsonProperty("remoteSteerable")
-        private Boolean remoteSteerable;
-
-        public Boolean getRemoteSteerable() { return remoteSteerable; }
-        public void setRemoteSteerable(Boolean remoteSteerable) { this.remoteSteerable = remoteSteerable; }
+        @JsonProperty("remoteSteerable") Boolean remoteSteerable
+    ) {
     }
 }

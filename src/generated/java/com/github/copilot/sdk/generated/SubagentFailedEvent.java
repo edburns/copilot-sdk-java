@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code subagent.failed} session event. */
+/**
+ * The {@code subagent.failed} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SubagentFailedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "subagent.failed"; }
 
     @JsonProperty("data")
     private SubagentFailedEventData data;
@@ -26,62 +33,23 @@ public final class SubagentFailedEvent extends SessionEvent {
     /** Data payload for {@link SubagentFailedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SubagentFailedEventData {
-
+    public record SubagentFailedEventData(
         /** Tool call ID of the parent tool invocation that spawned this sub-agent */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Internal name of the sub-agent */
-        @JsonProperty("agentName")
-        private String agentName;
-
+        @JsonProperty("agentName") String agentName,
         /** Human-readable display name of the sub-agent */
-        @JsonProperty("agentDisplayName")
-        private String agentDisplayName;
-
+        @JsonProperty("agentDisplayName") String agentDisplayName,
         /** Error message describing why the sub-agent failed */
-        @JsonProperty("error")
-        private String error;
-
+        @JsonProperty("error") String error,
         /** Model used by the sub-agent (if any model calls succeeded before failure) */
-        @JsonProperty("model")
-        private String model;
-
+        @JsonProperty("model") String model,
         /** Total number of tool calls made before the sub-agent failed */
-        @JsonProperty("totalToolCalls")
-        private Double totalToolCalls;
-
+        @JsonProperty("totalToolCalls") Double totalToolCalls,
         /** Total tokens (input + output) consumed before the sub-agent failed */
-        @JsonProperty("totalTokens")
-        private Double totalTokens;
-
+        @JsonProperty("totalTokens") Double totalTokens,
         /** Wall-clock duration of the sub-agent execution in milliseconds */
-        @JsonProperty("durationMs")
-        private Double durationMs;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getAgentName() { return agentName; }
-        public void setAgentName(String agentName) { this.agentName = agentName; }
-
-        public String getAgentDisplayName() { return agentDisplayName; }
-        public void setAgentDisplayName(String agentDisplayName) { this.agentDisplayName = agentDisplayName; }
-
-        public String getError() { return error; }
-        public void setError(String error) { this.error = error; }
-
-        public String getModel() { return model; }
-        public void setModel(String model) { this.model = model; }
-
-        public Double getTotalToolCalls() { return totalToolCalls; }
-        public void setTotalToolCalls(Double totalToolCalls) { this.totalToolCalls = totalToolCalls; }
-
-        public Double getTotalTokens() { return totalTokens; }
-        public void setTotalTokens(Double totalTokens) { this.totalTokens = totalTokens; }
-
-        public Double getDurationMs() { return durationMs; }
-        public void setDurationMs(Double durationMs) { this.durationMs = durationMs; }
+        @JsonProperty("durationMs") Double durationMs
+    ) {
     }
 }

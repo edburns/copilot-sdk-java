@@ -12,33 +12,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code session.shell.kill} RPC method. */
+/**
+ * Request parameters for the {@code session.shell.kill} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionShellKillParams {
-
+public record SessionShellKillParams(
     /** Target session identifier */
-    @JsonProperty("sessionId")
-    private String sessionId;
-
+    @JsonProperty("sessionId") String sessionId,
     /** Process identifier returned by shell.exec */
-    @JsonProperty("processId")
-    private String processId;
-
+    @JsonProperty("processId") String processId,
     /** Signal to send (default: SIGTERM) */
-    @JsonProperty("signal")
-    private SessionShellKillParamsSignal signal;
-
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-
-    public String getProcessId() { return processId; }
-    public void setProcessId(String processId) { this.processId = processId; }
-
-    public SessionShellKillParamsSignal getSignal() { return signal; }
-    public void setSignal(SessionShellKillParamsSignal signal) { this.signal = signal; }
-
+    @JsonProperty("signal") SessionShellKillParamsSignal signal
+) {
 
     /** Signal to send (default: SIGTERM) */
     public enum SessionShellKillParamsSignal {
@@ -53,5 +42,12 @@ public class SessionShellKillParams {
         SessionShellKillParamsSignal(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionShellKillParamsSignal fromValue(String value) {
+            for (SessionShellKillParamsSignal v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionShellKillParamsSignal value: " + value);
+        }
     }
 }

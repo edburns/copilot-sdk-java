@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.info} session event. */
+/**
+ * The {@code session.info} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionInfoEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.info"; }
 
     @JsonProperty("data")
     private SessionInfoEventData data;
@@ -26,27 +33,13 @@ public final class SessionInfoEvent extends SessionEvent {
     /** Data payload for {@link SessionInfoEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionInfoEventData {
-
+    public record SessionInfoEventData(
         /** Category of informational message (e.g., "notification", "timing", "context_window", "mcp", "snapshot", "configuration", "authentication", "model") */
-        @JsonProperty("infoType")
-        private String infoType;
-
+        @JsonProperty("infoType") String infoType,
         /** Human-readable informational message for display in the timeline */
-        @JsonProperty("message")
-        private String message;
-
+        @JsonProperty("message") String message,
         /** Optional URL associated with this message that the user can open in a browser */
-        @JsonProperty("url")
-        private String url;
-
-        public String getInfoType() { return infoType; }
-        public void setInfoType(String infoType) { this.infoType = infoType; }
-
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
-
-        public String getUrl() { return url; }
-        public void setUrl(String url) { this.url = url; }
+        @JsonProperty("url") String url
+    ) {
     }
 }

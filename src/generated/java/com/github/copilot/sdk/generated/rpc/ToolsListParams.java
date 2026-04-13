@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Request parameters for the {@code tools.list} RPC method. */
+/**
+ * Request parameters for the {@code tools.list} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ToolsListParams {
-
+public record ToolsListParams(
     /** Optional model ID — when provided, the returned tool list reflects model-specific overrides */
-    @JsonProperty("model")
-    private String model;
-
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    @JsonProperty("model") String model
+) {
 }

@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code user.message} session event. */
+/**
+ * The {@code user.message} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class UserMessageEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "user.message"; }
 
     @JsonProperty("data")
     private UserMessageEventData data;
@@ -27,50 +34,20 @@ public final class UserMessageEvent extends SessionEvent {
     /** Data payload for {@link UserMessageEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class UserMessageEventData {
-
+    public record UserMessageEventData(
         /** The user's message text as displayed in the timeline */
-        @JsonProperty("content")
-        private String content;
-
+        @JsonProperty("content") String content,
         /** Transformed version of the message sent to the model, with XML wrapping, timestamps, and other augmentations for prompt caching */
-        @JsonProperty("transformedContent")
-        private String transformedContent;
-
+        @JsonProperty("transformedContent") String transformedContent,
         /** Files, selections, or GitHub references attached to the message */
-        @JsonProperty("attachments")
-        private List<Object> attachments;
-
+        @JsonProperty("attachments") List<Object> attachments,
         /** Origin of this message, used for timeline filtering (e.g., "skill-pdf" for skill-injected messages that should be hidden from the user) */
-        @JsonProperty("source")
-        private String source;
-
+        @JsonProperty("source") String source,
         /** The agent mode that was active when this message was sent */
-        @JsonProperty("agentMode")
-        private UserMessageEventDataAgentMode agentMode;
-
+        @JsonProperty("agentMode") UserMessageEventDataAgentMode agentMode,
         /** CAPI interaction ID for correlating this user message with its turn */
-        @JsonProperty("interactionId")
-        private String interactionId;
-
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-
-        public String getTransformedContent() { return transformedContent; }
-        public void setTransformedContent(String transformedContent) { this.transformedContent = transformedContent; }
-
-        public List<Object> getAttachments() { return attachments; }
-        public void setAttachments(List<Object> attachments) { this.attachments = attachments; }
-
-        public String getSource() { return source; }
-        public void setSource(String source) { this.source = source; }
-
-        public UserMessageEventDataAgentMode getAgentMode() { return agentMode; }
-        public void setAgentMode(UserMessageEventDataAgentMode agentMode) { this.agentMode = agentMode; }
-
-        public String getInteractionId() { return interactionId; }
-        public void setInteractionId(String interactionId) { this.interactionId = interactionId; }
-
+        @JsonProperty("interactionId") String interactionId
+    ) {
 
         /** The agent mode that was active when this message was sent */
         public enum UserMessageEventDataAgentMode {
@@ -87,6 +64,13 @@ public final class UserMessageEvent extends SessionEvent {
             UserMessageEventDataAgentMode(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static UserMessageEventDataAgentMode fromValue(String value) {
+                for (UserMessageEventDataAgentMode v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown UserMessageEventDataAgentMode value: " + value);
+            }
         }
     }
 }

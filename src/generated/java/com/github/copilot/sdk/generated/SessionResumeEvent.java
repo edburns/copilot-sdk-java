@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.resume} session event. */
+/**
+ * The {@code session.resume} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionResumeEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.resume"; }
 
     @JsonProperty("data")
     private SessionResumeEventData data;
@@ -27,112 +34,42 @@ public final class SessionResumeEvent extends SessionEvent {
     /** Data payload for {@link SessionResumeEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionResumeEventData {
-
+    public record SessionResumeEventData(
         /** ISO 8601 timestamp when the session was resumed */
-        @JsonProperty("resumeTime")
-        private OffsetDateTime resumeTime;
-
+        @JsonProperty("resumeTime") OffsetDateTime resumeTime,
         /** Total number of persisted events in the session at the time of resume */
-        @JsonProperty("eventCount")
-        private Double eventCount;
-
+        @JsonProperty("eventCount") Double eventCount,
         /** Model currently selected at resume time */
-        @JsonProperty("selectedModel")
-        private String selectedModel;
-
+        @JsonProperty("selectedModel") String selectedModel,
         /** Reasoning effort level used for model calls, if applicable (e.g. "low", "medium", "high", "xhigh") */
-        @JsonProperty("reasoningEffort")
-        private String reasoningEffort;
-
+        @JsonProperty("reasoningEffort") String reasoningEffort,
         /** Updated working directory and git context at resume time */
-        @JsonProperty("context")
-        private SessionResumeEventDataContext context;
-
+        @JsonProperty("context") SessionResumeEventDataContext context,
         /** Whether the session was already in use by another client at resume time */
-        @JsonProperty("alreadyInUse")
-        private Boolean alreadyInUse;
-
+        @JsonProperty("alreadyInUse") Boolean alreadyInUse,
         /** Whether this session supports remote steering via Mission Control */
-        @JsonProperty("remoteSteerable")
-        private Boolean remoteSteerable;
-
-        public OffsetDateTime getResumeTime() { return resumeTime; }
-        public void setResumeTime(OffsetDateTime resumeTime) { this.resumeTime = resumeTime; }
-
-        public Double getEventCount() { return eventCount; }
-        public void setEventCount(Double eventCount) { this.eventCount = eventCount; }
-
-        public String getSelectedModel() { return selectedModel; }
-        public void setSelectedModel(String selectedModel) { this.selectedModel = selectedModel; }
-
-        public String getReasoningEffort() { return reasoningEffort; }
-        public void setReasoningEffort(String reasoningEffort) { this.reasoningEffort = reasoningEffort; }
-
-        public SessionResumeEventDataContext getContext() { return context; }
-        public void setContext(SessionResumeEventDataContext context) { this.context = context; }
-
-        public Boolean getAlreadyInUse() { return alreadyInUse; }
-        public void setAlreadyInUse(Boolean alreadyInUse) { this.alreadyInUse = alreadyInUse; }
-
-        public Boolean getRemoteSteerable() { return remoteSteerable; }
-        public void setRemoteSteerable(Boolean remoteSteerable) { this.remoteSteerable = remoteSteerable; }
-
+        @JsonProperty("remoteSteerable") Boolean remoteSteerable
+    ) {
 
         /** Updated working directory and git context at resume time */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionResumeEventDataContext {
-
+        public record SessionResumeEventDataContext(
             /** Current working directory path */
-            @JsonProperty("cwd")
-            private String cwd;
-
+            @JsonProperty("cwd") String cwd,
             /** Root directory of the git repository, resolved via git rev-parse */
-            @JsonProperty("gitRoot")
-            private String gitRoot;
-
+            @JsonProperty("gitRoot") String gitRoot,
             /** Repository identifier derived from the git remote URL ("owner/name" for GitHub, "org/project/repo" for Azure DevOps) */
-            @JsonProperty("repository")
-            private String repository;
-
+            @JsonProperty("repository") String repository,
             /** Hosting platform type of the repository (github or ado) */
-            @JsonProperty("hostType")
-            private SessionResumeEventDataContextHostType hostType;
-
+            @JsonProperty("hostType") SessionResumeEventDataContextHostType hostType,
             /** Current git branch name */
-            @JsonProperty("branch")
-            private String branch;
-
+            @JsonProperty("branch") String branch,
             /** Head commit of current git branch at session start time */
-            @JsonProperty("headCommit")
-            private String headCommit;
-
+            @JsonProperty("headCommit") String headCommit,
             /** Base commit of current git branch at session start time */
-            @JsonProperty("baseCommit")
-            private String baseCommit;
-
-            public String getCwd() { return cwd; }
-            public void setCwd(String cwd) { this.cwd = cwd; }
-
-            public String getGitRoot() { return gitRoot; }
-            public void setGitRoot(String gitRoot) { this.gitRoot = gitRoot; }
-
-            public String getRepository() { return repository; }
-            public void setRepository(String repository) { this.repository = repository; }
-
-            public SessionResumeEventDataContextHostType getHostType() { return hostType; }
-            public void setHostType(SessionResumeEventDataContextHostType hostType) { this.hostType = hostType; }
-
-            public String getBranch() { return branch; }
-            public void setBranch(String branch) { this.branch = branch; }
-
-            public String getHeadCommit() { return headCommit; }
-            public void setHeadCommit(String headCommit) { this.headCommit = headCommit; }
-
-            public String getBaseCommit() { return baseCommit; }
-            public void setBaseCommit(String baseCommit) { this.baseCommit = baseCommit; }
-
+            @JsonProperty("baseCommit") String baseCommit
+        ) {
 
             /** Hosting platform type of the repository (github or ado) */
             public enum SessionResumeEventDataContextHostType {
@@ -145,6 +82,13 @@ public final class SessionResumeEvent extends SessionEvent {
                 SessionResumeEventDataContextHostType(String value) { this.value = value; }
                 @com.fasterxml.jackson.annotation.JsonValue
                 public String getValue() { return value; }
+                @com.fasterxml.jackson.annotation.JsonCreator
+                public static SessionResumeEventDataContextHostType fromValue(String value) {
+                    for (SessionResumeEventDataContextHostType v : values()) {
+                        if (v.value.equals(value)) return v;
+                    }
+                    throw new IllegalArgumentException("Unknown SessionResumeEventDataContextHostType value: " + value);
+                }
             }
         }
     }

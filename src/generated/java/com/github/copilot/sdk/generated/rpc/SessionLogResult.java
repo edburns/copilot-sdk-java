@@ -13,16 +13,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.log} RPC method. */
+/**
+ * Result for the {@code session.log} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionLogResult {
-
+public record SessionLogResult(
     /** The unique identifier of the emitted session event */
-    @JsonProperty("eventId")
-    private UUID eventId;
-
-    public UUID getEventId() { return eventId; }
-    public void setEventId(UUID eventId) { this.eventId = eventId; }
+    @JsonProperty("eventId") UUID eventId
+) {
 }

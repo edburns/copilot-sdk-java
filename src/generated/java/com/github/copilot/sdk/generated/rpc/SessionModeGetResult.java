@@ -12,19 +12,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** Result for the {@code session.mode.get} RPC method. */
+/**
+ * Result for the {@code session.mode.get} RPC method.
+ *
+ * @since 1.0.0
+ */
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SessionModeGetResult {
-
+public record SessionModeGetResult(
     /** The current agent mode. */
-    @JsonProperty("mode")
-    private SessionModeGetResultMode mode;
-
-    public SessionModeGetResultMode getMode() { return mode; }
-    public void setMode(SessionModeGetResultMode mode) { this.mode = mode; }
-
+    @JsonProperty("mode") SessionModeGetResultMode mode
+) {
 
     /** The current agent mode. */
     public enum SessionModeGetResultMode {
@@ -39,5 +38,12 @@ public class SessionModeGetResult {
         SessionModeGetResultMode(String value) { this.value = value; }
         @com.fasterxml.jackson.annotation.JsonValue
         public String getValue() { return value; }
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static SessionModeGetResultMode fromValue(String value) {
+            for (SessionModeGetResultMode v : values()) {
+                if (v.value.equals(value)) return v;
+            }
+            throw new IllegalArgumentException("Unknown SessionModeGetResultMode value: " + value);
+        }
     }
 }

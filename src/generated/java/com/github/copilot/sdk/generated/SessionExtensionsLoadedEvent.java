@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
-/** The {@code session.extensions_loaded} session event. */
+/**
+ * The {@code session.extensions_loaded} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class SessionExtensionsLoadedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "session.extensions_loaded"; }
 
     @JsonProperty("data")
     private SessionExtensionsLoadedEventData data;
@@ -27,48 +34,23 @@ public final class SessionExtensionsLoadedEvent extends SessionEvent {
     /** Data payload for {@link SessionExtensionsLoadedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class SessionExtensionsLoadedEventData {
-
+    public record SessionExtensionsLoadedEventData(
         /** Array of discovered extensions and their status */
-        @JsonProperty("extensions")
-        private List<SessionExtensionsLoadedEventDataExtensionsItem> extensions;
-
-        public List<SessionExtensionsLoadedEventDataExtensionsItem> getExtensions() { return extensions; }
-        public void setExtensions(List<SessionExtensionsLoadedEventDataExtensionsItem> extensions) { this.extensions = extensions; }
-
+        @JsonProperty("extensions") List<SessionExtensionsLoadedEventDataExtensionsItem> extensions
+    ) {
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class SessionExtensionsLoadedEventDataExtensionsItem {
-
+        public record SessionExtensionsLoadedEventDataExtensionsItem(
             /** Source-qualified extension ID (e.g., 'project:my-ext', 'user:auth-helper') */
-            @JsonProperty("id")
-            private String id;
-
+            @JsonProperty("id") String id,
             /** Extension name (directory name) */
-            @JsonProperty("name")
-            private String name;
-
+            @JsonProperty("name") String name,
             /** Discovery source */
-            @JsonProperty("source")
-            private SessionExtensionsLoadedEventDataExtensionsItemSource source;
-
+            @JsonProperty("source") SessionExtensionsLoadedEventDataExtensionsItemSource source,
             /** Current status: running, disabled, failed, or starting */
-            @JsonProperty("status")
-            private SessionExtensionsLoadedEventDataExtensionsItemStatus status;
-
-            public String getId() { return id; }
-            public void setId(String id) { this.id = id; }
-
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
-
-            public SessionExtensionsLoadedEventDataExtensionsItemSource getSource() { return source; }
-            public void setSource(SessionExtensionsLoadedEventDataExtensionsItemSource source) { this.source = source; }
-
-            public SessionExtensionsLoadedEventDataExtensionsItemStatus getStatus() { return status; }
-            public void setStatus(SessionExtensionsLoadedEventDataExtensionsItemStatus status) { this.status = status; }
-
+            @JsonProperty("status") SessionExtensionsLoadedEventDataExtensionsItemStatus status
+        ) {
 
             /** Discovery source */
             public enum SessionExtensionsLoadedEventDataExtensionsItemSource {
@@ -81,6 +63,13 @@ public final class SessionExtensionsLoadedEvent extends SessionEvent {
                 SessionExtensionsLoadedEventDataExtensionsItemSource(String value) { this.value = value; }
                 @com.fasterxml.jackson.annotation.JsonValue
                 public String getValue() { return value; }
+                @com.fasterxml.jackson.annotation.JsonCreator
+                public static SessionExtensionsLoadedEventDataExtensionsItemSource fromValue(String value) {
+                    for (SessionExtensionsLoadedEventDataExtensionsItemSource v : values()) {
+                        if (v.value.equals(value)) return v;
+                    }
+                    throw new IllegalArgumentException("Unknown SessionExtensionsLoadedEventDataExtensionsItemSource value: " + value);
+                }
             }
 
             /** Current status: running, disabled, failed, or starting */
@@ -98,6 +87,13 @@ public final class SessionExtensionsLoadedEvent extends SessionEvent {
                 SessionExtensionsLoadedEventDataExtensionsItemStatus(String value) { this.value = value; }
                 @com.fasterxml.jackson.annotation.JsonValue
                 public String getValue() { return value; }
+                @com.fasterxml.jackson.annotation.JsonCreator
+                public static SessionExtensionsLoadedEventDataExtensionsItemStatus fromValue(String value) {
+                    for (SessionExtensionsLoadedEventDataExtensionsItemStatus v : values()) {
+                        if (v.value.equals(value)) return v;
+                    }
+                    throw new IllegalArgumentException("Unknown SessionExtensionsLoadedEventDataExtensionsItemStatus value: " + value);
+                }
             }
         }
     }

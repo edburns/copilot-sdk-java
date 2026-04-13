@@ -12,10 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.processing.Generated;
 
-/** The {@code tool.execution_progress} session event. */
+/**
+ * The {@code tool.execution_progress} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ToolExecutionProgressEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "tool.execution_progress"; }
 
     @JsonProperty("data")
     private ToolExecutionProgressEventData data;
@@ -26,20 +33,11 @@ public final class ToolExecutionProgressEvent extends SessionEvent {
     /** Data payload for {@link ToolExecutionProgressEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ToolExecutionProgressEventData {
-
+    public record ToolExecutionProgressEventData(
         /** Tool call ID this progress notification belongs to */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** Human-readable progress status message (e.g., from an MCP server) */
-        @JsonProperty("progressMessage")
-        private String progressMessage;
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getProgressMessage() { return progressMessage; }
-        public void setProgressMessage(String progressMessage) { this.progressMessage = progressMessage; }
+        @JsonProperty("progressMessage") String progressMessage
+    ) {
     }
 }

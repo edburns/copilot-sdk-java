@@ -14,10 +14,17 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-/** The {@code elicitation.requested} session event. */
+/**
+ * The {@code elicitation.requested} session event.
+ *
+ * @since 1.0.0
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @javax.annotation.processing.Generated("copilot-sdk-codegen")
 public final class ElicitationRequestedEvent extends SessionEvent {
+
+    @Override
+    public String getType() { return "elicitation.requested"; }
 
     @JsonProperty("data")
     private ElicitationRequestedEventData data;
@@ -28,57 +35,22 @@ public final class ElicitationRequestedEvent extends SessionEvent {
     /** Data payload for {@link ElicitationRequestedEvent}. */
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ElicitationRequestedEventData {
-
+    public record ElicitationRequestedEventData(
         /** Unique identifier for this elicitation request; used to respond via session.respondToElicitation() */
-        @JsonProperty("requestId")
-        private String requestId;
-
+        @JsonProperty("requestId") String requestId,
         /** Tool call ID from the LLM completion; used to correlate with CompletionChunk.toolCall.id for remote UIs */
-        @JsonProperty("toolCallId")
-        private String toolCallId;
-
+        @JsonProperty("toolCallId") String toolCallId,
         /** The source that initiated the request (MCP server name, or absent for agent-initiated) */
-        @JsonProperty("elicitationSource")
-        private String elicitationSource;
-
+        @JsonProperty("elicitationSource") String elicitationSource,
         /** Message describing what information is needed from the user */
-        @JsonProperty("message")
-        private String message;
-
+        @JsonProperty("message") String message,
         /** Elicitation mode; "form" for structured input, "url" for browser-based. Defaults to "form" when absent. */
-        @JsonProperty("mode")
-        private ElicitationRequestedEventDataMode mode;
-
+        @JsonProperty("mode") ElicitationRequestedEventDataMode mode,
         /** JSON Schema describing the form fields to present to the user (form mode only) */
-        @JsonProperty("requestedSchema")
-        private ElicitationRequestedEventDataRequestedSchema requestedSchema;
-
+        @JsonProperty("requestedSchema") ElicitationRequestedEventDataRequestedSchema requestedSchema,
         /** URL to open in the user's browser (url mode only) */
-        @JsonProperty("url")
-        private String url;
-
-        public String getRequestId() { return requestId; }
-        public void setRequestId(String requestId) { this.requestId = requestId; }
-
-        public String getToolCallId() { return toolCallId; }
-        public void setToolCallId(String toolCallId) { this.toolCallId = toolCallId; }
-
-        public String getElicitationSource() { return elicitationSource; }
-        public void setElicitationSource(String elicitationSource) { this.elicitationSource = elicitationSource; }
-
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
-
-        public ElicitationRequestedEventDataMode getMode() { return mode; }
-        public void setMode(ElicitationRequestedEventDataMode mode) { this.mode = mode; }
-
-        public ElicitationRequestedEventDataRequestedSchema getRequestedSchema() { return requestedSchema; }
-        public void setRequestedSchema(ElicitationRequestedEventDataRequestedSchema requestedSchema) { this.requestedSchema = requestedSchema; }
-
-        public String getUrl() { return url; }
-        public void setUrl(String url) { this.url = url; }
-
+        @JsonProperty("url") String url
+    ) {
 
         /** Elicitation mode; "form" for structured input, "url" for browser-based. Defaults to "form" when absent. */
         public enum ElicitationRequestedEventDataMode {
@@ -91,33 +63,26 @@ public final class ElicitationRequestedEvent extends SessionEvent {
             ElicitationRequestedEventDataMode(String value) { this.value = value; }
             @com.fasterxml.jackson.annotation.JsonValue
             public String getValue() { return value; }
+            @com.fasterxml.jackson.annotation.JsonCreator
+            public static ElicitationRequestedEventDataMode fromValue(String value) {
+                for (ElicitationRequestedEventDataMode v : values()) {
+                    if (v.value.equals(value)) return v;
+                }
+                throw new IllegalArgumentException("Unknown ElicitationRequestedEventDataMode value: " + value);
+            }
         }
 
         /** JSON Schema describing the form fields to present to the user (form mode only) */
         @JsonIgnoreProperties(ignoreUnknown = true)
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class ElicitationRequestedEventDataRequestedSchema {
-
+        public record ElicitationRequestedEventDataRequestedSchema(
             /** Schema type indicator (always 'object') */
-            @JsonProperty("type")
-            private String type;
-
+            @JsonProperty("type") String type,
             /** Form field definitions, keyed by field name */
-            @JsonProperty("properties")
-            private Map<String, Object> properties;
-
+            @JsonProperty("properties") Map<String, Object> properties,
             /** List of required field names */
-            @JsonProperty("required")
-            private List<String> required;
-
-            public String getType() { return type; }
-            public void setType(String type) { this.type = type; }
-
-            public Map<String, Object> getProperties() { return properties; }
-            public void setProperties(Map<String, Object> properties) { this.properties = properties; }
-
-            public List<String> getRequired() { return required; }
-            public void setRequired(List<String> required) { this.required = required; }
+            @JsonProperty("required") List<String> required
+        ) {
         }
     }
 }
