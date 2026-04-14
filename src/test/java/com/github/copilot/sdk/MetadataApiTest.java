@@ -5,8 +5,8 @@
 package com.github.copilot.sdk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.copilot.sdk.events.SessionEventParser;
-import com.github.copilot.sdk.events.ToolExecutionProgressEvent;
+import com.github.copilot.sdk.generated.SessionEvent;
+import com.github.copilot.sdk.generated.ToolExecutionProgressEvent;
 import com.github.copilot.sdk.json.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MetadataApiTest {
 
     private static String cliPath;
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = JsonRpcClient.getObjectMapper();
 
     @BeforeAll
     static void setup() {
@@ -94,7 +94,7 @@ public class MetadataApiTest {
                 }
                 """;
 
-        var event = SessionEventParser.parse(MAPPER.readTree(json));
+        var event = MAPPER.treeToValue(MAPPER.readTree(json), SessionEvent.class);
 
         assertNotNull(event);
         assertInstanceOf(ToolExecutionProgressEvent.class, event);
@@ -108,7 +108,7 @@ public class MetadataApiTest {
 
     @Test
     void testToolExecutionProgressEventType() {
-        assertEquals("tool.execution_progress", ToolExecutionProgressEvent.TYPE);
+        assertEquals("tool.execution_progress", new ToolExecutionProgressEvent().getType());
     }
 
     // ===== Response Type Deserialization Tests =====

@@ -16,15 +16,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.github.copilot.sdk.events.AbstractSessionEvent;
-import com.github.copilot.sdk.events.AssistantMessageEvent;
-import com.github.copilot.sdk.events.AssistantTurnEndEvent;
-import com.github.copilot.sdk.events.AssistantTurnStartEvent;
-import com.github.copilot.sdk.events.AssistantUsageEvent;
-import com.github.copilot.sdk.events.SessionIdleEvent;
-import com.github.copilot.sdk.events.ToolExecutionCompleteEvent;
-import com.github.copilot.sdk.events.ToolExecutionStartEvent;
-import com.github.copilot.sdk.events.UserMessageEvent;
+import com.github.copilot.sdk.generated.SessionEvent;
+import com.github.copilot.sdk.generated.AssistantMessageEvent;
+import com.github.copilot.sdk.generated.AssistantTurnEndEvent;
+import com.github.copilot.sdk.generated.AssistantTurnStartEvent;
+import com.github.copilot.sdk.generated.AssistantUsageEvent;
+import com.github.copilot.sdk.generated.SessionIdleEvent;
+import com.github.copilot.sdk.generated.ToolExecutionCompleteEvent;
+import com.github.copilot.sdk.generated.ToolExecutionStartEvent;
+import com.github.copilot.sdk.generated.UserMessageEvent;
 import com.github.copilot.sdk.json.MessageOptions;
 import com.github.copilot.sdk.json.PermissionHandler;
 import com.github.copilot.sdk.json.SessionConfig;
@@ -62,7 +62,7 @@ public class SessionEventsE2ETest {
         // Use existing session snapshot that emits turn events
         ctx.configureForTest("session", "should_receive_session_events");
 
-        var allEvents = new ArrayList<AbstractSessionEvent>();
+        var allEvents = new ArrayList<SessionEvent>();
 
         try (CopilotClient client = ctx.createClient()) {
             CopilotSession session = client
@@ -197,7 +197,7 @@ public class SessionEventsE2ETest {
         // Use existing session snapshot
         ctx.configureForTest("session", "should_receive_session_events");
 
-        var allEvents = new ArrayList<AbstractSessionEvent>();
+        var allEvents = new ArrayList<SessionEvent>();
 
         try (CopilotClient client = ctx.createClient()) {
             CopilotSession session = client

@@ -29,16 +29,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.copilot.sdk.events.AbstractSessionEvent;
-import com.github.copilot.sdk.events.AssistantMessageEvent;
-import com.github.copilot.sdk.events.CapabilitiesChangedEvent;
-import com.github.copilot.sdk.events.CommandExecuteEvent;
-import com.github.copilot.sdk.events.ElicitationRequestedEvent;
-import com.github.copilot.sdk.events.ExternalToolRequestedEvent;
-import com.github.copilot.sdk.events.PermissionRequestedEvent;
-import com.github.copilot.sdk.events.SessionErrorEvent;
-import com.github.copilot.sdk.events.SessionEventParser;
-import com.github.copilot.sdk.events.SessionIdleEvent;
+import com.github.copilot.sdk.generated.AssistantMessageEvent;
+import com.github.copilot.sdk.generated.CapabilitiesChangedEvent;
+import com.github.copilot.sdk.generated.CommandExecuteEvent;
+import com.github.copilot.sdk.generated.ElicitationRequestedEvent;
+import com.github.copilot.sdk.generated.ExternalToolRequestedEvent;
+import com.github.copilot.sdk.generated.PermissionRequestedEvent;
+import com.github.copilot.sdk.generated.SessionErrorEvent;
+import com.github.copilot.sdk.generated.SessionEvent;
+import com.github.copilot.sdk.generated.SessionIdleEvent;
 import com.github.copilot.sdk.json.AgentInfo;
 import com.github.copilot.sdk.json.CommandContext;
 import com.github.copilot.sdk.json.CommandDefinition;
@@ -116,7 +115,7 @@ import com.github.copilot.sdk.json.UserPromptSubmittedHookInput;
  * @see CopilotClient#createSession(com.github.copilot.sdk.json.SessionConfig)
  * @see CopilotClient#resumeSession(String,
  *      com.github.copilot.sdk.json.ResumeSessionConfig)
- * @see AbstractSessionEvent
+ * @see SessionEvent
  * @since 1.0.0
  */
 public final class CopilotSession implements AutoCloseable {
@@ -135,7 +134,7 @@ public final class CopilotSession implements AutoCloseable {
     private volatile SessionCapabilities capabilities = new SessionCapabilities();
     private final SessionUiApi ui;
     private final JsonRpcClient rpc;
-    private final Set<Consumer<AbstractSessionEvent>> eventHandlers = ConcurrentHashMap.newKeySet();
+    private final Set<Consumer<SessionEvent>> eventHandlers = ConcurrentHashMap.newKeySet();
     private final Map<String, ToolDefinition> toolHandlers = new ConcurrentHashMap<>();
     private final Map<String, CommandHandler> commandHandlers = new ConcurrentHashMap<>();
     private final AtomicReference<PermissionHandler> permissionHandler = new AtomicReference<>();
@@ -450,7 +449,7 @@ public final class CopilotSession implements AutoCloseable {
         var future = new CompletableFuture<AssistantMessageEvent>();
         var lastAssistantMessage = new AtomicReference<AssistantMessageEvent>();
 
-        Consumer<AbstractSessionEvent> handler = evt -> {
+        Consumer<SessionEvent> handler = evt -> {
             if (evt instanceof AssistantMessageEvent msg) {
                 lastAssistantMessage.set(msg);
             } else if (evt instanceof SessionIdleEvent) {
@@ -563,7 +562,7 @@ public final class CopilotSession implements AutoCloseable {
      *
      * <pre>{@code
      * // Collect all events
-     * var events = new ArrayList<AbstractSessionEvent>();
+     * var events = new ArrayList<SessionEvent>();
      * session.on(events::add);
      * }</pre>
      *
@@ -573,10 +572,10 @@ public final class CopilotSession implements AutoCloseable {
      * @throws IllegalStateException
      *             if this session has been terminated
      * @see #on(Class, Consumer)
-     * @see AbstractSessionEvent
+     * @see SessionEvent
      * @see #setEventErrorPolicy(EventErrorPolicy)
      */
-    public Closeable on(Consumer<AbstractSessionEvent> handler) {
+    public Closeable on(Consumer<SessionEvent> handler) {
         ensureNotTerminated();
         eventHandlers.add(handler);
         return () -> eventHandlers.remove(handler);
@@ -626,11 +625,11 @@ public final class CopilotSession implements AutoCloseable {
      * @throws IllegalStateException
      *             if this session has been terminated
      * @see #on(Consumer)
-     * @see AbstractSessionEvent
+     * @see SessionEvent
      */
-    public <T extends AbstractSessionEvent> Closeable on(Class<T> eventType, Consumer<T> handler) {
+    public <T extends SessionEvent> Closeable on(Class<T> eventType, Consumer<T> handler) {
         ensureNotTerminated();
-        Consumer<AbstractSessionEvent> wrapper = event -> {
+        Consumer<SessionEvent> wrapper = event -> {
             if (eventType.isInstance(event)) {
                 handler.accept(eventType.cast(event));
             }
@@ -662,12 +661,12 @@ public final class CopilotSession implements AutoCloseable {
      * @see #setEventErrorHandler(EventErrorHandler)
      * @see #setEventErrorPolicy(EventErrorPolicy)
      */
-    void dispatchEvent(AbstractSessionEvent event) {
+    void dispatchEvent(SessionEvent event) {
         // Handle broadcast request events (protocol v3) before dispatching to user
         // handlers. These are fire-and-forget: the response is sent asynchronously.
         handleBroadcastEventAsync(event);
 
-        for (Consumer<AbstractSessionEvent> handler : eventHandlers) {
+        for (Consumer<SessionEvent> handler : eventHandlers) {
             try {
                 handler.accept(event);
             } catch (Exception e) {
@@ -697,7 +696,7 @@ public final class CopilotSession implements AutoCloseable {
      * @param event
      *            the event to handle
      */
-    private void handleBroadcastEventAsync(AbstractSessionEvent event) {
+    private void handleBroadcastEventAsync(SessionEvent event) {
         if (event instanceof ExternalToolRequestedEvent toolEvent) {
             var data = toolEvent.getData();
             if (data == null || data.requestId() == null || data.toolName() == null) {
@@ -721,7 +720,8 @@ public final class CopilotSession implements AutoCloseable {
             if (handler == null) {
                 return; // This client doesn't handle permissions; another client will
             }
-            executePermissionAndRespondAsync(data.requestId(), data.permissionRequest(), handler);
+            executePermissionAndRespondAsync(data.requestId(),
+                    MAPPER.convertValue(data.permissionRequest(), PermissionRequest.class), handler);
         } else if (event instanceof CommandExecuteEvent cmdEvent) {
             var data = cmdEvent.getData();
             if (data == null || data.requestId() == null || data.commandName() == null) {
@@ -742,8 +742,8 @@ public final class CopilotSession implements AutoCloseable {
                             .setRequired(data.requestedSchema().required());
                 }
                 var context = new ElicitationContext().setSessionId(sessionId).setMessage(data.message())
-                        .setRequestedSchema(schema).setMode(data.mode()).setElicitationSource(data.elicitationSource())
-                        .setUrl(data.url());
+                        .setRequestedSchema(schema).setMode(data.mode() != null ? data.mode().getValue() : null)
+                        .setElicitationSource(data.elicitationSource()).setUrl(data.url());
                 handleElicitationRequestAsync(context, data.requestId());
             }
         } else if (event instanceof CapabilitiesChangedEvent capEvent) {
@@ -1436,17 +1436,17 @@ public final class CopilotSession implements AutoCloseable {
      * @return a future that resolves with a list of all session events
      * @throws IllegalStateException
      *             if this session has been terminated
-     * @see AbstractSessionEvent
+     * @see SessionEvent
      */
-    public CompletableFuture<List<AbstractSessionEvent>> getMessages() {
+    public CompletableFuture<List<SessionEvent>> getMessages() {
         ensureNotTerminated();
         return rpc.invoke("session.getMessages", Map.of("sessionId", sessionId), GetMessagesResponse.class)
                 .thenApply(response -> {
-                    var events = new ArrayList<AbstractSessionEvent>();
+                    var events = new ArrayList<SessionEvent>();
                     if (response.events() != null) {
                         for (JsonNode eventNode : response.events()) {
                             try {
-                                AbstractSessionEvent event = SessionEventParser.parse(eventNode);
+                                SessionEvent event = MAPPER.treeToValue(eventNode, SessionEvent.class);
                                 if (event != null) {
                                     events.add(event);
                                 }
