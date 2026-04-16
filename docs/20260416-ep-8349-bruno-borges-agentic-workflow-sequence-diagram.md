@@ -15,7 +15,7 @@ sequenceDiagram
     Note over Cron,Maint: Phase 1 - Detect upstream changes (weekly-upstream-sync.yml)
     Cron->>WUS: Trigger (or manual workflow_dispatch)
     WUS->>LastMerge: Read last merged commit SHA
-    LastMerge-->>WUS: e.g. c3fa6cb...
+    LastMerge-->>WUS: Example c3fa6cb
     WUS->>Upstream: git clone & rev-parse HEAD
     Upstream-->>WUS: UPSTREAM_HEAD SHA
     
@@ -37,7 +37,7 @@ sequenceDiagram
     Scripts-->>Copilot: Branch created, commit summary
 
     Copilot->>Scripts: Run merge-upstream-diff.sh
-    Scripts-->>Copilot: Grouped diff (.NET src, tests, docs, etc.)
+    Scripts-->>Copilot: Grouped diff for dotnet src tests and docs
 
     Copilot->>Copilot: Analyze diff for features, bug fixes, and protocol changes
     
@@ -53,10 +53,10 @@ sequenceDiagram
     Scripts->>JavaSDK: Final build + push branch
 
     Copilot->>PR: Push to auto-created PR branch
-    Copilot->>PR: Update PR body with ported and skipped changes; add upstream-sync label
+    Copilot->>PR: Update PR body with ported and skipped changes and add upstream-sync label
 
     Note over PR,JavaSDK: Phase 3 - Human review and merge
-    PR->>JavaSDK: Human reviews & merges to main
+    PR->>JavaSDK: Human reviews and merges to main
 
     Note over Maint: Phase 4 - Housekeeping (agentics-maintenance.yml)
     Maint->>GHIssues: Daily: close expired issues (upstream-sync issues expire after 6 days)
