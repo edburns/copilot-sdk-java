@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant Cron as ⏰ Cron Schedule<br/>(Monday 10:00 UTC)
     participant WUS as Weekly Upstream Sync<br/>Workflow
@@ -60,3 +61,4 @@ sequenceDiagram
     Note over Maint: Phase 4 — Housekeeping (agentics-maintenance.yml)
     Maint->>GHIssues: Daily: close expired issues<br/>(upstream-sync issues expire after 6 days)
     Maint->>PR: Daily: close expired PRs
+```
