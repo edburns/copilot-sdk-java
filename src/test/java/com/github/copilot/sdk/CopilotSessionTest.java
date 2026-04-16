@@ -29,6 +29,7 @@ import com.github.copilot.sdk.generated.SessionIdleEvent;
 import com.github.copilot.sdk.generated.SessionStartEvent;
 import com.github.copilot.sdk.generated.ToolExecutionStartEvent;
 import com.github.copilot.sdk.generated.UserMessageEvent;
+import com.github.copilot.sdk.generated.rpc.SessionRpc;
 import com.github.copilot.sdk.json.MessageOptions;
 import com.github.copilot.sdk.json.PermissionHandler;
 import com.github.copilot.sdk.json.ResumeSessionConfig;
@@ -845,6 +846,32 @@ public class CopilotSessionTest {
             // A non-existent session should return null
             var notFound = client.getSessionMetadata("non-existent-session-id").get(30, TimeUnit.SECONDS);
             assertNull(notFound, "Non-existent session should return null");
+
+            session.close();
+        }
+    }
+
+    /**
+     * Verifies that {@link CopilotSession#getRpc()} returns a non-null
+     * {@link SessionRpc} wired to the session's ID and that all namespace fields
+     * are present.
+     */
+    @Test
+    void testGetRpcReturnsSessionRpcWithCorrectSessionId() throws Exception {
+        ctx.configureForTest("session", "should_receive_session_events");
+
+        try (CopilotClient client = ctx.createClient()) {
+            CopilotSession session = client
+                    .createSession(new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL)).get();
+
+            SessionRpc rpc = session.getRpc();
+            assertNotNull(rpc, "getRpc() must not return null");
+            assertNotNull(rpc.agent, "SessionRpc.agent must not be null");
+            assertNotNull(rpc.model, "SessionRpc.model must not be null");
+            assertNotNull(rpc.tools, "SessionRpc.tools must not be null");
+            assertNotNull(rpc.permissions, "SessionRpc.permissions must not be null");
+            assertNotNull(rpc.commands, "SessionRpc.commands must not be null");
+            assertNotNull(rpc.ui, "SessionRpc.ui must not be null");
 
             session.close();
         }

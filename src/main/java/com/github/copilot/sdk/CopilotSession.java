@@ -30,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.copilot.sdk.generated.AssistantMessageEvent;
+import com.github.copilot.sdk.generated.rpc.SessionCommandsHandlePendingCommandParams;
+import com.github.copilot.sdk.generated.rpc.SessionPermissionsHandlePendingPermissionRequestParams;
+import com.github.copilot.sdk.generated.rpc.SessionRpc;
 import com.github.copilot.sdk.generated.CapabilitiesChangedEvent;
 import com.github.copilot.sdk.generated.CommandExecuteEvent;
 import com.github.copilot.sdk.generated.ElicitationRequestedEvent;
@@ -134,6 +137,7 @@ public final class CopilotSession implements AutoCloseable {
     private volatile SessionCapabilities capabilities = new SessionCapabilities();
     private final SessionUiApi ui;
     private final JsonRpcClient rpc;
+    private volatile SessionRpc sessionRpc;
     private final Set<Consumer<SessionEvent>> eventHandlers = ConcurrentHashMap.newKeySet();
     private final Map<String, ToolDefinition> toolHandlers = new ConcurrentHashMap<>();
     private final Map<String, CommandHandler> commandHandlers = new ConcurrentHashMap<>();
@@ -183,6 +187,7 @@ public final class CopilotSession implements AutoCloseable {
         this.rpc = rpc;
         this.workspacePath = workspacePath;
         this.ui = new SessionUiApiImpl();
+        this.sessionRpc = rpc != null ? new SessionRpc(rpc::invoke, sessionId) : null;
         var executor = new ScheduledThreadPoolExecutor(1, r -> {
             var t = new Thread(r, "sendAndWait-timeout");
             t.setDaemon(true);
@@ -219,6 +224,7 @@ public final class CopilotSession implements AutoCloseable {
      */
     void setActiveSessionId(String sessionId) {
         this.sessionId = sessionId;
+        this.sessionRpc = rpc != null ? new SessionRpc(rpc::invoke, sessionId) : null;
     }
 
     /**
@@ -267,6 +273,25 @@ public final class CopilotSession implements AutoCloseable {
      */
     public SessionUiApi getUi() {
         return ui;
+    }
+
+    /**
+     * Returns the typed RPC client for this session.
+     * <p>
+     * Provides strongly-typed access to all session-level API namespaces. The
+     * {@code sessionId} is injected automatically into every call.
+     * <p>
+     * Example usage:
+     *
+     * <pre>{@code
+     * var agents = session.getRpc().agent.list().get();
+     * }</pre>
+     *
+     * @return the session-scoped typed RPC client
+     * @since 1.0.0
+     */
+    public SessionRpc getRpc() {
+        return sessionRpc;
     }
 
     /**
@@ -851,8 +876,9 @@ public final class CopilotSession implements AutoCloseable {
                     try {
                         PermissionRequestResult denied = new PermissionRequestResult();
                         denied.setKind(PermissionRequestResultKind.DENIED_COULD_NOT_REQUEST_FROM_USER);
-                        rpc.invoke("session.permissions.handlePendingPermissionRequest",
-                                Map.of("sessionId", sessionId, "requestId", requestId, "result", denied), Object.class);
+                        sessionRpc.permissions.handlePendingPermissionRequest(
+                                new SessionPermissionsHandlePendingPermissionRequestParams(sessionId, requestId,
+                                        denied));
                     } catch (Exception e) {
                         LOG.log(Level.WARNING, "Error sending permission denied for requestId=" + requestId, e);
                     }
@@ -863,8 +889,8 @@ public final class CopilotSession implements AutoCloseable {
                 try {
                     PermissionRequestResult denied = new PermissionRequestResult();
                     denied.setKind(PermissionRequestResultKind.DENIED_COULD_NOT_REQUEST_FROM_USER);
-                    rpc.invoke("session.permissions.handlePendingPermissionRequest",
-                            Map.of("sessionId", sessionId, "requestId", requestId, "result", denied), Object.class);
+                    sessionRpc.permissions.handlePendingPermissionRequest(
+                            new SessionPermissionsHandlePendingPermissionRequestParams(sessionId, requestId, denied));
                 } catch (Exception sendEx) {
                     LOG.log(Level.WARNING, "Error sending permission denied for requestId=" + requestId, sendEx);
                 }
@@ -908,8 +934,8 @@ public final class CopilotSession implements AutoCloseable {
         Runnable task = () -> {
             if (handler == null) {
                 try {
-                    rpc.invoke("session.commands.handlePendingCommand", Map.of("sessionId", sessionId, "requestId",
-                            requestId, "error", "Unknown command: " + commandName), Object.class);
+                    sessionRpc.commands.handlePendingCommand(new SessionCommandsHandlePendingCommandParams(sessionId,
+                            requestId, "Unknown command: " + commandName));
                 } catch (Exception e) {
                     LOG.log(Level.WARNING, "Error sending command error for requestId=" + requestId, e);
                 }
@@ -920,16 +946,16 @@ public final class CopilotSession implements AutoCloseable {
                         .setArgs(args);
                 handler.handle(ctx).thenRun(() -> {
                     try {
-                        rpc.invoke("session.commands.handlePendingCommand",
-                                Map.of("sessionId", sessionId, "requestId", requestId), Object.class);
+                        sessionRpc.commands.handlePendingCommand(
+                                new SessionCommandsHandlePendingCommandParams(sessionId, requestId, null));
                     } catch (Exception e) {
                         LOG.log(Level.WARNING, "Error sending command result for requestId=" + requestId, e);
                     }
                 }).exceptionally(ex -> {
                     try {
                         String msg = ex.getMessage() != null ? ex.getMessage() : ex.toString();
-                        rpc.invoke("session.commands.handlePendingCommand",
-                                Map.of("sessionId", sessionId, "requestId", requestId, "error", msg), Object.class);
+                        sessionRpc.commands.handlePendingCommand(
+                                new SessionCommandsHandlePendingCommandParams(sessionId, requestId, msg));
                     } catch (Exception e) {
                         LOG.log(Level.WARNING, "Error sending command error for requestId=" + requestId, e);
                     }
@@ -939,8 +965,8 @@ public final class CopilotSession implements AutoCloseable {
                 LOG.log(Level.WARNING, "Error executing command for requestId=" + requestId, e);
                 try {
                     String msg = e.getMessage() != null ? e.getMessage() : e.toString();
-                    rpc.invoke("session.commands.handlePendingCommand",
-                            Map.of("sessionId", sessionId, "requestId", requestId, "error", msg), Object.class);
+                    sessionRpc.commands.handlePendingCommand(
+                            new SessionCommandsHandlePendingCommandParams(sessionId, requestId, msg));
                 } catch (Exception sendEx) {
                     LOG.log(Level.WARNING, "Error sending command error for requestId=" + requestId, sendEx);
                 }

@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.copilot.sdk.generated.rpc.McpConfigAddParams;
 import com.github.copilot.sdk.generated.rpc.McpDiscoverParams;
 import com.github.copilot.sdk.generated.rpc.RpcCaller;
@@ -272,5 +273,152 @@ class RpcWrappersTest {
 
         assertEquals(1, stub.calls.size());
         assertEquals("account.getQuota", stub.calls.get(0).method());
+    }
+
+    // ── CopilotSession.getRpc() wiring tests ──────────────────────────────────
+    // These tests use a socket-pair backed JsonRpcClient (same pattern as
+    // RpcHandlerDispatcherTest) to construct a real CopilotSession and verify
+    // that getRpc() returns a correctly wired SessionRpc.
+
+    @Test
+    void copilotSession_getRpc_returns_non_null_session_rpc() throws Exception {
+        try (var sockets = new SocketPair()) {
+            var rpc = sockets.client();
+            var session = new CopilotSession("sess-unit", rpc);
+
+            assertNotNull(session.getRpc());
+        }
+    }
+
+    @Test
+    void copilotSession_getRpc_sessionId_matches_session() throws Exception {
+        try (var sockets = new SocketPair()) {
+            var rpc = sockets.client();
+            var stub = sockets.stubServer();
+            var session = new CopilotSession("sess-test-id", rpc);
+
+            // Call any no-arg session method via getRpc() to verify sessionId injection
+            session.getRpc().agent.list();
+
+            // Drain the sent message from the stub server
+            var sent = stub.readOneMessage();
+            assertEquals("session.agent.list", sent.get("method").asText());
+            assertEquals("sess-test-id", sent.get("params").get("sessionId").asText());
+        }
+    }
+
+    @Test
+    void copilotSession_getRpc_updates_when_sessionId_changes() throws Exception {
+        try (var sockets = new SocketPair()) {
+            var rpc = sockets.client();
+            var stub = sockets.stubServer();
+            var session = new CopilotSession("old-id", rpc);
+
+            // Simulate server returning a different sessionId (v2 CLI behaviour)
+            session.setActiveSessionId("new-id");
+
+            session.getRpc().agent.list();
+
+            var sent = stub.readOneMessage();
+            assertEquals("new-id", sent.get("params").get("sessionId").asText(),
+                    "getRpc() should reflect the updated sessionId");
+        }
+    }
+
+    @Test
+    void copilotSession_getRpc_all_namespace_fields_present() throws Exception {
+        try (var sockets = new SocketPair()) {
+            var rpc = sockets.client();
+            var session = new CopilotSession("sess-ns", rpc);
+
+            var sessionRpc = session.getRpc();
+            assertNotNull(sessionRpc.model);
+            assertNotNull(sessionRpc.agent);
+            assertNotNull(sessionRpc.skills);
+            assertNotNull(sessionRpc.tools);
+            assertNotNull(sessionRpc.permissions);
+            assertNotNull(sessionRpc.commands);
+            assertNotNull(sessionRpc.ui);
+        }
+    }
+
+    /**
+     * Helper that creates a loopback socket pair. The client side is used by
+     * {@link JsonRpcClient}; the server side can be read to inspect outbound
+     * messages.
+     */
+    private static final class SocketPair implements AutoCloseable {
+
+        private static final ObjectMapper MAPPER = JsonRpcClient.getObjectMapper();
+
+        private final java.net.Socket clientSocket;
+        private final java.net.Socket serverSocket;
+        private final JsonRpcClient rpcClient;
+
+        SocketPair() throws Exception {
+            try (var ss = new java.net.ServerSocket(0)) {
+                clientSocket = new java.net.Socket("localhost", ss.getLocalPort());
+                serverSocket = ss.accept();
+            }
+            serverSocket.setSoTimeout(3000);
+            rpcClient = JsonRpcClient.fromSocket(clientSocket);
+        }
+
+        JsonRpcClient client() {
+            return rpcClient;
+        }
+
+        StubServer stubServer() {
+            return new StubServer(serverSocket);
+        }
+
+        @Override
+        public void close() throws Exception {
+            rpcClient.close();
+            clientSocket.close();
+            serverSocket.close();
+        }
+    }
+
+    /**
+     * Reads raw JSON-RPC messages written to the server side of the socket.
+     */
+    private static final class StubServer {
+
+        private static final ObjectMapper MAPPER = JsonRpcClient.getObjectMapper();
+
+        private final java.io.InputStream in;
+
+        StubServer(java.net.Socket socket) {
+            try {
+                this.in = socket.getInputStream();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        /**
+         * Reads one JSON-RPC message (Content-Length framed) from the stream.
+         */
+        com.fasterxml.jackson.databind.JsonNode readOneMessage() throws Exception {
+            // Read Content-Length header
+            var header = new StringBuilder();
+            int b;
+            while ((b = in.read()) != -1) {
+                if (b == '\n' && header.toString().endsWith("\r")) {
+                    break;
+                }
+                header.append((char) b);
+            }
+            // Skip blank line
+            in.read(); // '\r'
+            in.read(); // '\n'
+
+            String hdr = header.toString().trim();
+            int colon = hdr.indexOf(':');
+            int len = Integer.parseInt(hdr.substring(colon + 1).trim());
+            byte[] body = in.readNBytes(len);
+            return MAPPER.readTree(body);
+        }
     }
 }
