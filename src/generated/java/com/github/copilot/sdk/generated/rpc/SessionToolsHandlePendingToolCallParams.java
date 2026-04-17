@@ -26,7 +26,7 @@ public record SessionToolsHandlePendingToolCallParams(
     /** Request ID of the pending tool call */
     @JsonProperty("requestId") String requestId,
     /** Tool call result (string or expanded result object) */
-    @JsonProperty("result") String result,
+    @JsonProperty("result") Object result,
     /** Error message if the tool call failed */
     @JsonProperty("error") String error
 ) {

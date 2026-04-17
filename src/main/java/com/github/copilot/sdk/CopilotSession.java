@@ -822,7 +822,8 @@ public final class CopilotSession implements AutoCloseable {
                             toolResult = ToolResultObject
                                     .success(result instanceof String s ? s : MAPPER.writeValueAsString(result));
                         }
-                        sendExpandedToolResult(requestId, toolResult);
+                        getRpc().tools.handlePendingToolCall(
+                                new SessionToolsHandlePendingToolCallParams(sessionId, requestId, toolResult, null));
                     } catch (Exception e) {
                         LOG.log(Level.WARNING, "Error sending tool result for requestId=" + requestId, e);
                     }
@@ -855,25 +856,6 @@ public final class CopilotSession implements AutoCloseable {
             LOG.log(Level.WARNING, "Executor rejected tool task for requestId=" + requestId + "; running inline", e);
             task.run();
         }
-    }
-
-    /**
-     * Sends a {@code ToolResultObject} back via
-     * {@code session.tools.handlePendingToolCall} using an
-     * {@link com.fasterxml.jackson.databind.node.ObjectNode} payload.
-     * <p>
-     * {@link SessionToolsHandlePendingToolCallParams#result()} is typed as
-     * {@code String} by the code generator's {@code anyOf[string,object]}
-     * preference rule, but the protocol requires a JSON object for expanded
-     * {@code ToolResultObject} results. This helper bypasses the type constraint
-     * while keeping every other call site on the typed wrapper.
-     */
-    private void sendExpandedToolResult(String requestId, ToolResultObject toolResult) {
-        var node = MAPPER.createObjectNode();
-        node.put("sessionId", sessionId);
-        node.put("requestId", requestId);
-        node.set("result", MAPPER.valueToTree(toolResult));
-        rpc.invoke("session.tools.handlePendingToolCall", node, Object.class);
     }
 
     /**

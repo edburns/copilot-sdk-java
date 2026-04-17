@@ -113,15 +113,9 @@ function schemaTypeToJava(
             const result = schemaTypeToJava(nonNull[0] as JSONSchema7, required && !hasNull, context, propName, nestedTypes);
             return result;
         }
-        // When exactly two non-null types and one of them is string, prefer String
-        // over Object to avoid unnecessary type erasure on common wire-level unions
-        // (e.g., string | null, string | boolean).  For wider unions keep Object.
-        if (nonNull.length === 2) {
-            const hasString = nonNull.some((s) => typeof s === "object" && (s as JSONSchema7).type === "string");
-            if (hasString) {
-                return { javaType: "String", imports };
-            }
-        }
+        // Multi-branch anyOf: fall through to Object, matching the C# generator's
+        // behavior.  Java has no union types, so Object is the correct erasure for
+        // anyOf[string, object] and similar multi-variant schemas.
         console.warn(`[codegen] ${context}.${propName}: anyOf with ${nonNull.length} non-null branches — falling back to Object`);
         return { javaType: "Object", imports };
     }
