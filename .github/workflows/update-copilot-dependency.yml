@@ -159,7 +159,7 @@ jobs:
           > Created by the **Update @github/copilot Dependency** workflow." \
               --base main \
               --head "$BRANCH" \
-            | grep -oP '\d+$' || gh pr view "$BRANCH" --json number --jq .number)
+            | grep -oE '[0-9]+$' || gh pr view "$BRANCH" --json number --jq .number)
           fi
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
@@ -179,6 +179,7 @@ jobs:
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
+          set -o pipefail
           mvn verify 2>&1 | tee /tmp/mvn-verify-output.txt
           echo "exit_code=$?" >> "$GITHUB_OUTPUT"
 
@@ -214,20 +215,22 @@ jobs:
         if: steps.trigger-fix.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.commit-changes.outputs.branch }}
         run: |
           echo "Waiting for agentic fix workflow to start..."
           sleep 30
 
-          # Find the most recent run of codegen-agentic-fix triggered after us
           for i in $(seq 1 60); do
             RUN_ID=$(gh run list \
               --workflow=codegen-agentic-fix.lock.yml \
+              --branch="$BRANCH" \
               --limit=1 \
               --json databaseId,status \
               --jq '.[0].databaseId')
 
             STATUS=$(gh run list \
               --workflow=codegen-agentic-fix.lock.yml \
+              --branch="$BRANCH" \
               --limit=1 \
               --json databaseId,status \
               --jq '.[0].status')

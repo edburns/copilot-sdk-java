@@ -99,6 +99,7 @@ jobs:
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
+          set -o pipefail
           mvn verify 2>&1 | tee /tmp/mvn-verify-output.txt
           echo "exit_code=$?" >> "$GITHUB_OUTPUT"
 
@@ -131,6 +132,7 @@ jobs:
         if: steps.trigger-fix.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.head_ref }}
         run: |
           echo "Waiting for agentic fix workflow to start..."
           sleep 30
@@ -138,12 +140,14 @@ jobs:
           for i in $(seq 1 60); do
             RUN_ID=$(gh run list \
               --workflow=codegen-agentic-fix.lock.yml \
+              --branch="$BRANCH" \
               --limit=1 \
               --json databaseId,status \
               --jq '.[0].databaseId')
 
             STATUS=$(gh run list \
               --workflow=codegen-agentic-fix.lock.yml \
+              --branch="$BRANCH" \
               --limit=1 \
               --json databaseId,status \
               --jq '.[0].status')
