@@ -33,9 +33,9 @@ tools:
     toolsets: [context, repos]
 
 safe-outputs:
-  push-to-pull-request-branch:
+  push_to_pull_request_branch:
     max: 3
-  add-comment:
+  add_comment:
     target: "*"
     max: 5
   noop:
