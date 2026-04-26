@@ -8,8 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-> **Reference implementation sync:** [`github/copilot-sdk@922959f`](https://github.com/github/copilot-sdk/commit/922959f4a7b83509c3620d4881733c6c5677f00c)
+> **Reference implementation sync:** [`github/copilot-sdk@dd2dcbc`](https://github.com/github/copilot-sdk/commit/dd2dcbc439256acfb9feb2cff07c0b9c820091b8)
 
+## [0.3.0-java.2] - 2026-04-26
+
+> **Reference implementation sync:** [`github/copilot-sdk@dd2dcbc`](https://github.com/github/copilot-sdk/commit/dd2dcbc439256acfb9feb2cff07c0b9c820091b8)
 ## [0.3.0-java-preview.1] - 2026-04-21
 
 > **Reference implementation sync:** [`github/copilot-sdk@922959f`](https://github.com/github/copilot-sdk/commit/922959f4a7b83509c3620d4881733c6c5677f00c)
@@ -500,6 +503,8 @@ New types: `GetForegroundSessionResponse`, `SetForegroundSessionResponse`
 [0.3.0-java-preview.0]: https://github.com/github/copilot-sdk-java/compare/v0.2.2-java.1...v0.3.0-java-preview.0
 [Unreleased]: https://github.com/github/copilot-sdk-java/compare/v0.3.0-java-preview.1...HEAD
 [0.3.0-java-preview.1]: https://github.com/github/copilot-sdk-java/compare/v0.2.2-java.1...v0.3.0-java-preview.1
+[Unreleased]: https://github.com/github/copilot-sdk-java/compare/v0.3.0-java.2...HEAD
+[0.3.0-java.2]: https://github.com/github/copilot-sdk-java/compare/v0.2.2-java.1...v0.3.0-java.2
 [0.2.2-java.1]: https://github.com/github/copilot-sdk-java/compare/v0.2.1-java.1...v0.2.2-java.1
 [Unreleased]: https://github.com/github/copilot-sdk-java/compare/v0.3.0-java-preview.0...HEAD
 [0.3.0-java-preview.0]: https://github.com/github/copilot-sdk-java/compare/v0.2.2-java.1...v0.3.0-java-preview.0
