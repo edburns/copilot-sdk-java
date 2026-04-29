@@ -53,6 +53,27 @@
         <skip.test.harness>false</skip.test.harness>
         <!-- Extra JVM args for Surefire; overridden by the jdk21+ profile -->
         <surefire.jvm.args />
+        <!--
+            The version of the @github/copilot npm package that the reference implementation
+            commit pinned in .lastmerge depends on. Mirrors the value of dependencies."@github/copilot"
+            in target/copilot-sdk/nodejs/package.json after the reference impl is cloned/reset to the
+            commit in .lastmerge.
+
+            The previously mentioned package.json contains the SINGLE
+            SOURCE OF TRUTH for the Copilot CLI version that all paths
+            (build-test.yml, run-smoke-test.yml,
+            update-copilot-dependency.yml, setup-copilot action) must
+            pin to. It is updated automatically by
+            .github/scripts/reference-impl-sync/sync-cli-version-from-reference-impl.sh,
+            which is called from merge-reference-impl-finish.sh
+            whenever .lastmerge is updated.
+
+            DO NOT EDIT MANUALLY. To update, run the
+            reference-impl-sync workflow and deal with the subsequent
+            PR.
+        -->
+        <readonly-copilot-sdk-ref-impl-version-from-lastmerge-file-updated-by-weekly-reference-impl-sync>^1.0.36-0</readonly-copilot-sdk-ref-impl-version-from-lastmerge-file-updated-by-weekly-reference-impl-sync>
+
     </properties>
 
     <dependencies>

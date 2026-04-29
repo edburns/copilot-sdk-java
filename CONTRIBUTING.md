@@ -38,9 +38,41 @@ If you have ideas for entirely new features, please post an issue or start a dis
 1. Push to your fork and [submit a pull request][pr]
 1. Pat yourself on the back and wait for your pull request to be reviewed and merged.
 
-### Running tests and linters
+### Running locally, including tests and linters
 
 ```bash
+# Obtain the pinned version of Copilot CLI to the local workarea.
+# This clones the reference implementation at the commit pinned in
+# .lastmerge, but does NOT run `npm ci` inside its nodejs/ subdir.
+mvn generate-test-resources
+
+# Install the pinned Copilot CLI into target/copilot-sdk/nodejs/node_modules
+# so the SDK tests use the version declared in
+# target/copilot-sdk/nodejs/package.json (the SDK-test pin), NOT the version
+# in target/copilot-sdk/test/harness/package.json (the replay-harness pin,
+# which is incidental and may be older).
+
+## POSIX
+
+(cd target/copilot-sdk/nodejs && npm ci --ignore-scripts)
+
+## PowerShell
+
+Push-Location target\copilot-sdk\nodejs; if ($?) { npm ci --ignore-scripts }; Pop-Location
+
+# Make it so the pinned Copilot CLI is used for the tests. The patterns
+# below are scoped to the `nodejs/node_modules/` subtree so they cannot
+# accidentally pick up the older harness copy under
+# target/copilot-sdk/test/harness/node_modules/.
+
+## POSIX
+
+export COPILOT_CLI_PATH="$(find "$PWD/target" -type f -path '*/nodejs/node_modules/@github/copilot/index.js' | head -n 1)"
+
+## PowerShell
+
+$env:COPILOT_CLI_PATH = (Get-ChildItem -Path "$PWD\target" -Recurse -Filter 'index.js' -File | Where-Object { $_.FullName -match '[\\/]nodejs[\\/]node_modules[\\/]@github[\\/]copilot[\\/]index\.js$' } | Select-Object -First 1 -ExpandProperty FullName)
+
 # Build and run all tests
 mvn clean verify
 
@@ -52,6 +84,20 @@ mvn spotless:apply
 
 # Check formatting only
 mvn spotless:check
+```
+
+Assuming you are in the same shell you used to run the above commands, to run this exact Copilot CLI locally you can do the following.
+
+### POSIX
+
+```bash
+node ${COPILOT_CLI_PATH}
+```
+
+### PowerShell
+
+```PowerShell
+node $env:COPILOT_CLI_PATH
 ```
 
 Here are a few things you can do that will increase the likelihood of your pull request being accepted:
