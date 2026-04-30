@@ -62,6 +62,17 @@
         <copilot.cli.path>${copilot.sdk.clone.dir}/nodejs/node_modules/@github/copilot/index.js</copilot.cli.path>
         <!-- Set to true (via -Pskip-test-harness) to skip git-clone + npm install of test harness -->
         <skip.test.harness>false</skip.test.harness>
+        <!--
+            Whether to skip the install-nodejs-cli-dependencies execution
+            (npm ci of the @github/copilot CLI). Defaults to ${skip.test.harness}
+            so it tracks the rest of the test-harness setup, but is also
+            forced to true when Maven tests are skipped (-DskipTests or
+            -Dmaven.test.skip) via the skip-cli-install-when-tests-skipped
+            and skip-cli-install-when-maven-test-skip profiles below, so that
+            non-test builds (e.g. package/deploy with tests skipped) do not
+            require npm or network access.
+        -->
+        <skip.cli.install>${skip.test.harness}</skip.cli.install>
         <!-- Extra JVM args for Surefire; overridden by the jdk21+ profile -->
         <surefire.jvm.args />
         <!--
@@ -292,7 +303,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skip.test.harness}</skip>
+                            <skip>${skip.cli.install}</skip>
                             <executable>npm</executable>
                             <workingDirectory>${copilot.sdk.clone.dir}/nodejs</workingDirectory>
                             <arguments>
@@ -655,6 +666,39 @@
             <id>skip-test-harness</id>
             <properties>
                 <skip.test.harness>true</skip.test.harness>
+            </properties>
+        </profile>
+        <!--
+            Skip the install-nodejs-cli-dependencies (npm ci) execution when
+            tests are skipped via -DskipTests, so non-test builds do not
+            require npm or network access. Activates automatically; no manual
+            -P needed.
+        -->
+        <profile>
+            <id>skip-cli-install-when-tests-skipped</id>
+            <activation>
+                <property>
+                    <name>skipTests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <skip.cli.install>true</skip.cli.install>
+            </properties>
+        </profile>
+        <!--
+            Same as above, but for -Dmaven.test.skip=true.
+        -->
+        <profile>
+            <id>skip-cli-install-when-maven-test-skip</id>
+            <activation>
+                <property>
+                    <name>maven.test.skip</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <skip.cli.install>true</skip.cli.install>
             </properties>
         </profile>
         <!-- Debug profile for FINE logging during tests -->
