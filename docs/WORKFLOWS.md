@@ -9,8 +9,8 @@
 | [Update @github/copilot Dependency](workflows/update-copilot-dependency.yml) | Updates the `@github/copilot` npm package, re-runs code generation, and opens a PR | `workflow_dispatch` | — |
 | [Deploy Documentation](workflows/deploy-site.yml) | Generates and deploys versioned docs to GitHub Pages | `workflow_run` (after Build & Test), `release`, `workflow_dispatch` | — |
 | [Publish to Maven Central](workflows/publish-maven.yml) | Releases the SDK to Maven Central and creates a GitHub Release | `workflow_dispatch` | — |
-| [Reference Implementation Sync](workflows/reference-impl-sync.yml) | Checks for new reference implementation commits and creates an issue for Copilot to merge | `workflow_dispatch` | Daily at 10:00 UTC |
-| [Reference Implementation Sync (Agentic)](workflows/reference-impl-sync.lock.yml) | Compiled agentic workflow that executes the reference implementation sync via `gh-aw` | `workflow_dispatch` | Daily (scattered) |
+| [Reference Implementation Sync](workflows/reference-impl-sync.yml) | Checks for new reference implementation commits and creates an issue for Copilot to merge | `workflow_dispatch` | [See workflow](workflows/reference-impl-sync.yml) |
+| [Reference Implementation Sync (Agentic)](workflows/reference-impl-sync.lock.yml) | Compiled agentic workflow that executes the reference implementation sync via `gh-aw` | `workflow_dispatch` | [See workflow](workflows/reference-impl-sync.yml) |
 | [Copilot Setup Steps](workflows/copilot-setup-steps.yml) | Configures the environment for the GitHub Copilot coding agent | `push` (on self-change), `workflow_dispatch` | — |
 
 ---
@@ -68,7 +68,7 @@ Manual-only workflow that performs a full release:
 
 **File:** [`reference-impl-sync.yml`](workflows/reference-impl-sync.yml)
 
-Runs daily at 10:00 UTC. Clones the official `github/copilot-sdk` repository and compares `HEAD` against the commit hash stored in `.lastmerge`.
+Runs on the schedule specified in [`.github/workflows/reference-impl-sync.yml`](workflows/reference-impl-sync.yml). Clones the official `github/copilot-sdk` repository and compares `HEAD` against the commit hash stored in `.lastmerge`.
 
 If new commits are found:
 1. Closes any previously open `reference-impl-sync` issues

@@ -2,8 +2,8 @@ name: "Reference Implementation Sync"
 
 on:
   schedule:
-    # Daily at 10:00 UTC (5:00 AM EST / 6:00 AM EDT)
-    - cron: '0 10 * * *'
+    # Tuesday and Thursday at 10:00 UTC (5:00 AM EST / 6:00 AM EDT)
+    - cron: '0 10 * * 2,4'
   workflow_dispatch:
 
 permissions:
