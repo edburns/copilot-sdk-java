@@ -49,6 +49,17 @@
         <!-- Directory where the copilot-sdk repo will be cloned for tests -->
         <copilot.sdk.clone.dir>${project.build.directory}/copilot-sdk</copilot.sdk.clone.dir>
         <copilot.tests.dir>${copilot.sdk.clone.dir}/test</copilot.tests.dir>
+        <!--
+            Path to the Copilot CLI entry point used by the SDK tests. Defaults
+            to the CLI installed under target/copilot-sdk/nodejs by the
+            install-nodejs-cli-dependencies execution. Surefire injects this
+            into the test JVM as the COPILOT_CLI_PATH environment variable, so
+            `mvn verify` is self-contained and the developer never has to set
+            it manually. Override on the command line to point at a different
+            CLI build, e.g.:
+              mvn verify -Dcopilot.cli.path=/some/other/copilot/index.js
+        -->
+        <copilot.cli.path>${copilot.sdk.clone.dir}/nodejs/node_modules/@github/copilot/index.js</copilot.cli.path>
         <!-- Set to true (via -Pskip-test-harness) to skip git-clone + npm install of test harness -->
         <skip.test.harness>false</skip.test.harness>
         <!-- Extra JVM args for Surefire; overridden by the jdk21+ profile -->
@@ -261,6 +272,35 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <!--
+                        Install the @github/copilot CLI declared by
+                        target/copilot-sdk/nodejs/package.json. This is the CLI
+                        version the SDK tests must run against (independent of
+                        the older pin in test/harness/package.json which is
+                        incidental to harness internals). Mirrors what
+                        .github/workflows/build-test.yml does manually so that
+                        `mvn clean verify` is self-contained: the prior
+                        target/copilot-sdk/nodejs/node_modules is wiped by
+                        clean, but this re-creates it before tests run.
+                        Uses npm ci with the ignore-scripts flag, matching
+                        build-test.yml.
+                    -->
+                    <execution>
+                        <id>install-nodejs-cli-dependencies</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.test.harness}</skip>
+                            <executable>npm</executable>
+                            <workingDirectory>${copilot.sdk.clone.dir}/nodejs</workingDirectory>
+                            <arguments>
+                                <argument>ci</argument>
+                                <argument>--ignore-scripts</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -274,6 +314,15 @@
                         <copilot.tests.dir>${copilot.tests.dir}</copilot.tests.dir>
                         <copilot.sdk.dir>${copilot.sdk.clone.dir}</copilot.sdk.dir>
                     </systemPropertyVariables>
+                    <!--
+                        Set COPILOT_CLI_PATH for the forked test JVM so the SDK
+                        tests transparently use the pinned CLI under
+                        target/copilot-sdk/nodejs/. See the copilot.cli.path
+                        property above for the override mechanism.
+                    -->
+                    <environmentVariables>
+                        <COPILOT_CLI_PATH>${copilot.cli.path}</COPILOT_CLI_PATH>
+                    </environmentVariables>
                 </configuration>
             </plugin>
             <!-- Add src/generated/java as an additional source root -->

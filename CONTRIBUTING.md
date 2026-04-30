@@ -40,39 +40,9 @@ If you have ideas for entirely new features, please post an issue or start a dis
 
 ### Running locally, including tests and linters
 
+The POM has logic to ensure a known correct installation of Copilot CLI is used when executing the tests. If you want to test against a different installation of Copilot CLI, set the value of the `copilot.cli.path` maven property to the fully qualified path to the Copilot CLI.
+
 ```bash
-# Obtain the pinned version of Copilot CLI to the local workarea.
-# This clones the reference implementation at the commit pinned in
-# .lastmerge, but does NOT run `npm ci` inside its nodejs/ subdir.
-mvn generate-test-resources
-
-# Install the pinned Copilot CLI into target/copilot-sdk/nodejs/node_modules
-# so the SDK tests use the version declared in
-# target/copilot-sdk/nodejs/package.json (the SDK-test pin), NOT the version
-# in target/copilot-sdk/test/harness/package.json (the replay-harness pin,
-# which is incidental and may be older).
-
-## POSIX
-
-(cd target/copilot-sdk/nodejs && npm ci --ignore-scripts)
-
-## PowerShell
-
-Push-Location target\copilot-sdk\nodejs; if ($?) { npm ci --ignore-scripts }; Pop-Location
-
-# Make it so the pinned Copilot CLI is used for the tests. The patterns
-# below are scoped to the `nodejs/node_modules/` subtree so they cannot
-# accidentally pick up the older harness copy under
-# target/copilot-sdk/test/harness/node_modules/.
-
-## POSIX
-
-export COPILOT_CLI_PATH="$(find "$PWD/target" -type f -path '*/nodejs/node_modules/@github/copilot/index.js' | head -n 1)"
-
-## PowerShell
-
-$env:COPILOT_CLI_PATH = (Get-ChildItem -Path "$PWD\target" -Recurse -Filter 'index.js' -File | Where-Object { $_.FullName -match '[\\/]nodejs[\\/]node_modules[\\/]@github[\\/]copilot[\\/]index\.js$' } | Select-Object -First 1 -ExpandProperty FullName)
-
 # Build and run all tests
 mvn clean verify
 
@@ -86,17 +56,19 @@ mvn spotless:apply
 mvn spotless:check
 ```
 
-Assuming you are in the same shell you used to run the above commands, to run this exact Copilot CLI locally you can do the following.
+## Running the known correct Copilot CLI installation
 
 ### POSIX
 
 ```bash
+export COPILOT_CLI_PATH="$(find "$PWD/target" -type f -path '*/nodejs/node_modules/@github/copilot/index.js' | head -n 1)"
 node ${COPILOT_CLI_PATH}
 ```
 
 ### PowerShell
 
 ```PowerShell
+$env:COPILOT_CLI_PATH = (Get-ChildItem -Path "$PWD\target" -Recurse -Filter 'index.js' -File | Where-Object { $_.FullName -match '[\\/]nodejs[\\/]node_modules[\\/]@github[\\/]copilot[\\/]index\.js$' } | Select-Object -First 1 -ExpandProperty FullName)
 node $env:COPILOT_CLI_PATH
 ```
 
