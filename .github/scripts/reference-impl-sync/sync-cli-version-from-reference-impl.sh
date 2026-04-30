@@ -56,7 +56,7 @@ fi
 
 # node is always available since the reference implementation uses npm.
 CLI_VERSION=$(node -e \
-    "const fs=require('fs');const p=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));const v=(p.dependencies&&p.dependencies['@github/copilot'])||(p.devDependencies&&p.devDependencies['@github/copilot']);if(!v){process.exit(2);}process.stdout.write(v);" \
+    "const fs=require('fs');const p=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));const v=(p.dependencies&&p.dependencies['@github/copilot'])||(p.devDependencies&&p.devDependencies['@github/copilot']);process.stdout.write(v||'');" \
     "$PKG_JSON")
 
 if [[ -z "$CLI_VERSION" ]]; then

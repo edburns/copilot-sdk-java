@@ -57,7 +57,7 @@ echo "▸ Syncing @github/copilot version in pom.xml from reference implementati
 "$ROOT_DIR/.github/scripts/reference-impl-sync/sync-cli-version-from-reference-impl.sh" "$REFERENCE_IMPL_DIR"
 
 git add .lastmerge pom.xml
-git commit -m "Update .lastmerge to $NEW_COMMIT"
+git commit -m "Update .lastmerge to $NEW_COMMIT and sync pom.xml CLI version"
 
 # ── 3. Push branch ───────────────────────────────────────────
 echo "▸ Pushing branch $BRANCH_NAME to origin…"
