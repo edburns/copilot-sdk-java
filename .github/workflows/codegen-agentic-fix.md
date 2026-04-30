@@ -34,6 +34,8 @@ tools:
 
 safe-outputs:
   push-to-pull-request-branch:
+    target: "*"
+    labels: [dependencies]
   add-comment:
     target: "*"
     max: 5
