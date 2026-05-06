@@ -383,6 +383,29 @@ var session = client.createSession(
 
 > **Note:** The `bearerToken` option accepts a **static token string** only. The SDK does not refresh this token automatically. If your token expires, requests will fail and you'll need to create a new session with a fresh token.
 
+### Model Overrides
+
+Use `modelId` and `wireModel` to control model resolution and the model name on the wire:
+
+```java
+var session = client.createSession(
+    new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+        .setProvider(new ProviderConfig()
+            .setType("openai")
+            .setBaseUrl("https://api.openai.com/v1")
+            .setApiKey("sk-...")
+            .setModelId("gpt-4o")           // Runtime config lookup
+            .setWireModel("my-finetune-v3") // Sent to the provider API
+            .setMaxPromptTokens(100_000)    // Override max prompt tokens
+            .setMaxOutputTokens(4096))      // Override max output tokens
+).get();
+```
+
+- **`modelId`** — Well-known model name used by the runtime to look up agent configuration (tools, prompts, reasoning behavior) and default token limits. Also used as the wire model when `wireModel` is not set.
+- **`wireModel`** — Model name sent to the provider API for inference. Use when the provider's model name (e.g., an Azure deployment name or a custom fine-tune name) differs from `modelId`.
+- **`maxPromptTokens`** — Overrides the resolved model's default max prompt tokens. The runtime triggers conversation compaction when the prompt would exceed this limit.
+- **`maxOutputTokens`** — Overrides the resolved model's default max output tokens.
+
 ### Microsoft Foundry Local
 
 [Microsoft Foundry Local](https://foundrylocal.ai) lets you run AI models locally on your own device with an OpenAI-compatible API. Install it via the Foundry Local CLI, then point the SDK at your local endpoint:
@@ -1259,6 +1282,39 @@ if (metadata != null) {
 ```
 
 This is more efficient than `listSessions()` when you already know the session ID, as it performs a direct O(1) lookup instead of scanning all sessions.
+
+---
+
+## Remote Sessions
+
+Remote sessions enable Mission Control integration, making sessions accessible from GitHub web and mobile. When enabled, sessions in a GitHub repository working directory receive a remote URL.
+
+### Enabling Remote Sessions
+
+Set `remote(true)` on the client options to enable remote session support for all sessions:
+
+```java
+var options = new CopilotClientOptions()
+    .setRemote(true)
+    .setCwd("/path/to/github-repo");
+
+try (var client = new CopilotClient(options)) {
+    var session = client.createSession(
+        new SessionConfig().setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+    ).get();
+
+    // Listen for the remote URL info event
+    session.on(SessionInfoEvent.class, event -> {
+        System.out.println("Remote URL: " + event.getData());
+    });
+}
+```
+
+### Prerequisites
+
+- The user must be authenticated (GitHub token or logged-in user)
+- The session's working directory must be a GitHub repository
+- This option is only used when the SDK spawns the CLI process; it is ignored when connecting to an external server via `setCliUrl()`
 
 ---
 
