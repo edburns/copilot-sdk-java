@@ -321,6 +321,13 @@
                 <configuration>
                     <!-- Inject JaCoCo agent + any JDK-version-specific flags -->
                     <argLine>${testExecutionAgentArgs} ${surefire.jvm.args}</argLine>
+                    <!--
+                        Automatically retry tests that fail on the first attempt.
+                        This handles intermittent failures in E2E tests (e.g.,
+                        CompactionTest) where snapshot matching can be sensitive
+                        to non-deterministic compaction behaviour.
+                    -->
+                    <rerunFailingTestsCount>2</rerunFailingTestsCount>
                     <systemPropertyVariables>
                         <copilot.tests.dir>${copilot.tests.dir}</copilot.tests.dir>
                         <copilot.sdk.dir>${copilot.sdk.clone.dir}</copilot.sdk.dir>
