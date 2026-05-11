@@ -53,6 +53,9 @@ This guide covers advanced scenarios for extending and customizing your Copilot 
   - [Incoming Elicitation Handler](#Incoming_Elicitation_Handler)
   - [Session Capabilities](#Session_Capabilities)
   - [Outgoing Elicitation via session.getUi()](#Outgoing_Elicitation_via_session.getUi)
+- [Mode Handlers](#Mode_Handlers)
+  - [Exit Plan Mode](#Exit_Plan_Mode)
+  - [Auto Mode Switch](#Auto_Mode_Switch)
 - [Getting Session Metadata by ID](#Getting_Session_Metadata_by_ID)
 
 ---
@@ -1264,6 +1267,66 @@ var result = ui.elicitation(new ElicitationParams()
 ```
 
 All `getUi()` methods throw `IllegalStateException` if the host does not support elicitation. Always check capabilities first.
+
+---
+
+## Mode Handlers
+
+Mode handlers let your application respond to mode transitions requested by the Copilot CLI.
+
+### Exit Plan Mode
+
+When the model finishes creating a plan and wants to transition out of plan mode, it invokes the `exitPlanMode` handler. Register the handler via `SessionConfig.setOnExitPlanMode()`:
+
+```java
+var session = client.createSession(new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+    .setOnExitPlanMode((request, invocation) -> {
+        System.out.println("Plan summary: " + request.getSummary());
+        System.out.println("Available actions: " + request.getActions());
+        System.out.println("Recommended: " + request.getRecommendedAction());
+
+        return CompletableFuture.completedFuture(
+            new ExitPlanModeResult()
+                .setApproved(true)
+                .setSelectedAction("interactive")
+                .setFeedback("Looks good, proceed!"));
+    })).get();
+```
+
+When no handler is registered, the SDK automatically approves the plan (`approved=true`). The handler receives an `ExitPlanModeRequest` with:
+
+| Field               | Description                                     |
+|---------------------|-------------------------------------------------|
+| `summary`           | Summary of the plan that was created            |
+| `planContent`       | Full content of the plan file                   |
+| `actions`           | Available actions (e.g., interactive, autopilot) |
+| `recommendedAction` | The recommended action for the user             |
+
+### Auto Mode Switch
+
+When the model encounters a rate limit or similar constraint, it may request to switch modes automatically. Register the handler via `SessionConfig.setOnAutoModeSwitch()`:
+
+```java
+var session = client.createSession(new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
+    .setOnAutoModeSwitch((request, invocation) -> {
+        System.out.println("Error: " + request.getErrorCode());
+        System.out.println("Retry after: " + request.getRetryAfterSeconds() + "s");
+
+        return CompletableFuture.completedFuture(AutoModeSwitchResponse.YES);
+    })).get();
+```
+
+When no handler is registered, the SDK returns `NO` (declining the mode switch). The response options are:
+
+| Response                        | Description                              |
+|---------------------------------|------------------------------------------|
+| `AutoModeSwitchResponse.YES`       | Allow the mode switch this time          |
+| `AutoModeSwitchResponse.YES_ALWAYS`| Always allow automatic mode switches     |
+| `AutoModeSwitchResponse.NO`        | Decline the mode switch                  |
+
+Both handlers are also available on `ResumeSessionConfig` for resumed sessions.
 
 ---
 
