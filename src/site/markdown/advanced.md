@@ -1280,6 +1280,7 @@ When the model finishes creating a plan and wants to transition out of plan mode
 
 ```java
 var session = client.createSession(new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
     .setOnExitPlanMode((request, invocation) -> {
         System.out.println("Plan summary: " + request.getSummary());
         System.out.println("Available actions: " + request.getActions());
@@ -1308,6 +1309,7 @@ When the model encounters a rate limit or similar constraint, it may request to 
 
 ```java
 var session = client.createSession(new SessionConfig()
+    .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
     .setOnAutoModeSwitch((request, invocation) -> {
         System.out.println("Error: " + request.getErrorCode());
         System.out.println("Retry after: " + request.getRetryAfterSeconds() + "s");
