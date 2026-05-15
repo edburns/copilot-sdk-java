@@ -8,7 +8,7 @@ Releases of this implementation track releases of the reference implementation. 
 
 - Simple number qualifier (0.1.32-0, 0.1.32-1, ...) fails on a subtle but important point: 0.1.32-0 is treated identically to 0.1.32 by Maven (trailing zeros are normalized away), and bare numeric qualifiers are pre-release semantics. Your "first release" would sort before the reference implementation bare version.
 
-- Java and number in the qualifier (0.1.32-java.N
+- Java and number in the qualifier (0.1.32-java.N)
 
    - java is an unknown qualifier that sorts correctly and accurately describes what it is — the Java-ecosystem release of this version.
 
