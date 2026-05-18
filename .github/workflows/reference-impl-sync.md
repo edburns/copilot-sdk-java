@@ -4,7 +4,7 @@ description: |
   Copilot SDK (github/copilot-sdk) and assigns to Copilot to port changes.
 
 on:
-  schedule: daily
+  schedule: weekly on friday
   workflow_dispatch:
 
 permissions:
